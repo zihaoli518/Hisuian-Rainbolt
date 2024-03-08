@@ -1,0 +1,27 @@
+{
+  "name": "hisuian-rainbolt",
+  "version": "1.0.0",
+  "description": "a simple geoguesser discord bot",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zihaoli518/Hisuian-Rainbolt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zihaoli518/Hisuian-Rainbolt/issues"
+  },
+  "homepage": "https://github.com/zihaoli518/Hisuian-Rainbolt#readme",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.0",
+    "puppeteer": "^22.4.1"
+  }
+}
