@@ -2,7 +2,9 @@ const puppeteer = require('puppeteer');
 require('dotenv').config();
 
 
-const generateDailyChallengeLink = async (cookie) =>  {
+const generateDailyChallengeLink = async () =>  {
+  console.log('inside generateDailyChallengeLink...');
+
   const url = 'https://www.geoguessr.com/maps/world/play';
   // const url = 'https://www.geoguessr.com/signin?target=%2Fmaps%2Fworld%2Fplay'
 
@@ -10,9 +12,9 @@ const generateDailyChallengeLink = async (cookie) =>  {
   const page = await browser.newPage();
   await page.goto(url);
 
-  const test = await page.evaluate(() => {
 
-  })
+  // Set the viewport to match the browser window size
+  await page.setViewport({ width: 1920, height: 1080 });
 
   
   // login 
@@ -28,6 +30,26 @@ const generateDailyChallengeLink = async (cookie) =>  {
   await page.waitForSelector('img[alt="Challenge"]');
   await page.click('img[alt="Challenge"]');
 
+  // change settings 
+  const checkbox = await page.$('input[type="checkbox"].toggle_toggle__hwnyw');
+  await checkbox.click();
+
+  // Calculate the new position (e.g., halfway across the slider)
+  const timeLimit = 40;
+
+  const sliderElement = await page.$('.game-options_slider__JwEe2 .styles_rangeslider__y45WS');
+  const box = await sliderElement.boundingBox(); 
+  let newX = box.x + ((timeLimit/600) * box.width) + box.width*0.086;
+  console.log(newX)
+  await page.mouse.click(newX, box.y, { clickCount: 2 });
+
+  // disable move pan zoom 
+  const checkboxes = await page.$$('.game-options_optionInput__TAqdI input[type="checkbox"].toggle_toggle__hwnyw');
+  for (const checkbox of checkboxes) {
+      await checkbox.click();
+  }
+
+
   await page.waitForSelector('button[data-qa="invite-friends-button"]');
   await page.click('button[data-qa="invite-friends-button"]');
 
@@ -39,17 +61,9 @@ const generateDailyChallengeLink = async (cookie) =>  {
     return inputElement ? inputElement.value : null;
   });
 
-  console.log(gameURL);
-  // await page.waitForSelector('#__next > div > div.version4_layout__KcIcs.version4_noSideTray__ayVjE > div.version4_content__oaYfe > main > div > div > div > a.button_link__xHa3x.button_variantSecondary__lSxsR')
-  // await page.click('#__next > div > div.version4_layout__KcIcs.version4_noSideTray__ayVjE > div.version4_content__oaYfe > main > div > div > div > a.button_link__xHa3x.button_variantSecondary__lSxsR')
-  
-  // await page.waitForSelector('#email');
-  // await page.waitForSelector('#password');
-  // page.type('#email', process.env.GEOGUESSR_USERNAME);
-  // page.type('#password', process.env.GEOGUESSR_PASSWORD);
-  // page.click('#__next > div > div.version4_layout__KcIcs.version4_noSideTray__ayVjE > div.version4_content__oaYfe > main > div > div > form > div > div.auth_forgotAndLoginButtonWrapper__PiLQi > div.form-field_formField__beWhf.form-field_typeActions__tMY1O > div > button')
-  // console.log(page)
+  return gameURL;
 }
 
 
-generateDailyChallengeLink();
+
+module.exports = generateDailyChallengeLink;
