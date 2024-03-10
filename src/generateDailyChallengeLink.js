@@ -40,7 +40,6 @@ const generateDailyChallengeLink = async () =>  {
   const sliderElement = await page.$('.game-options_slider__JwEe2 .styles_rangeslider__y45WS');
   const box = await sliderElement.boundingBox(); 
   let newX = box.x + ((timeLimit/600) * box.width) + box.width*0.086;
-  console.log(newX)
   await page.mouse.click(newX, box.y, { clickCount: 2 });
 
   // disable move pan zoom 

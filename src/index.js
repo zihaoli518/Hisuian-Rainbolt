@@ -1,7 +1,8 @@
+require('dotenv').config();
 const { Client, IntentsBitField, EmbedBuilder } = require('discord.js'); 
 const puppeteer = require('puppeteer');
 const generateDailyChallengeLink = require('./generateDailyChallengeLink.js')
-require('dotenv').config();
+const cron = require('node-cron');
 
 
 const TOKEN = process.env.DISCORD_TOKEN; 
@@ -61,6 +62,24 @@ client.on('interactionCreate', async (interaction) => {
 })
 
 client.login(TOKEN);
+
+
+
+
+// Cron job 
+const schedule = '30 23 * * *';
+
+// Schedule the task
+cron.schedule(schedule, async () => {
+  const dailyLink = await generateDailyChallengeLink();
+
+  const date = getDate();
+  const channelID = process.env.TEST_CHANNEL_ID; 
+
+  await client.channels.cache.get(channelID).send(dailyLink);
+  await client.channels.cache.get(channelID).send(`here's the daily challenge for ${date}, glhf! @everyone      (generated with cron job)` );
+  console.log('Running scheduled task...');
+});
 
 
 
