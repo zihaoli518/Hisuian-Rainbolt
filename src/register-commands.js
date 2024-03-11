@@ -1,10 +1,26 @@
 require('dotenv').config();
-const { REST, Routes } = require('discord.js');
+const { REST, Routes, ApplicationCommandOptionType } = require('discord.js');
 
 const commands = [
   {
     name: 'dailychallenge',
     description: 'posts daily challenge link'
+  },
+  {
+    name: 'dailyscore',
+    description: 'uses geoguessr api to get todays daily challenge scores and posts recap'
+  },
+  {
+    name: 'dailyscoreof',
+    description: 'posts recap for daily challenge',
+    options: [
+      {
+        name: 'date',
+        description: 'date of the daily challenge you want to generate a recap for',
+        type: ApplicationCommandOptionType.String,
+      },
+      
+    ]
   }
 ]
 
