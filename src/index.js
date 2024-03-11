@@ -88,18 +88,9 @@ const handleInteractionDailyScore = async (interaction) => {
     let todaysURL = challengeURLArray[0];
     let yesterdayURL = challengeURLArray[1]; 
 
-    let message1 = `here is the leaderboard for today's daily challenge: `;
-
     // const testURL = "https://geoguessr.com/api/v3/results/highscores/VIT6mW6KIg0pthxj?friends=false&limit=26&minRounds=5"
     console.log('testURL ', todaysURL)
     const scoresArrayToday = await getScores(todaysURL);
-    // for (let i=0; i<scoresArrayToday.length; i++) {
-    //   message1 += (i+1);
-    //   message1 += ` ${scoresArrayToday[i].playerName}`;
-    //   message1 += ` ${scoresArrayToday[i].totalScore}`;
-    //   message1 += ` ${scoresArrayToday[i].totalDistance}`
-    // }
-
     // get date
     const date = getDate(); 
 
@@ -117,10 +108,12 @@ const handleInteractionDailyScore = async (interaction) => {
       const rankStr = rank.toString();
       const totalScoreStr = totalScore.toString();
       fields.push(
-        { name: rankStr+'. '+playerName, value: `score: ${totalScoreStr}, distance: ${totalDistance} country streak: ${countryStreak}`, inline: true }
+        { name: rankStr+'. '+playerName, value: `🌍score: ${totalScoreStr}, 🚎 distance: ${totalDistance} 📍country streak: ${countryStreak}`, inline: true }
       );      
       // fields.push({ name: '\u200B', value: '\u200B' })
       fields.push({ name: '\u200B', value: '\u200B\u200B' });
+      // if player breaks 20k, send alert to general channel
+      if (totalScore>19999) twentyKAlert(interaction, playerName);
     });
     // console.log('about to send message....', embed)
     embed.addFields(fields);
@@ -136,21 +129,24 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
   try {
     const channelID = process.env.TEST_CHANNEL_ID; 
 
-    let message1 = `here is the leaderboard for today's daily challenge: `;
+    let message1 = `here is the leaderboard for ${date}'s daily challenge: `;
     const scoresArray = await getScores(challengeId);
-    for (let i=0; i<scoresArray.length; i++) {
-      message1 += (i+1);
-      message1 += ` ${scoresArray[i].playerName}`;
-      message1 += ` ${scoresArray[i].totalScore}`;
-      message1 += ` ${scoresArray[i].totalDistance}`
-
-    }
     await client.channels.cache.get(channelID).send(message1);
   } catch (error) {
     console.log(error)
   }
 }
 
+
+const twentyKAlert = async (interaction, playerName) => {
+  try {
+    const channelID = process.env.GENERAL_CHANNEL_ID; 
+    const message = `🚨🚨🚨20k alert🚨🚨🚨\n congrats ${playerName} on breaking 20k!`
+    await client.channels.cache.get(channelID).send(message);
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 
 
