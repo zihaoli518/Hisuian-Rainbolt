@@ -1,9 +1,14 @@
 const puppeteer = require('puppeteer');
+const fs = require('fs');
+let historyObject = require('../challengeHistory.js');
+
+
 require('dotenv').config();
 
 
 const generateDailyChallengeLink = async () =>  {
   console.log('inside generateDailyChallengeLink...');
+  
 
   const url = 'https://www.geoguessr.com/maps/world/play';
   // const url = 'https://www.geoguessr.com/signin?target=%2Fmaps%2Fworld%2Fplay'
@@ -60,9 +65,36 @@ const generateDailyChallengeLink = async () =>  {
     return inputElement ? inputElement.value : null;
   });
 
+  const dateToday = getDateStr();
+
+  historyObject[dateToday] = gameURL;
+
+  // Convert the object to a string and write it back to the file
+  fs.writeFile('challengeHistory.js', `module.exports = ${JSON.stringify(historyObject, null, 2)};`, err => {
+      if (err) {
+          console.error('Error writing to file:', err);
+      } else {
+          console.log('Message history object saved to challengeHistory.js');
+      }
+  });
+
   return gameURL;
 }
 
+
+
+
+const getDateStr = (date) => {
+  let currentDate = date;
+  if (!date) currentDate = new Date();
+  console.log('getDataStr....', date, currentDate)
+  // Get the day, month, and year
+  const day = currentDate.getDate();
+  const month = currentDate.getMonth() + 1; // Month is zero-based, so add 1
+  const year = currentDate.getFullYear();
+
+  return`${month}-${day}-${year}`;
+}
 
 
 module.exports = generateDailyChallengeLink;

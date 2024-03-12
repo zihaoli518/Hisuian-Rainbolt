@@ -11,16 +11,24 @@ const commands = [
     description: 'uses geoguessr api to get todays daily challenge scores and posts recap'
   },
   {
-    name: 'dailyscoreof',
+    name: 'daily_score_of',
     description: 'posts recap for daily challenge',
     options: [
       {
         name: 'date',
-        description: 'date of the daily challenge you want to generate a recap for',
+        description: 'please enter a datey ou want to generate a recap for. example: 2-19-2024',
         type: ApplicationCommandOptionType.String,
-      },
-      
+        required: true
+      }
     ]
+  },
+  {
+    name: 'create_history_object',
+    description: 'parses thru all messages in challenge channel and save all URL to javascript object'
+  },
+  {
+    name: 'test_alert',
+    description: 'get trolled'
   }
 ]
 
