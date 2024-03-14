@@ -14,7 +14,36 @@ const challengeScoreHistory = require('../challengeScoreHistory.js');
 
 const db = require('./dbFunctions/dbModel.js');
 
+// importing and mapping playerName and discordID
+const getAllDiscordID = async () => {
+  // const query = `SELECT "discordID" FROM public.usernames WHERE "playerName" = '${playerName}'`;
+  const query = `SELECT * FROM usernames`;
+  try {
+    const dbResponse = await db.query(query);
+    if (dbResponse.rows[0]) {
+      const result = {}
+      dbResponse.rows.forEach(row => {
+        result[row.playerName] = row.discordID
+      })
+      return result;
+    }
+  } catch (error) {
+    console.log(error);
+    throw error; 
+  }
+};
 
+// get all usernames-discordID mappnig
+let discordUsernameObj = {};
+(async () => {
+  const data = await getAllDiscordID();
+  discordUsernameObj = data;
+  console.log(discordUsernameObj);
+})();
+
+
+
+// discord js setup
 const TOKEN = process.env.DISCORD_TOKEN; 
 
 
@@ -34,6 +63,9 @@ client.on('ready', (c) => {
 
 // handle all messages 
 client.on('messageCreate', (message) => {
+  // console.log('messageCreate ', message)
+  const user = message.id; 
+
 });
 
 
@@ -80,15 +112,15 @@ const handleInteractionDailyChallenge = async (interaction, user) => {
     // send url to daily challenge channel 
     try {
       // reply to command
-      await interaction.reply('daily challenge url created and sent! ' + `<@${user}>`);
+      interaction.reply('daily challenge url is being created ' + `<@${user}>`);
       // first generate the link 
       const dailyLink = await generateDailyChallengeLink();
       const date = getDateStr();
 
       const channelID = process.env.DAILY_CHALLENGE_CHANNEL_ID; 
 
-      await client.channels.cache.get(channelID).send(dailyLink);
-      await client.channels.cache.get(channelID).send(`here's the daily challenge for ${date}, glhf!` );
+      await client.channels.cache.get(channelID).send(`${dailyLink} \n here's the daily challenge for ${date}, glhf!` );
+      // await client.channels.cache.get(channelID).send(dailyLink);
     } catch (error) {
       console.log(error)
     }
@@ -100,21 +132,26 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
   // interaction.reply(`generating daily challenge recap for ${date}... this might take a while`);
   // check if date exists in challenge history 
   if (!challengeHistory[date]) {
-    interaction.reply('oops, the requested date does not exist. check your formatting of the date again, it should be 2-19-2024. or I forgot to post a link that day.')
+    interaction.reply('`oops, the requested date does not exist. check your formatting of the date again, it should be 2-19-2024. or I forgot to post a link that day.`')
     return
   }
+  interaction.reply('`generating daily recap... this might take a while because free APIs limit my speed :/`')
+
   
   const dailyChallengeChannel = process.env.DAILY_CHALLENGE_CHANNEL_ID;
   // const outputChannel = process.env.GENERAL_CHANNEL_ID; 
-  const outputChannel = process.env.GENERAL_CHANNEL_ID; 
-
+  const outputChannel = process.env.TEST_CHANNEL_ID; 
   // Get the channel you want to go through messages in
   // const channel = client.channels.cache.get(dailyChallengeChannel);
   try {
     const url = challengeHistory[date];
-    const scoresArray = await getScores(url, date);
+    const dailyScoreObj = await getScores(url, date, interaction);
+    const rankingArray = dailyScoreObj.rankingArray;
+    const bestGuess = dailyScoreObj.dailyInfo.bestGuess;
+    const aboveAverage = [];
+
     
-    console.log('index.js scoresArray generated. Building embed.... ')
+    console.log('index.js rankingArray generated. Building embed.... ')
     // build embed to be send to channel 
     const embed = new EmbedBuilder()
       .setTitle('daily challenge leaderboard for: ' + date.toString())
@@ -122,44 +159,68 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
     // Iterate over the data and add fields dynamically
     const fields = [];
 
-    scoresArray.forEach((entry) => {
-      const { rank, playerName, totalScore, totalDistance, countryRight} = entry;
-      const rankStr = rank.toString();
-      const totalScoreStr = totalScore.toString();
-      // get monthly/all time stats 
-      const monthStr = dateStrToMonthStr(date);
-      // fields.push({ name: '\u200B', value: '\u200B' })
-      generateMonthlyStats(playerName, monthStr)
-      .then(monthlyStats => {
-        let wins = monthlyStats.wins;
-        let top3 = monthlyStats.topThree;
-        let games = monthlyStats.gamesPlayed+1;
-        if (rank===1) wins++;
-        if (rank<=3) top3++;     
-        const top3Rate = ((top3/games)*100).toFixed(1).toString() + "%";
-        fields.push(
-          { name: rankStr+'. '+playerName, value: `🌍 score: ${totalScoreStr} 🚎 distance: ${totalDistance} 📍country: ${countryRight}/5`, inline: true }
-        );
-        fields.push(
-          { name: 'monthly stats', value: `avg: ${monthlyStats.monthlyAverage} 👑 wins: ${wins}, GP: ${games}, 🏆 top 3: ${top3}, rate: ${top3Rate}` }
-        );   
-        fields.push({ name: ' ', value: ' ' });
-        // if player breaks 20k, send alert to general channel
-        const todayObj = new Date();
-        const todayStr = getDateStr(todayObj);
-        return monthlyStats
-      })
-      .then((monthlyStats) => {
-        // alerts for special occasions 
-        // if (totalScore>19999 && todayStr===date) twentyKAlert(interaction, playerName);
-        if (totalScore>19999) twentyKAlert(interaction, playerName);
-        if (totalScore > monthlyStats.allTimeHighscore) pbAlert(interaction, playerName, totalScore, monthlyStats.allTimeHighscore)
-      })
+    const promiseArray = rankingArray.map((entry) => {
+      return new Promise(async (resolve) => {
+          const { rank, playerName, totalScore, totalDistance, countryRight } = entry;
+          const rankStr = rank.toString();
+          const totalScoreStr = totalScore.toString();
+          const monthStr = dateStrToMonthStr(date);
+  
+          try {
+              const monthlyStats = await generateMonthlyStats(playerName, monthStr);
+              let wins = monthlyStats.wins;
+              let top3 = monthlyStats.topThree;
+              let games = monthlyStats.gamesPlayed + 1;
+              if (rank === 1) wins++;
+              if (rank <= 3) top3++;
+              const top3Rate = ((top3 / games) * 100).toFixed(1).toString() + "%";
+  
+              console.log('checking average: ', totalScore, monthlyStats.monthlyAverage);
+              if (totalScore > monthlyStats.monthlyAverage) aboveAverage.push(playerName);
+  
+              const field1 = { name: rankStr + '. ' + playerName, value: `🌍 score: ${totalScoreStr} 🚎 distance: ${totalDistance}km 📍country: ${countryRight}/5`, inline: true };
+              const field2 = { name: 'monthly stats', value: `avg: ${monthlyStats.monthlyAverage} 👑 wins: ${wins}, GP: ${games}, 🏆 top 3: ${top3}, ${top3Rate}` };
+              const field3 = { name: ' ', value: ' ' };
+  
+              fields.push(field1, field2, field3);
+  
+              // const todayObj = new Date();
+              // const todayStr = getDateStr(todayObj);
+  
+              // Resolve the promise with monthlyStats
+              resolve(monthlyStats);
+          } catch (error) {
+              console.error('Error in generating monthly stats:', error);
+              // Resolve with null in case of error
+              resolve(null);
+          }
+      });
     });
+  
+    // Wait for all promises to resolve
+    await Promise.all(promiseArray);
+
+
+    console.log('before discordID')
+    // add daily awards
+    const discordID = discordUsernameObj[bestGuess.playerName];
+    
+    const aboveAverageStr = aboveAverage.join(', ');
+    fields.push(
+      { name: '\u200b ', value: '🏅🏅🏅🏅🏅🏅daily awards🏅🏅🏅🏅🏅🏅'},
+      { name: '🔥 best guess of the day 🔥', value: `good job ${bestGuess.playerName}, <@${discordID}>! an impressive distance of only ${bestGuess.distance} km 🥳, went absolutely crazy at\n||${bestGuess.address}|| 🧭` },
+      { name: 'congrats on beating your monthly average!', value: aboveAverageStr }
+    );
+
     embed.addFields(fields);
+    console.log('after addFields')
+
+
+
     // if (totalScore>19999) await twentyKAlert(interaction, playerName);
     await client.channels.cache.get(outputChannel).send({embeds: [embed]});
-    
+    console.log('after client.channels.cache')
+
   } catch (error) {
     console.log(error)
   }
@@ -181,17 +242,16 @@ const twentyKAlert = async (interaction, playerName) => {
 
 const testAlert = async (interaction, playerName) => {
   try {
-    getDiscordID('Z')
-      .then(id => {
-        const channelID = process.env.TEST_CHANNEL_ID; 
-        const trollID = '392169146563166208';
-        const user = client.users.cache.get(trollID);
-        const message = `🚨🚨🚨poggers alert🚨🚨🚨\n congrats <@${id}> on winning a free extended car warranty!`
-        client.channels.cache.get(channelID).send(message);
-    
-        const gifURL = 'https://media.tenor.com/bCWhbbjF8dwAAAAM/poggers-pepe.gif';
-        client.channels.cache.get(channelID).send({ files: [gifURL] })
-      })
+    console.log(discordUsernameObj)
+      const channelID = process.env.TEST_CHANNEL_ID; 
+      const trollID = discordUsernameObj['Z'];
+      const user = client.users.cache.get(trollID);
+      const message = `🚨🚨🚨poggers alert🚨🚨🚨\n congrats <@${trollID}> on winning a free extended car warranty!`
+      client.channels.cache.get(channelID).send(message);
+  
+      const gifURL = 'https://media.tenor.com/bCWhbbjF8dwAAAAM/poggers-pepe.gif';
+      client.channels.cache.get(channelID).send({ files: [gifURL] })
+
   } catch (error) {
     console.log(error)
   }
@@ -199,34 +259,20 @@ const testAlert = async (interaction, playerName) => {
 
 const pbAlert = async (interaction, playerName, newScore, oldScore) => {
   try {
-    getDiscordID(playerName)
-      .then(id => {
-        const channelID = process.env.GENERAL_CHANNEL_ID; 
-        const trollID = '392169146563166208';
-        const user = client.users.cache.get(trollID);
-        const message = `🚨🚨🚨new PB alert🚨🚨🚨\n congrats <@${id}> on beating their old record of${oldScore} with a new PB of ${newScore}!`
-        client.channels.cache.get(channelID).send(message);
-    
-        const gifURL = 'https://media.tenor.com/bCWhbbjF8dwAAAAM/poggers-pepe.gif';
-        client.channels.cache.get(channelID).send({ files: [gifURL] })
-      })
+    const channelID = process.env.GENERAL_CHANNEL_ID; 
+    const discordID = discordUsernameObj[playerName];
+    const user = client.users.cache.get(discordID);
+    const message = `🚨🚨🚨new PB alert🚨🚨🚨\n congrats <@${discordID}> on beating their old record of${oldScore} with a new PB of ${newScore}!`
+    client.channels.cache.get(channelID).send(message);
+
+    const gifURL = 'https://media.tenor.com/bCWhbbjF8dwAAAAM/poggers-pepe.gif';
+    client.channels.cache.get(channelID).send({ files: [gifURL] })
   } catch (error) {
     console.log(error)
   }
 }
-const getDiscordID = async (playerName) => {
-  const query = `SELECT "discordID" FROM public.usernames WHERE "playerName" = '${playerName}'`;
-  try {
-    const dbResponse = await db.query(query);
-    if (dbResponse.rows[0]) {
-      // console.log(dbResponse.rows[0])
-      return dbResponse.rows[0].discordID;
-    }
-  } catch (error) {
-    console.log(error);
-    throw error; 
-  }
-};
+
+
 
 
 

@@ -87,7 +87,7 @@ const generateDailyChallengeLink = async () =>  {
 const getDateStr = (date) => {
   let currentDate = date;
   if (!date) currentDate = new Date();
-  console.log('getDataStr....', date, currentDate)
+  console.log('getDateStr....', date, currentDate)
   // Get the day, month, and year
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1; // Month is zero-based, so add 1

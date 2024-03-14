@@ -5,7 +5,10 @@ require('dotenv').config();
 const fs = require('fs');
 const fetch = require('node-fetch');
 let historyObject = require('../challengeHistory.js');
-const challengeScoreHistory = require('../challengeScoreHistory.js')
+const challengeScoreHistory = require('../challengeScoreHistory.js');
+// const db = require('../dbModel.js');
+const getScores = require('./getScores.js');
+
 
 
 
@@ -19,21 +22,27 @@ const generateMonthlyStats = async (playerName, monthStr) => {
   let allTimeHighscore = 0; 
   let wins = 0; 
   let topThree = 0;  
-  dateArray.forEach(date => {
-    const rankingArray = challengeScoreHistory[date].ranking;
+
+  for (const date of dateArray) {
+    let rankingArray = challengeScoreHistory[date].ranking;
+    
+    rankingArray = challengeScoreHistory[date].ranking;
+
+    // update challengeScoreHistory by running getScore
     rankingArray.forEach(playerObj => {
-      if (playerObj.playerName===playerName){
+      if (playerObj.playerName === playerName) {
         allTimeHighscore = Math.max(allTimeHighscore, playerObj.totalScore);
         if (dateStrToMonthStr(date) === monthStr) {
           totalScore += playerObj.totalScore;
           gamesPlayed++;
-          if (playerObj.rank===1) wins++;
-          if (playerObj.rank<=3) topThree++; 
+          if (playerObj.rank === 1) wins++;
+          if (playerObj.rank <= 3) topThree++;
         }
       }
     })
     // if (!dateStrToMonthStr(date) === monthStr) return;
-  })
+  }
+  
   const result = {};
   result['monthlyAverage'] = (totalScore/gamesPlayed).toFixed(1); 
   result['gamesPlayed'] = gamesPlayed; 
@@ -50,6 +59,5 @@ const dateStrToMonthStr = (str) => {
   return monthYearString
 }
 
-// getScores('https://www.geoguessr.com/challenge/sAF4oji97OiV6OTF')
 
 module.exports = generateMonthlyStats;

@@ -3,43 +3,59 @@
 // [{playerName: 'test', rank: 1, totalScore: 1000, totalDistance:'10km'}]
 require('dotenv').config();
 const fs = require('fs');
-
 const fetch = require('node-fetch');
+const GEOCODING_API_KEY = process.env.GEOCODING_API_KEY
 
 let challengeScoreHistory = require('../challengeScoreHistory.js');
 
 
-const GEOCODING_API_KEY = process.env.GEOCODING_API_KEY
-
-// const link = "https://geoguessr.com/api/v3/results/highscores/VIT6mW6KIg0pthxj?friends=false&limit=26&minRounds=5";
 
 const cookie = `_ncfa=${process.env.GEOGUESSR_COOKIE}`; // Replace with your cookie value
-
 const headers = {
   'Content-Type': 'application/json',
   'cookie': cookie,
   'User-Agent': 'Your User Agent String Here'
 };
 
-const getScores = async (challengeURL, dateStr) => {
+
+
+// for daily awards 
+let dailyBestCounter = Infinity; 
+let dailyInfo = {
+  bestGuess: {playerName: '', score: 0, distance: 0, address: '' },
+
+}
+
+
+const getScores = async (challengeURL, dateStr, interaction) => {
   console.log('inside getScores, ', challengeURL)
   // first convert it to the correct api endpoint 
   const challengeId = extractChallengeId(challengeURL);
   const apiEndpoint = `https://geoguessr.com/api/v3/results/highscores/${challengeId}?friends=false&limit=26&minRounds=5`
+  // format data to be sent back 
   try {
     const response = await fetch(apiEndpoint, { headers });
     const data = await response.json();
+    // check if cached 
+    const cached = challengeScoreHistory[dateStr];
+    if (cached && cached.ranking[0].guesses && data.items.length===cached.ranking.length && cached.dailyInfo) {
+      console.log('CACHED!')
+      return {rankingArray: cached.ranking, dailyInfo: cached.dailyInfo};
+    }
+    // process data if new data found 
     const rankingArray = [];
     let rankCounter = 1;
+
     for (const row of data.items) {
       const result = {};
       result['rank'] = rankCounter;
       result['playerName'] = row.playerName;
       result['totalScore'] = row.totalScore;
       const distanceInMeters = row.game.player.totalDistanceInMeters;
-      const distanceInKm = (distanceInMeters / 1000).toFixed(1);
+      const distanceInKm = Number((distanceInMeters / 1000).toFixed(1));
       result['totalDistance'] = distanceInKm + 'km'; 
-      const guessData = await checkCountryCodes(row.game.rounds, row.game.player.guesses);
+
+      const guessData = await checkCountryCodes(row.game.rounds, row.game.player.guesses, row.playerName);
       console.log('guessData: ', guessData)
 
       result['countryRight'] = guessData.totalRight;
@@ -48,16 +64,22 @@ const getScores = async (challengeURL, dateStr) => {
       rankingArray.push(result);
       rankCounter++;
     }
-    updateChallengeHistory(dateStr, challengeURL, rankingArray);
-    return rankingArray;
+    updateChallengeHistory(dateStr, challengeURL, rankingArray, dailyInfo);
+    return {rankingArray: rankingArray, dailyInfo: dailyInfo};
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error('Error fetching data in getScores:', error, typeof(error), error.type);
+    const errorType = error.type;
+    if (interaction) interaction.reply('an error has occured: ' + errorType + '. this is most likely due to no one completing the challenge yet ')
     throw error;
   }
 };
 
+const getDailyInfo = () => {
 
-async function checkCountryCodes(rounds, guesses) {
+}
+
+
+async function checkCountryCodes(rounds, guesses, playerName) {
   console.log('inside checkCountryCodes.......');
   
   const resultArray = [];
@@ -70,22 +92,30 @@ async function checkCountryCodes(rounds, guesses) {
     const { lat, lng, distanceInMeters } = guess;
     const roundCode = rounds[i].streakLocationCode;
 
-    console.log('right before guessCode');
-    const promise = getCountryCode(lat, lng, i).then(guessCode => {
-      console.log('right after guessCode, ', guessCode);
-      const distance = (distanceInMeters / 1000).toFixed(1);
-
+    console.log('right before guessData');
+    const promise = getCountryCode(lat, lng, i).then(guessData => {
+      console.log('right after guessData, ', guessData);
+      const distanceStr = (distanceInMeters / 1000).toFixed(1);
       result['lat'] = lat;
       result['lng'] = lng;
       result['countryCode'] = roundCode;
+      const guessCode = guessData.address.country_code.toLowerCase();
       result['guessCode'] = guessCode;
       if (roundCode === guessCode) {
         result.rightCountry = true;
         totalRight++;
       }
-      result['distance'] = distance;
+      result['distance'] = +distanceStr;
+      result['score'] = guess.roundScoreInPoints;
+      result['address'] = guessData.display_name;
 
       resultArray.push(result);
+
+      // check and update daily best guess 
+      if (Number(distanceStr) > 0 && Number(distanceStr) < dailyBestCounter) {
+        dailyBestCounter = Number(distanceStr); 
+        dailyInfo.bestGuess = {playerName: playerName, score: result.score, distance: Number(distanceStr), address: result.address }
+      }
     });
 
     promiseArray.push(promise);
@@ -116,7 +146,7 @@ async function getCountryCode(latitude, longitude, i) {
           }
           const data = await response.json();
           console.log(data);
-          return(data.address.country_code.toLowerCase());
+          return(data);
         } catch (error) {
           console.error('Error fetching country code:', error);
         }
@@ -134,8 +164,8 @@ async function getCountryCode(latitude, longitude, i) {
   });
 }
 
-const updateChallengeHistory = (dateStr, url, rankingArray) => {
-  challengeScoreHistory[dateStr] = {url: url, ranking: rankingArray}; 
+const updateChallengeHistory = async (dateStr, url, rankingArray, dailyInfo) => {
+  challengeScoreHistory[dateStr] = {url: url, ranking: rankingArray, dailyInfo: dailyInfo}; 
 
   fs.writeFile('challengeScoreHistory.js', `module.exports = ${JSON.stringify(challengeScoreHistory, null, 2)};`, err => {
     if (err) {
