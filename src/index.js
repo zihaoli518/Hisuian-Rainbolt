@@ -138,7 +138,6 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
   interaction.reply('`generating daily recap... this might take a while because free APIs limit my speed :/`')
 
   
-  const dailyChallengeChannel = process.env.DAILY_CHALLENGE_CHANNEL_ID;
   // const outputChannel = process.env.GENERAL_CHANNEL_ID; 
   const outputChannel = process.env.TEST_CHANNEL_ID; 
   // Get the channel you want to go through messages in
@@ -148,6 +147,7 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
     const dailyScoreObj = await getScores(url, date, interaction);
     const rankingArray = dailyScoreObj.rankingArray;
     const bestGuess = dailyScoreObj.dailyInfo.bestGuess;
+    const worstGuess = dailyScoreObj.dailyInfo.worstGuess;
     const aboveAverage = [];
 
     
@@ -203,12 +203,19 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
 
     console.log('before discordID')
     // add daily awards
-    const discordID = discordUsernameObj[bestGuess.playerName];
+    const discordIDBest = discordUsernameObj[bestGuess.playerName];
+    const discordIDWorst = discordUsernameObj[worstGuess.playerName];
+
     
     const aboveAverageStr = aboveAverage.join(', ');
+    const goodJob = ['good job', 'good shit', 'wow nice', 'holy poggers', 'poggers' ];
+    const impressive = ['impressive', 'incredible', 'unbelievable', 'insane'];
+    const wentCrazy = ['went absolutely crazy @ ', '360 no scoped: ', 'went off @ ', 'went bonkers @ ']
+
     fields.push(
       { name: '\u200b ', value: '🏅🏅🏅🏅🏅🏅daily awards🏅🏅🏅🏅🏅🏅'},
-      { name: '🔥 best guess of the day 🔥', value: `good job ${bestGuess.playerName}, <@${discordID}>! an impressive distance of only ${bestGuess.distance} km 🥳, went absolutely crazy at\n||${bestGuess.address}|| 🧭` },
+      { name: '🔥 best guess of the day 🔥', value: `${getRandomWord(goodJob)} ${bestGuess.playerName} aka <@${discordIDBest}>! an ${getRandomWord(impressive)} guess with only ${bestGuess.distance} km off 🥳, ${getRandomWord(wentCrazy)} \n||${bestGuess.address}|| 🧭` },
+      { name: '😮‍💨 furthest guess of the day 😮‍💨', value: `${getRandomWord(goodJob)} ${worstGuess.playerName} aka <@${discordIDWorst}>! an ${getRandomWord(impressive)} guess with only ${worstGuess.distance} km off 🥳, ${getRandomWord(wentCrazy)} \n||${worstGuess.address}|| 🧭` },
       { name: 'congrats on beating your monthly average!', value: aboveAverageStr }
     );
 
@@ -357,4 +364,11 @@ const dateStrToMonthStr = (str) => {
   const parts = str.split('-'); // Split the string by the hyphen character
   const monthYearString = `${parts[0]}-${parts[2]}`;
   return monthYearString
+}
+
+const getRandomWord = (array) => {
+  // Generate a random index between 0 and 2 (inclusive)
+  const randomIndex = Math.floor(Math.random() * words.length);
+  // Return the word at the random index
+  return array[randomIndex];
 }

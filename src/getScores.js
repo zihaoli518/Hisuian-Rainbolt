@@ -21,9 +21,10 @@ const headers = {
 
 // for daily awards 
 let dailyBestCounter = Infinity; 
+let dailyWorstCounter = 0; 
 let dailyInfo = {
   bestGuess: {playerName: '', score: 0, distance: 0, address: '' },
-
+  worstGues: {playerName: '', score: 0, distance: 0, address: '' },
 }
 
 
@@ -35,6 +36,7 @@ const getScores = async (challengeURL, dateStr, interaction) => {
   // format data to be sent back 
   try {
     const response = await fetch(apiEndpoint, { headers });
+    console.log(response)
     const data = await response.json();
     // check if cached 
     const cached = challengeScoreHistory[dateStr];
@@ -53,7 +55,7 @@ const getScores = async (challengeURL, dateStr, interaction) => {
       result['totalScore'] = row.totalScore;
       const distanceInMeters = row.game.player.totalDistanceInMeters;
       const distanceInKm = Number((distanceInMeters / 1000).toFixed(1));
-      result['totalDistance'] = distanceInKm + 'km'; 
+      result['totalDistance'] = distanceInKm; 
 
       const guessData = await checkCountryCodes(row.game.rounds, row.game.player.guesses, row.playerName);
       console.log('guessData: ', guessData)
@@ -74,13 +76,21 @@ const getScores = async (challengeURL, dateStr, interaction) => {
   }
 };
 
-const getDailyInfo = () => {
-
+// reset global variables 
+const resetDailyInfo = () => {
+  dailyBestCounter = Infinity; 
+  dailyWorstCounter = 0; 
+  dailyInfo = {
+    bestGuess: {playerName: '', score: 0, distance: 0, address: '' },
+    worstGues: {playerName: '', score: 0, distance: 0, address: '' },
+  }
 }
 
 
 async function checkCountryCodes(rounds, guesses, playerName) {
-  console.log('inside checkCountryCodes.......');
+  console.log('inside checkCountryCodes.......', playerName);
+  // Reset global variables
+  resetDailyInfo();
   
   const resultArray = [];
   let totalRight = 0;
@@ -95,26 +105,34 @@ async function checkCountryCodes(rounds, guesses, playerName) {
     console.log('right before guessData');
     const promise = getCountryCode(lat, lng, i).then(guessData => {
       console.log('right after guessData, ', guessData);
-      const distanceStr = (distanceInMeters / 1000).toFixed(1);
+      if (guessData.error==='Unable to geocode') {
+
+      }
+      const distance = Number((distanceInMeters / 1000).toFixed(1));
       result['lat'] = lat;
       result['lng'] = lng;
       result['countryCode'] = roundCode;
-      const guessCode = guessData.address.country_code.toLowerCase();
+      const guessCode = guessData.address.country_code ? guessData.address.country_code.toLowerCase() : '';
       result['guessCode'] = guessCode;
       if (roundCode === guessCode) {
         result.rightCountry = true;
         totalRight++;
       }
-      result['distance'] = +distanceStr;
+      result['distance'] = distance;
       result['score'] = guess.roundScoreInPoints;
-      result['address'] = guessData.display_name;
+      result['address'] = guessData.display_name ? guessData.display_name : 'ocean lmao';
 
       resultArray.push(result);
 
       // check and update daily best guess 
-      if (Number(distanceStr) > 0 && Number(distanceStr) < dailyBestCounter) {
-        dailyBestCounter = Number(distanceStr); 
-        dailyInfo.bestGuess = {playerName: playerName, score: result.score, distance: Number(distanceStr), address: result.address }
+      if (distance > 0 && distance < dailyBestCounter) {
+        dailyBestCounter = distance; 
+        dailyInfo.bestGuess = {playerName: playerName, score: result.score, distance: distance, address: result.address }
+      }
+      // check and update daily worse guess 
+      if (distance > 0 && distance > dailyWorstCounter) {
+        dailyWorstCounter = distance; 
+        dailyInfo.worstGuess = {playerName: playerName, score: result.score, distance: distance, address: result.address }
       }
     });
 
@@ -134,7 +152,7 @@ async function checkCountryCodes(rounds, guesses, playerName) {
 
 
 async function getCountryCode(latitude, longitude, i) {
-  console.log('inside getCountryCode...');
+  console.log('inside getCountryCode...', i);
   const url = `https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}&api_key=${GEOCODING_API_KEY}`;
   
   // Create a promise wrapper for fetch
@@ -145,7 +163,7 @@ async function getCountryCode(latitude, longitude, i) {
             throw new Error(`Failed to fetch country code: ${response.statusText}`);
           }
           const data = await response.json();
-          console.log(data);
+          // console.log(data);
           return(data);
         } catch (error) {
           console.error('Error fetching country code:', error);
