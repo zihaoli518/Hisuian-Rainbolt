@@ -32,13 +32,8 @@ let dailyInfo = {
 
 const getScores = async (challengeURL, dateStr, interaction) => {
   console.log('inside getScores, ', challengeURL);
-  console.log('checking if url is cached....')
-  // // check if cached 
-  const cached = challengeScoreHistory[dateStr];
-  if (cached) {
-    console.log('CACHED!')
-    return {rankingArray: cached.ranking, dailyInfo: cached.dailyInfo};
-  }
+    // Reset global variables
+    resetDailyInfo();
   // first convert it to the correct api endpoint 
   const challengeId = extractChallengeId(challengeURL);
   const apiEndpoint = `https://geoguessr.com/api/v3/results/highscores/${challengeId}?friends=false&limit=26&minRounds=5`
@@ -46,7 +41,13 @@ const getScores = async (challengeURL, dateStr, interaction) => {
   try {
     const response = await fetch(apiEndpoint, { headers });
     const data = await response.json();
-    console.log(response)
+    // // check if cached 
+    console.log('checking if url is cached....');
+    // const cached = challengeScoreHistory[dateStr];
+    // if (cached && cached.ranking && cached.ranking.length===data.items.length) {
+    //   console.log('CACHED!')
+    //   return {rankingArray: cached.ranking, dailyInfo: cached.dailyInfo};
+    // }
     // process data if new data found 
     const rankingArray = [];
     let rankCounter = 1;
@@ -94,8 +95,7 @@ const resetDailyInfo = () => {
 
 async function checkCountryCodes(rounds, guesses, playerName) {
   console.log('inside checkCountryCodes.......', playerName);
-  // Reset global variables
-  resetDailyInfo();
+
   
   const resultArray = [];
   let totalRight = 0;

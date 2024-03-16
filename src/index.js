@@ -13,6 +13,8 @@ const generateMonthlyStats = require('./generateMonthlyStats.js');
 const challengeScoreHistory = require('../challengeScoreHistory.js');
 const countryGreetings = require('./utils/countryGreetings.js');
 const getAllTimeStats = require('./getAllTimeStats.js')
+const countryCodeDict = require('./utils/countryCodes.js');
+
 
 console.log(Object.keys(challengeScoreHistory).sort())
 
@@ -96,6 +98,10 @@ client.on('interactionCreate', async (interaction) => {
   }
   if (interaction.commandName === 'get_my_all_time_stats') {
     handleInteractionGetAllTimeStats(interaction, user)
+  }
+  if (interaction.commandName === 'get_all_time_stats_of') {
+    const userId = interaction.options.get('user').value.toString();
+    handleInteractionGetAllTimeStats(interaction, userId)
   }
   if (interaction.commandName === 'create_history_object') {
     createHistoryObject(interaction);
@@ -215,7 +221,7 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
     const discordIDWorst = discordUsernameObj[worstGuess.playerName];
 
     
-    const aboveAverageStr = aboveAverage.join(', ');
+    const aboveAverageStr = aboveAverage.length ? aboveAverage.join(', ') : '.... no one ..... trash seed';
     // best
     const goodJob = ['wild guess', 'good shit', 'wow nice', 'holy poggers', 'poggers', 'what a beast!' ];
     const impressive = ['impressive', 'incredible', 'unbelievable', 'insane'];
@@ -253,8 +259,74 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
 
 
 
-const handleInteractionGetAllTimeStats = (interaction, user) => {
-  const allTimeStats = 
+const handleInteractionGetAllTimeStats = async (interaction, user) => {
+  const outputChannel = process.env.TEST_CHANNEL_ID;
+  const startTime = performance.now();
+
+  try {
+    let playerNameArg = '';
+    for (let playerName in discordUsernameObj) {
+      if (discordUsernameObj[playerName] === user) playerNameArg = playerName
+    }
+    const allTimeStats = getAllTimeStats(playerNameArg);
+
+    const randomTroll = ['seasoned veteran of', 'experienced explorer with', 'impressive consistency of' ]
+  
+    const embed = new EmbedBuilder()
+      .setTitle(`let's scope out your all time stats,***${playerNameArg}*** : `)
+      .setDescription(` <@${user}>, a ${getRandomWord(randomTroll)} ***${allTimeStats.gamesPlayed}*** games `)
+
+      .setColor('Orange')
+    // Iterate over the data and add fields dynamically
+    const fields = [];
+
+    const top3rate = (allTimeStats.topThree*100/allTimeStats.gamesPlayed).toFixed(1) + '%'
+    const countryRightStr = allTimeStats.correctCountries + ' / ' + (allTimeStats.gamesPlayed*5);
+    console.log('about to top, ', allTimeStats)
+    const {topCountries, troubleCountries} = topAndBottomCountries(allTimeStats.countryStats, allTimeStats.gamesPlayed);
+    let topCountriesStr = '';
+    topCountries.forEach(countryObj => {
+      topCountriesStr += `${countryCodeDict[countryObj.country]},    ${countryObj.right} / ${countryObj.total}, ${countryObj.percentage}% \n`
+    })
+    let bottomCountriesStr = '';
+    troubleCountries.forEach(countryObj => {
+      bottomCountriesStr += `${countryCodeDict[countryObj.country]},    ${countryObj.right} / ${countryObj.total}, ${countryObj.percentage}% \n`
+    })
+
+
+    fields.push(
+      { name: 'average score', value: allTimeStats.averageScore.toString(), inline: true},
+      { name: 'wins', value: allTimeStats.wins.toString(), inline: true},
+      { name: 'top 3', value: `${allTimeStats.topThree.toString()}, ***${top3rate}***`, inline: true},
+      { name: 'average rank', value: allTimeStats.averageRank.toString(), inline: true},
+      { name: 'average distance', value: allTimeStats.averageDistance + ' km', inline: true},
+      // { name: 'games', value: allTimeStats.gamesPlayed.toString(), inline: true},
+      { name: 'personal best', value: allTimeStats.personalBestScore.toString(), inline: true},
+      { name: 'countries', value: countryRightStr, inline: true},
+      { name: 'best round', value: allTimeStats.personalBestRound.toString(), inline: true},
+      { name: 'best guess', value: allTimeStats.allTimeBestGuess + ' km', inline: true},
+      { name: 'worst guess', value: allTimeStats.allTimeWorstGuess + ' km', inline: true},
+      { name: 'daily shoutouts', value: `best: ${allTimeStats.bestGuessOfTheDay}, worst: ${allTimeStats.worstGuessOfTheDay}`, inline: true},
+
+      { name: `🤯 you are killing it when we are in: 🤯`, value: topCountriesStr},
+      { name: `😅 you get trolled by these countries: 😅`, value: bottomCountriesStr}
+
+    );
+    embed.addFields(fields);
+
+    // end performance 
+    const endTime = performance.now();
+    const elapsedTime = ((endTime - startTime) / 1000).toFixed(3);
+    embed.setFooter({text: 'stats generated in ' + elapsedTime + 's'})
+  
+    await client.channels.cache.get(outputChannel).send({embeds: [embed]});
+    const reply = `\`your all time stats have been generated in ${elapsedTime}s\``
+    interaction.reply(reply)
+  }
+  catch(error) {
+    console.log(error)
+  }
+
 }
 
 
@@ -398,4 +470,37 @@ const getRandomWord = (array) => {
   const randomIndex = Math.floor(Math.random() * array.length);
   // Return the word at the random index
   return array[randomIndex];
+}
+
+
+function topAndBottomCountries(countryStats, gamesPlayed) {
+  console.log('topAndBottomCountries', countryStats);
+  const filterThreshhold = gamesPlayed/11
+  const filteredStats = Object.entries(countryStats)
+    .filter(([country, stats]) => stats.total > filterThreshhold);
+  const countriesWithPercentage = filteredStats.map(([country, stats]) => {
+      const percentage = Number(((stats.right / stats.total) * 100).toFixed(1));
+      const right = stats.right
+      const total = stats.total
+      return { country, percentage, right, total};
+  });
+
+  // Sort countries by percentage of correct answers
+  const sortedByPercentage = countriesWithPercentage.sort((a, b) => b.percentage - a.percentage);
+
+  // Get the top 3 countries with the highest percentage of correct answers
+  const topCountries = sortedByPercentage.slice(0, 4);
+
+  // Get the top 3 countries with the lowest percentage of correct answers
+  const troubleCountries = sortedByPercentage.sort((a, b) => {
+    if (a.percentage !== b.percentage) {
+        return a.percentage - b.percentage;
+    } else {
+        // If percentage is the same, use the total as tiebreaker
+        return b.total - a.total;
+    }
+  }).slice(0,4);
+  console.log(topCountries, troubleCountries)
+
+return { topCountries, troubleCountries };
 }

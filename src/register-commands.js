@@ -27,6 +27,18 @@ const commands = [
     description: 'generate a recap for your all time stats'
   },
   {
+    name: 'get_all_time_stats_of', 
+    description: 'generate a recap for given users all time stats',
+    options: [
+      {
+        name: 'user',
+        description: 'please select the player you want to get all time stats for',
+        type: ApplicationCommandOptionType.User,
+        required: true
+      }
+    ]
+  },
+  {
     name: 'create_history_object',
     description: 'parses thru all messages in challenge channel and save all URL to javascript object'
   },

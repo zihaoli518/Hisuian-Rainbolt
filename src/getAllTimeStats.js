@@ -10,8 +10,8 @@ const getScores = require('./getScores.js');
 
 
 // input: (playerName) 
-// outpu: {average score: 1000, average distance: 1000, Number((totalRank / allTimeStats.gamesPlayed).toFixed(2));: 40, wins: 10, topThree: 20, bestGuessOFTheDay: 3, worstGuessOfTheDay:10,}
-const getAllTimeStats = async (playerName, monthStr) => {
+// outpu: {average score: 1000, average distance: 1000, Number((totalRank / allTimeStats.gamesPlayed).toFixed(2));: 40, wins: 10, topThree: 20, bestGuessOfTheDay: 3, worstGuessOfTheDay:10,}
+const getAllTimeStats = (playerName, monthStr) => {
   const dateKeys = Object.keys(challengeScoreHistory); 
 
   let totalScore = 0;
@@ -26,8 +26,7 @@ const getAllTimeStats = async (playerName, monthStr) => {
     averageRank: 0,
     personalBestScore: 0,
     personalBestRound: 0,
-    countryRight: 0,
-    bestGuessOFTheDay: 0, 
+    bestGuessOfTheDay: 0, 
     worstGuessOfTheDay: 0,
     allTimeBestGuess: Infinity, 
     allTimeBestGuessAddress: '',
@@ -57,7 +56,7 @@ const getAllTimeStats = async (playerName, monthStr) => {
         if (guess.score>allTimeStats.personalBestRound) allTimeStats.personalBestRound = guess.score;
         if (guess.distance<allTimeStats.allTimeBestGuess) {
           allTimeStats.allTimeBestGuess = guess.distance;
-          allTimeStats.allTimeBestGuess = guess.address;
+          allTimeStats.allTimeBestGuessAddress = guess.address;
         }
         if (guess.distance>allTimeStats.allTimeWorstGuess) allTimeStats.allTimeWorstGuess = guess.distance;
         // go thru country codes 
@@ -65,12 +64,12 @@ const getAllTimeStats = async (playerName, monthStr) => {
         allTimeStats.countryStats[guess.correctCountryCode].total++;
         if (guess.rightCountry) {
           allTimeStats.countryStats[guess.correctCountryCode].right++;
-          allTimeStats.countryRight++;
+          allTimeStats.correctCountries++;
         }
         if (!guess.rightCountry) allTimeStats.countryStats[guess.correctCountryCode].wrong++;
       });
     }
-    if (dailyData.dailyInfo.bestGuess.playerName===playerName) allTimeStats.bestGuessOFTheDay++;
+    if (dailyData.dailyInfo.bestGuess.playerName===playerName) allTimeStats.bestGuessOfTheDay++;
     if (dailyData.dailyInfo.worstGuess.playerName===playerName) allTimeStats.worstGuessOfTheDay++;
 
   }
@@ -88,4 +87,4 @@ module.exports = getAllTimeStats;
 
 
 
-getAllTimeStats('hoshibear')
+// getAllTimeStats('hoshibear')
