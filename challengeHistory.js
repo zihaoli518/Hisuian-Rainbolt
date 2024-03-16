@@ -62,5 +62,6 @@ module.exports = {
   "1-7-2024": "https://www.geoguessr.com/challenge/AIczI0OusSHfrvcP",
   "3-12-2024": "https://www.geoguessr.com/challenge/GQ3Six7HNRD34ZSR",
   "3-13-2024": "https://www.geoguessr.com/challenge/CiFq8mdpL2yY4g9e",
-  "3-14-2024": "https://www.geoguessr.com/challenge/o7DXLrX8Zi9DnQPB"
+  "3-14-2024": "https://www.geoguessr.com/challenge/o7DXLrX8Zi9DnQPB",
+  "3-15-2024": "https://www.geoguessr.com/challenge/2rXlEWAjXwyZI6XB"
 };

@@ -11,6 +11,10 @@ const generateDailyChallengeLink = require('./generateDailyChallengeLink.js');
 const getScores = require('./getScores.js');
 const generateMonthlyStats = require('./generateMonthlyStats.js');
 const challengeScoreHistory = require('../challengeScoreHistory.js');
+const countryGreetings = require('./utils/countryGreetings.js');
+const getAllTimeStats = require('./getAllTimeStats.js')
+
+console.log(Object.keys(challengeScoreHistory).sort())
 
 const db = require('./dbFunctions/dbModel.js');
 
@@ -78,17 +82,20 @@ client.on('interactionCreate', async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   
   console.log(interaction.commandName, user);
-  if (interaction.commandName === 'dailychallenge') {
+  if (interaction.commandName === 'daily_challenge_link') {
     handleInteractionDailyChallenge(interaction, user);
   }
-  if (interaction.commandName === 'dailyscore') {
+  if (interaction.commandName === 'daily_recap') {
     const dateToday = new Date(); 
     const dateStr = getDateStr(dateToday)
     handleInteractionDailyScoreOf(interaction, dateStr)
   } 
-  if (interaction.commandName === 'daily_score_of') {
+  if (interaction.commandName === 'get_recap_of') {
     const dateStr = interaction.options.get('date').value.toString();
     handleInteractionDailyScoreOf(interaction, dateStr)
+  }
+  if (interaction.commandName === 'get_my_all_time_stats') {
+    handleInteractionGetAllTimeStats(interaction, user)
   }
   if (interaction.commandName === 'create_history_object') {
     createHistoryObject(interaction);
@@ -136,10 +143,11 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
     return
   }
   interaction.reply('`generating daily recap... this might take a while because free APIs limit my speed :/`')
+  const startTime = performance.now();
 
   
   // const outputChannel = process.env.GENERAL_CHANNEL_ID; 
-  const outputChannel = process.env.TEST_CHANNEL_ID; 
+  const outputChannel = process.env.GENERAL_CHANNEL_ID; 
   // Get the channel you want to go through messages in
   // const channel = client.channels.cache.get(dailyChallengeChannel);
   try {
@@ -208,21 +216,31 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
 
     
     const aboveAverageStr = aboveAverage.join(', ');
-    const goodJob = ['good job', 'good shit', 'wow nice', 'holy poggers', 'poggers' ];
+    // best
+    const goodJob = ['wild guess', 'good shit', 'wow nice', 'holy poggers', 'poggers', 'what a beast!' ];
     const impressive = ['impressive', 'incredible', 'unbelievable', 'insane'];
-    const wentCrazy = ['went absolutely crazy @ ', '360 no scoped: ', 'went off @ ', 'went bonkers @ ']
-
+    const wentCrazy = ['went absolutely crazy @ ', '360 no scoped: ', 'went the f off @ ', 'went bonkers @ '];
+    // worst 
+    const worstGuessStr1 = [`${countryGreetings[worstGuess.guessCountryCode]}, thanks for trolling ${worstGuess.playerName} aka <@${discordIDWorst}>! an ${getRandomWord(impressive)} ${worstGuess.distance} km off🔥🔥, I can see why you thought it was ${worstGuess.guessCountry} instead of ${worstGuess.correctCountry} tho` ]
+    const worstGuessStr2 = [`${countryGreetings[worstGuess.guessCountryCode]}, oof ${worstGuess.playerName} aka <@${discordIDWorst}>, an ${getRandomWord(impressive)} ${worstGuess.distance} km off🔥🔥, understandable, ${worstGuess.guessCountry} and ${worstGuess.correctCountry} do look kinda alike` ];
+    const worstGuessStr3 = [`${countryGreetings[worstGuess.guessCountryCode]}, I feel you ${worstGuess.playerName} aka <@${discordIDWorst}>, 🫡 your guess in ${worstGuess.guessCountry} is ${worstGuess.distance} km away from ${worstGuess.correctCountry}, it happens!` ];
+    const worstGuessStr4 = [`${countryGreetings[worstGuess.guessCountryCode]}, apparently ${worstGuess.playerName} aka <@${discordIDWorst}>, thinks ${worstGuess.correctCountry} looks like ${worstGuess.guessCountry}, which is reasonable 🫡, but it's ${worstGuess.distance} km away unfortunately` ];
+    const worstGuessStr = [];
+    worstGuessStr.push(worstGuessStr1, worstGuessStr2, worstGuessStr3, worstGuessStr4)
     fields.push(
-      { name: '\u200b ', value: '🏅🏅🏅🏅🏅🏅daily awards🏅🏅🏅🏅🏅🏅'},
-      { name: '🔥 best guess of the day 🔥', value: `${getRandomWord(goodJob)} ${bestGuess.playerName} aka <@${discordIDBest}>! an ${getRandomWord(impressive)} guess with only ${bestGuess.distance} km off 🥳, ${getRandomWord(wentCrazy)} \n||${bestGuess.address}|| 🧭` },
-      { name: '😮‍💨 furthest guess of the day 😮‍💨', value: `${getRandomWord(goodJob)} ${worstGuess.playerName} aka <@${discordIDWorst}>! an ${getRandomWord(impressive)} guess with only ${worstGuess.distance} km off 🥳, ${getRandomWord(wentCrazy)} \n||${worstGuess.address}|| 🧭` },
+      { name: '\u200b ', value: '🏅🏅🏅🏅🏅 DAILY AWARDS🏅🏅🏅🏅🏅'},
+      { name: '🔥🔥🔥🔥🔥 best guess of the day 🔥🔥🔥🔥🔥', value: `${countryGreetings[bestGuess.countryCode]}, ${getRandomWord(goodJob)} ${bestGuess.playerName} aka <@${discordIDBest}>🥳! an ${getRandomWord(impressive)} guess with only ${bestGuess.distance} km off 🤯🤯🤯, ${getRandomWord(wentCrazy)} \n||${bestGuess.address}|| 🧭` },
+      { name: '😈😈😈😈😈 furthest guess of the day 😈😈😈😈😈', value: `${getRandomWord(worstGuessStr)}` },
       { name: 'congrats on beating your monthly average!', value: aboveAverageStr }
     );
 
     embed.addFields(fields);
-    console.log('after addFields')
+    console.log('after addFields ', bestGuess.countryCode, countryGreetings);
 
 
+    const endTime = performance.now();
+    const elapsedTime = ((endTime - startTime) / 1000).toFixed(3);
+    embed.setFooter({text: 'recap generated in ' + elapsedTime + 's'})
 
     // if (totalScore>19999) await twentyKAlert(interaction, playerName);
     await client.channels.cache.get(outputChannel).send({embeds: [embed]});
@@ -232,6 +250,15 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
     console.log(error)
   }
 }
+
+
+
+const handleInteractionGetAllTimeStats = (interaction, user) => {
+  const allTimeStats = 
+}
+
+
+
 
 
 const twentyKAlert = async (interaction, playerName) => {
@@ -368,7 +395,7 @@ const dateStrToMonthStr = (str) => {
 
 const getRandomWord = (array) => {
   // Generate a random index between 0 and 2 (inclusive)
-  const randomIndex = Math.floor(Math.random() * words.length);
+  const randomIndex = Math.floor(Math.random() * array.length);
   // Return the word at the random index
   return array[randomIndex];
 }

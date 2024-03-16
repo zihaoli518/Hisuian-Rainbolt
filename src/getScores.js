@@ -4,7 +4,9 @@
 require('dotenv').config();
 const fs = require('fs');
 const fetch = require('node-fetch');
-const GEOCODING_API_KEY = process.env.GEOCODING_API_KEY
+const GEOCODING_API_KEY = process.env.GEOCODING_API_KEY;
+const countryCodeDict = require('./utils/countryCodes.js');
+
 
 let challengeScoreHistory = require('../challengeScoreHistory.js');
 
@@ -24,26 +26,27 @@ let dailyBestCounter = Infinity;
 let dailyWorstCounter = 0; 
 let dailyInfo = {
   bestGuess: {playerName: '', score: 0, distance: 0, address: '' },
-  worstGues: {playerName: '', score: 0, distance: 0, address: '' },
+  worstGuess: {playerName: '', score: 0, distance: 0, guessCountry: '', correctCountry: '' },
 }
 
 
 const getScores = async (challengeURL, dateStr, interaction) => {
-  console.log('inside getScores, ', challengeURL)
+  console.log('inside getScores, ', challengeURL);
+  console.log('checking if url is cached....')
+  // // check if cached 
+  const cached = challengeScoreHistory[dateStr];
+  if (cached) {
+    console.log('CACHED!')
+    return {rankingArray: cached.ranking, dailyInfo: cached.dailyInfo};
+  }
   // first convert it to the correct api endpoint 
   const challengeId = extractChallengeId(challengeURL);
   const apiEndpoint = `https://geoguessr.com/api/v3/results/highscores/${challengeId}?friends=false&limit=26&minRounds=5`
   // format data to be sent back 
   try {
     const response = await fetch(apiEndpoint, { headers });
-    console.log(response)
     const data = await response.json();
-    // check if cached 
-    const cached = challengeScoreHistory[dateStr];
-    if (cached && cached.ranking[0].guesses && data.items.length===cached.ranking.length && cached.dailyInfo) {
-      console.log('CACHED!')
-      return {rankingArray: cached.ranking, dailyInfo: cached.dailyInfo};
-    }
+    console.log(response)
     // process data if new data found 
     const rankingArray = [];
     let rankCounter = 1;
@@ -62,12 +65,14 @@ const getScores = async (challengeURL, dateStr, interaction) => {
 
       result['countryRight'] = guessData.totalRight;
       result['guesses'] = guessData.resultArray;
-
+      result['averageDistance'] = distanceInKm/5;
       rankingArray.push(result);
       rankCounter++;
     }
     updateChallengeHistory(dateStr, challengeURL, rankingArray, dailyInfo);
+
     return {rankingArray: rankingArray, dailyInfo: dailyInfo};
+
   } catch (error) {
     console.error('Error fetching data in getScores:', error, typeof(error), error.type);
     const errorType = error.type;
@@ -82,7 +87,7 @@ const resetDailyInfo = () => {
   dailyWorstCounter = 0; 
   dailyInfo = {
     bestGuess: {playerName: '', score: 0, distance: 0, address: '' },
-    worstGues: {playerName: '', score: 0, distance: 0, address: '' },
+    worstGuess: {playerName: '', score: 0, distance: 0, guessCountry: '', correctCountry: '' },
   }
 }
 
@@ -111,9 +116,9 @@ async function checkCountryCodes(rounds, guesses, playerName) {
       const distance = Number((distanceInMeters / 1000).toFixed(1));
       result['lat'] = lat;
       result['lng'] = lng;
-      result['countryCode'] = roundCode;
-      const guessCode = guessData.address.country_code ? guessData.address.country_code.toLowerCase() : '';
-      result['guessCode'] = guessCode;
+      result['correctCountryCode'] = roundCode;
+      const guessCode = guessData.address && guessData.address.country_code ? guessData.address.country_code.toLowerCase() : '';
+      result['guessCountryCode'] = guessCode;
       if (roundCode === guessCode) {
         result.rightCountry = true;
         totalRight++;
@@ -127,12 +132,12 @@ async function checkCountryCodes(rounds, guesses, playerName) {
       // check and update daily best guess 
       if (distance > 0 && distance < dailyBestCounter) {
         dailyBestCounter = distance; 
-        dailyInfo.bestGuess = {playerName: playerName, score: result.score, distance: distance, address: result.address }
+        dailyInfo.bestGuess = {playerName: playerName, score: result.score, distance: distance, address: result.address, countryCode: roundCode}
       }
       // check and update daily worse guess 
       if (distance > 0 && distance > dailyWorstCounter) {
         dailyWorstCounter = distance; 
-        dailyInfo.worstGuess = {playerName: playerName, score: result.score, distance: distance, address: result.address }
+        dailyInfo.worstGuess = {playerName: playerName, score: result.score, distance: distance, guessCountry: countryCodeDict[guessCode] ? countryCodeDict[guessCode] : 'ocean', correctCountry: countryCodeDict[roundCode], guessCountryCode: guessCode}
       }
     });
 

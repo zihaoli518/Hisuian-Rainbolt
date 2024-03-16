@@ -4,7 +4,9 @@
 require('dotenv').config();
 const fs = require('fs');
 const fetch = require('node-fetch');
-let challengeHisotry = require('../challengeHistory.js');
+let challengeHistory = require('../challengeHistory.js');
+let challengeScoreHistory = require('../challengeScoreHistory.js');
+
 const getScores = require('./getScores.js');
 
 
@@ -15,24 +17,30 @@ const getScores = require('./getScores.js');
 
 const fetchMonthlyStats = async () => {
   console.log('inside fetchMonthlyStats')
-  const resultObj = {};
-  const challengeHistoryKeys = Object.keys(challengeHisotry);
+  const resultObj = challengeScoreHistory;
+  const challengeHistoryKeys = Object.keys(challengeHistory);
+  let counter = 0;
   for (let date of challengeHistoryKeys) {
-    console.log('processing...', date)
-    const url = challengeHisotry[date]; 
-    // first convert it to the correct api endpoint 
-    const scoresArray = await getScores(url, date);                                                        
-    resultObj[date] = {url: url, ranking: scoresArray}; 
+    counter++;
+    if (date[0]==='3') continue;
+    console.log('processing......', date,)
+    // const currentObj = challengeScoreHistory[date];
+    // if (currentObj.dailyInfo && currentObj.dailyInfo.worstGuess && currentObj.dailyInfo.worstGuess.guessCountryCode) continue;
+    const url = challengeHistory[date]; 
+
+    const {rankingArray, dailyInfo} = await getScores(url, date);                                                        
+    // resultObj[date] = {url: url, ranking: rankingArray, dailyInfo: dailyInfo}; 
+    console.log('finished updating ', date, counter, ' / ', challengeHistoryKeys.length)
   }
 
-  fs.writeFile('challengeScoreHistory.js', `module.exports = ${JSON.stringify(resultObj, null, 2)};`, err => {
-    if (err) {
-        console.error('Error writing to file:', err);
-        return;
-    } else {
-        console.log('Message history object saved to challengeScoreHistory.js');
-    }
-  });
+  // fs.writeFile('challengeScoreHistory.js', `module.exports = ${JSON.stringify(resultObj, null, 2)};`, err => {
+  //   if (err) {
+  //       console.error('Error writing to file:', err);
+  //       return;
+  //   } else {
+  //       console.log('Message history object saved to challengeScoreHistory.js');
+  //   }
+  // });
 };
 
 

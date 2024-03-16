@@ -3,15 +3,15 @@ const { REST, Routes, ApplicationCommandOptionType } = require('discord.js');
 
 const commands = [
   {
-    name: 'dailychallenge',
+    name: 'daily_challenge_link',
     description: 'posts daily challenge link'
   },
   {
-    name: 'dailyscore',
+    name: 'daily_recap',
     description: 'uses geoguessr api to get todays daily challenge scores and posts recap'
   },
   {
-    name: 'daily_score_of',
+    name: 'get_recap_of',
     description: 'posts recap for daily challenge',
     options: [
       {
@@ -21,6 +21,10 @@ const commands = [
         required: true
       }
     ]
+  },
+  {
+    name: 'get_my_all_time_stats', 
+    description: 'generate a recap for your all time stats'
   },
   {
     name: 'create_history_object',
