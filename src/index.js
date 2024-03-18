@@ -10,7 +10,7 @@ const challengeHistory = require('../challengeHistory.js')
 const generateDailyChallengeLink = require('./generateDailyChallengeLink.js');
 const getScores = require('./getScores.js');
 const generateMonthlyStats = require('./generateMonthlyStats.js');
-const challengeScoreHistory = require('../challengeScoreHistory.js');
+const challengeScoreHistory = require('../challengeScoreHistoryBackup.js');
 const countryGreetings = require('./utils/countryGreetings.js');
 const getAllTimeStats = require('./getAllTimeStats.js')
 const countryCodeDict = require('./utils/countryCodes.js');
@@ -260,7 +260,7 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
 
 
 const handleInteractionGetAllTimeStats = async (interaction, user) => {
-  const outputChannel = process.env.TEST_CHANNEL_ID;
+  const outputChannel = process.env.GENERAL_CHANNEL_ID;
   const startTime = performance.now();
 
   try {
@@ -273,7 +273,7 @@ const handleInteractionGetAllTimeStats = async (interaction, user) => {
     const randomTroll = ['seasoned veteran of', 'experienced explorer with', 'impressive consistency of' ]
   
     const embed = new EmbedBuilder()
-      .setTitle(`let's scope out your all time stats,***${playerNameArg}*** : `)
+      .setTitle(`let's scope out your all time stats, ***${playerNameArg}*** : `)
       .setDescription(` <@${user}>, a ${getRandomWord(randomTroll)} ***${allTimeStats.gamesPlayed}*** games `)
 
       .setColor('Orange')
@@ -282,31 +282,38 @@ const handleInteractionGetAllTimeStats = async (interaction, user) => {
 
     const top3rate = (allTimeStats.topThree*100/allTimeStats.gamesPlayed).toFixed(1) + '%'
     const countryRightStr = allTimeStats.correctCountries + ' / ' + (allTimeStats.gamesPlayed*5);
-    console.log('about to top, ', allTimeStats)
+    // console.log('about to top, ', allTimeStats)
     const {topCountries, troubleCountries} = topAndBottomCountries(allTimeStats.countryStats, allTimeStats.gamesPlayed);
+
+    const maxLengthTop = Math.max(...topCountries.map(countryObj => countryCodeDict[countryObj.country].length));
     let topCountriesStr = '';
     topCountries.forEach(countryObj => {
-      topCountriesStr += `${countryCodeDict[countryObj.country]},    ${countryObj.right} / ${countryObj.total}, ${countryObj.percentage}% \n`
-    })
+      const countryName = countryCodeDict[countryObj.country];
+      const padding = '-'.repeat(maxLengthTop - countryName.length + 2); // Adjust padding as needed
+      topCountriesStr += `📍 ${countryName} ${padding} ${countryObj.right} / ${countryObj.total} -- ${countryObj.percentage}% \n`;
+    });
+    const maxLengthBot = Math.max(...troubleCountries.map(countryObj => countryCodeDict[countryObj.country].length));
     let bottomCountriesStr = '';
     troubleCountries.forEach(countryObj => {
-      bottomCountriesStr += `${countryCodeDict[countryObj.country]},    ${countryObj.right} / ${countryObj.total}, ${countryObj.percentage}% \n`
-    })
+      const countryName = countryCodeDict[countryObj.country];
+      const padding = '-'.repeat(maxLengthBot - countryName.length + 2); // Adjust padding as needed
+      bottomCountriesStr += `😈 ${countryName} ${padding} ${countryObj.right} / ${countryObj.total}-- ${countryObj.percentage}% \n`;
+    });
 
 
     fields.push(
-      { name: 'average score', value: allTimeStats.averageScore.toString(), inline: true},
-      { name: 'wins', value: allTimeStats.wins.toString(), inline: true},
-      { name: 'top 3', value: `${allTimeStats.topThree.toString()}, ***${top3rate}***`, inline: true},
-      { name: 'average rank', value: allTimeStats.averageRank.toString(), inline: true},
-      { name: 'average distance', value: allTimeStats.averageDistance + ' km', inline: true},
+      { name: 'average score', value: `🎲 ${allTimeStats.averageScore}`, inline: true},
+      { name: 'wins', value: `👑 ${allTimeStats.wins}`, inline: true},
+      { name: 'top 3', value: `🏆 ${allTimeStats.topThree}, **${top3rate}**`, inline: true},
+      { name: 'average rank', value: `🥇 ${allTimeStats.averageRank}`, inline: true},
+      { name: 'average distance', value: `🚃 ${allTimeStats.averageDistance} km`, inline: true},
       // { name: 'games', value: allTimeStats.gamesPlayed.toString(), inline: true},
-      { name: 'personal best', value: allTimeStats.personalBestScore.toString(), inline: true},
-      { name: 'countries', value: countryRightStr, inline: true},
-      { name: 'best round', value: allTimeStats.personalBestRound.toString(), inline: true},
-      { name: 'best guess', value: allTimeStats.allTimeBestGuess + ' km', inline: true},
-      { name: 'worst guess', value: allTimeStats.allTimeWorstGuess + ' km', inline: true},
-      { name: 'daily shoutouts', value: `best: ${allTimeStats.bestGuessOfTheDay}, worst: ${allTimeStats.worstGuessOfTheDay}`, inline: true},
+      { name: 'personal best', value: `🚴 ${allTimeStats.personalBestScore}`, inline: true},
+      { name: 'countries', value: `🌎 ${countryRightStr}`, inline: true},
+      { name: 'best round', value: `🎖 ${allTimeStats.personalBestRound}`, inline: true},
+      { name: 'best guess', value: `🙌 ${allTimeStats.allTimeBestGuess} km in ${extractCountryNameFromAddress(allTimeStats.allTimeBestGuessAddress)}`, inline: true},
+      { name: 'furthest guess', value: `😈 ${allTimeStats.allTimeWorstGuess} km`, inline: true},
+      { name: 'daily shoutouts', value: `best: ${allTimeStats.bestGuessOfTheDay}, furthest: ${allTimeStats.worstGuessOfTheDay}`, inline: true},
 
       { name: `🤯 you are killing it when we are in: 🤯`, value: topCountriesStr},
       { name: `😅 you get trolled by these countries: 😅`, value: bottomCountriesStr}
@@ -503,4 +510,12 @@ function topAndBottomCountries(countryStats, gamesPlayed) {
   console.log(topCountries, troubleCountries)
 
 return { topCountries, troubleCountries };
+}
+
+
+function extractCountryNameFromAddress(address) {
+  const addressParts = address.split(',');
+  const countryName = addressParts[addressParts.length - 1].trim();
+
+  return countryName;
 }

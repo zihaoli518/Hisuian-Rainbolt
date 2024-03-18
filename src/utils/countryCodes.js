@@ -208,7 +208,7 @@ module.exports = {
   "sd": "Sudan",
   "sr": "Suriname",
   "sj": "Svalbard And Jan Mayen",
-  "sz": "Swaziland",
+  "sz": "Eswatini",
   "se": "Sweden",
   "ch": "Switzerland",
   "sy": "Syrian Arab Republic",
