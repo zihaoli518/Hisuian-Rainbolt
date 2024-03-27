@@ -206,3 +206,64 @@ guesses: [
     time: 7
   }
 ]
+
+
+
+
+{
+  averageScore: 10440.1,
+  averageDistance: 3482.65,
+  gamesPlayed: 30,
+  wins: 3,
+  topThree: 14,
+  averageRank: 3.43,
+  personalBestScore: 16670,
+  personalBestRound: 4993,
+  countryRight: 65,
+  bestGuessOFTheDay: 5,
+  worstGuessOfTheDay: 5,
+  allTimeBestGuess: '7, Goudhaver, Passewaay, Tiel, Gelderland, Netherlands, 4007 SJ, Netherlands',
+  allTimeBestGuessAddress: '',
+  allTimeWorstGuess: 18945.2,
+  correctCountries: 0,
+  countryStats: {
+    fr: { right: 1, wrong: 5, total: 6 },
+    us: { right: 36, wrong: 4, total: 40 },
+    th: { right: 0, wrong: 2, total: 2 },
+    au: { right: 1, wrong: 3, total: 4 },
+    de: { right: 0, wrong: 3, total: 3 },
+    tr: { right: 0, wrong: 1, total: 1 },
+    ru: { right: 2, wrong: 3, total: 5 },
+    gb: { right: 4, wrong: 5, total: 9 },
+    in: { right: 3, wrong: 3, total: 6 },
+    id: { right: 3, wrong: 0, total: 3 },
+    jp: { right: 9, wrong: 6, total: 15 },
+    mx: { right: 1, wrong: 3, total: 4 },
+    be: { right: 0, wrong: 1, total: 1 },
+    ca: { right: 0, wrong: 5, total: 5 },
+    bd: { right: 0, wrong: 1, total: 1 },
+    it: { right: 2, wrong: 6, total: 8 },
+    cl: { right: 0, wrong: 1, total: 1 },
+    br: { right: 0, wrong: 5, total: 5 },
+    bg: { right: 0, wrong: 1, total: 1 },
+    co: { right: 1, wrong: 1, total: 2 },
+    uy: { right: 0, wrong: 1, total: 1 },
+    sg: { right: 0, wrong: 2, total: 2 },
+    es: { right: 0, wrong: 4, total: 4 },
+    sz: { right: 0, wrong: 1, total: 1 },
+    za: { right: 0, wrong: 2, total: 2 },
+    il: { right: 0, wrong: 1, total: 1 },
+    no: { right: 0, wrong: 1, total: 1 },
+    ro: { right: 0, wrong: 1, total: 1 },
+    my: { right: 0, wrong: 1, total: 1 },
+    nz: { right: 0, wrong: 1, total: 1 },
+    se: { right: 0, wrong: 2, total: 2 },
+    cz: { right: 0, wrong: 2, total: 2 },
+    pe: { right: 1, wrong: 2, total: 3 },
+    dk: { right: 0, wrong: 1, total: 1 },
+    ar: { right: 0, wrong: 1, total: 1 },
+    pl: { right: 0, wrong: 2, total: 2 },
+    ph: { right: 1, wrong: 0, total: 1 },
+    ua: { right: 0, wrong: 1, total: 1 }
+  }
+}

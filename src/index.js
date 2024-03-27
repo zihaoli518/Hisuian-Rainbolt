@@ -10,7 +10,7 @@ const challengeHistory = require('../challengeHistory.js')
 const generateDailyChallengeLink = require('./generateDailyChallengeLink.js');
 const getScores = require('./getScores.js');
 const generateMonthlyStats = require('./generateMonthlyStats.js');
-const challengeScoreHistory = require('../challengeScoreHistoryBackup.js');
+const challengeScoreHistory = require('../challengeScoreHistory.js');
 const countryGreetings = require('./utils/countryGreetings.js');
 const getAllTimeStats = require('./getAllTimeStats.js')
 const countryCodeDict = require('./utils/countryCodes.js');
@@ -191,6 +191,8 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
   
               console.log('checking average: ', totalScore, monthlyStats.monthlyAverage);
               if (totalScore > monthlyStats.monthlyAverage) aboveAverage.push(playerName);
+              if (totalScore>19999) await twentyKAlert(interaction, playerName);
+              if (totalScore>monthlyStats.allTimeHighscore) await pbAlert(interaction, playerName, totalScore, monthlyStats.allTimeHighscore);
   
               const field1 = { name: rankStr + '. ' + playerName, value: `🌍 score: ${totalScoreStr} 🚎 distance: ${totalDistance}km 📍country: ${countryRight}/5`, inline: true };
               const field2 = { name: 'monthly stats', value: `avg: ${monthlyStats.monthlyAverage} 👑 wins: ${wins}, GP: ${games}, 🏆 top 3: ${top3}, ${top3Rate}` };
@@ -248,7 +250,6 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
     const elapsedTime = ((endTime - startTime) / 1000).toFixed(3);
     embed.setFooter({text: 'recap generated in ' + elapsedTime + 's'})
 
-    // if (totalScore>19999) await twentyKAlert(interaction, playerName);
     await client.channels.cache.get(outputChannel).send({embeds: [embed]});
     console.log('after client.channels.cache')
 

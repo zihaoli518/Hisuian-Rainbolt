@@ -25,8 +25,8 @@ const headers = {
 let dailyBestCounter = Infinity; 
 let dailyWorstCounter = 0; 
 let dailyInfo = {
-  bestGuess: {playerName: '', score: 0, distance: 0, address: '' },
-  worstGuess: {playerName: '', score: 0, distance: 0, guessCountry: '', correctCountry: '' },
+  bestGuess: {playerName: '', score: 0, distance: 0, address: '', countrycode: '' },
+  worstGuess: {playerName: '', score: 0, distance: 0, guessCountry: '', correctCountry: '', guessCountryCode: '' },
 }
 
 
@@ -43,17 +43,27 @@ const getScores = async (challengeURL, dateStr, interaction) => {
     const data = await response.json();
     // // check if cached 
     console.log('checking if url is cached....');
-    // const cached = challengeScoreHistory[dateStr];
-    // if (cached && cached.ranking && cached.ranking.length===data.items.length) {
-    //   console.log('CACHED!')
-    //   return {rankingArray: cached.ranking, dailyInfo: cached.dailyInfo};
-    // }
+    const cached = challengeScoreHistory[dateStr];
+    if (cached && cached.ranking && cached.ranking.length === data.items.length) {
+      console.log('CACHED!')
+      return {rankingArray: cached.ranking, dailyInfo: cached.dailyInfo};
+    }
     // process data if new data found 
     const rankingArray = [];
     let rankCounter = 1;
 
     for (const row of data.items) {
-      const result = {};
+      let result = {};
+      // check if already cached 
+      const foundPlayer = cached ? cached.ranking.find(cachedPlayer => cachedPlayer.playerName===row.playerName) : undefined;
+
+      if (foundPlayer) {
+        foundPlayer.rank = rankCounter;
+        rankCounter++;
+        rankingArray.push(foundPlayer);
+        continue;
+      }
+
       result['rank'] = rankCounter;
       result['playerName'] = row.playerName;
       result['totalScore'] = row.totalScore;
@@ -87,8 +97,8 @@ const resetDailyInfo = () => {
   dailyBestCounter = Infinity; 
   dailyWorstCounter = 0; 
   dailyInfo = {
-    bestGuess: {playerName: '', score: 0, distance: 0, address: '' },
-    worstGuess: {playerName: '', score: 0, distance: 0, guessCountry: '', correctCountry: '' },
+    bestGuess: {playerName: '', score: 0, distance: 0, address: '', countrycode: '' },
+    worstGuess: {playerName: '', score: 0, distance: 0, guessCountry: '', correctCountry: '', guessCountryCode: '' },
   }
 }
 

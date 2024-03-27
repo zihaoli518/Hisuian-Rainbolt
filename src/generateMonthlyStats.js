@@ -25,7 +25,7 @@ const generateMonthlyStats = async (playerName, monthStr) => {
 
   for (const date of dateArray) {
     let rankingArray = challengeScoreHistory[date].ranking;
-    
+
     rankingArray = challengeScoreHistory[date].ranking;
 
     // update challengeScoreHistory by running getScore

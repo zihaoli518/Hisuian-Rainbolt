@@ -1,7 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const fetch = require('node-fetch');
-const challengeScoreHistory = require('../../challengeScoreHistoryBackup.js');
+const challengeScoreHistory = require('../../challengeScoreHistory.js');
 const countryCodeDict = require('./countryCodes.js')
 
 
@@ -35,14 +35,11 @@ const update = () => {
         const guessCode = result.guessCountryCode;
         // check and update daily best guess 
         if (distance > 0 && distance < dailyBestCounter) {
-          if (date==='3-14-2024') console.log('best update ', distance, playerName)
           dailyBestCounter = distance; 
             dailyInfo.bestGuess = {playerName: playerName, score: result.score, distance: distance, address: result.address, countryCode: result.correctCountryCode}
           }
           // check and update daily worse guess 
           if (distance > 0 && distance > dailyWorstCounter) {
-            if (date==='3-14-2024') console.log('worst update ', distance, playerName)
-
             dailyWorstCounter = distance; 
             dailyInfo.worstGuess = {playerName: playerName, score: result.score, distance: distance, guessCountry: countryCodeDict[guessCode] ? countryCodeDict[guessCode] : 'ocean', correctCountry: result.correctCountryCode, guessCountryCode: guessCode}
           }
