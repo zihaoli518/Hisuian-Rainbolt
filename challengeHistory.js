@@ -75,5 +75,14 @@ module.exports = {
   "3-24-2024": "https://www.geoguessr.com/challenge/tl0sEA8EtMVQaNKZ",
   "3-25-2024": "https://www.geoguessr.com/challenge/rxnGb4ToTrHhyHBk",
   "3-26-2024": "https://www.geoguessr.com/challenge/MZY5LLQBdAXyMGlx",
-  "3-27-2024": "https://www.geoguessr.com/challenge/VrCB73KoTcZUiFll"
+  "3-27-2024": "https://www.geoguessr.com/challenge/VrCB73KoTcZUiFll",
+  "3-28-2024": "https://www.geoguessr.com/challenge/1EmLpLVUnIZYLSxf",
+  "3-29-2024": "https://www.geoguessr.com/challenge/CnOkuboQSiMTPG0x",
+  "3-30-2024": "https://www.geoguessr.com/challenge/FbmV7Xzi0U585WNb",
+  "3-31-2024": "https://www.geoguessr.com/challenge/gSRTPP9nZ8GQ6nIM",
+  "4-1-2024": "https://www.geoguessr.com/challenge/wEC2E6ZlbdECKkYf",
+  "4-2-2024": "https://www.geoguessr.com/challenge/2hqO7CcV5AJflmn3",
+  "4-3-2024": "https://www.geoguessr.com/challenge/clyg65Dv53AX07vc",
+  "4-4-2024": "https://www.geoguessr.com/challenge/uGTHPRLdIH0cOfa1",
+  "4-5-2024": "https://www.geoguessr.com/challenge/RYtp0SdnvVt3B0GA"
 };

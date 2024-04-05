@@ -219,6 +219,7 @@ module.exports = getScores;
 
 // utils
 const extractChallengeId = (url) => {
+  console.log(url)
   const parts = url.split('/');
   // The challenge ID is the last part of the URL
   const challengeId = parts[parts.length - 1];

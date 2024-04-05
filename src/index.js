@@ -130,7 +130,8 @@ const handleInteractionDailyChallenge = async (interaction, user) => {
       const dailyLink = await generateDailyChallengeLink();
       const date = getDateStr();
 
-      const channelID = process.env.DAILY_CHALLENGE_CHANNEL_ID; 
+      // const channelID = process.env.DAILY_CHALLENGE_CHANNEL_ID; 
+      const channelID = process.env.TEST_CHANNEL_ID; 
 
       await client.channels.cache.get(channelID).send(`${dailyLink} \n here's the daily challenge for ${date}, glhf!` );
       // await client.channels.cache.get(channelID).send(dailyLink);
@@ -153,7 +154,7 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
 
   
   // const outputChannel = process.env.GENERAL_CHANNEL_ID; 
-  const outputChannel = process.env.GENERAL_CHANNEL_ID; 
+  const outputChannel = process.env.TEST_CHANNEL_ID; 
   // Get the channel you want to go through messages in
   // const channel = client.channels.cache.get(dailyChallengeChannel);
   try {
