@@ -125,7 +125,7 @@ const handleInteractionDailyChallenge = async (interaction, user) => {
     // send url to daily challenge channel 
     try {
       // reply to command
-      interaction.reply('daily challenge url is being created ' + `<@${user}>`);
+      if (interaction) interaction.reply('daily challenge url is being created ' + `<@${user}>`);
       // first generate the link 
       const dailyLink = await generateDailyChallengeLink();
       const date = getDateStr();
@@ -146,10 +146,10 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
   // interaction.reply(`generating daily challenge recap for ${date}... this might take a while`);
   // check if date exists in challenge history 
   if (!challengeHistory[date]) {
-    interaction.reply('`oops, the requested date does not exist. check your formatting of the date again, it should be 2-19-2024. or I forgot to post a link that day.`')
+    if (interaction) interaction.reply('`oops, the requested date does not exist. check your formatting of the date again, it should be 2-19-2024. or I forgot to post a link that day.`')
     return
   }
-  interaction.reply('`generating daily recap... this might take a while because free APIs limit my speed :/`')
+  if (interaction) interaction.reply('`generating daily recap... this might take a while because free APIs limit my speed :/`')
   const startTime = performance.now();
 
   
@@ -440,7 +440,7 @@ const createHistoryObject = async (interaction) => {
 
 
 // Cron job 
-const schedule = '30 23 * * *';
+const schedule = '30 3 * * *';
 
 // Schedule the task
 cron.schedule(schedule, async () => {
@@ -452,21 +452,36 @@ cron.schedule(schedule, async () => {
   // await client.channels.cache.get(channelID).send(dailyLink);
   // await client.channels.cache.get(channelID).send(`here's the daily challenge for ${date}, glhf! @everyone      (generated with cron job)` );
   console.log('Running scheduled task...');
+  handleInteractionDailyChallenge();
+  const prevDate = getDateStr(undefined, true); 
+  handleInteractionDailyScoreOf(undefined, prevDate);
 });
 
 
 
+
+
+
+
 // util functions 
-const getDateStr = (date) => {
+const getDateStr = (date, prevDay=false) => {
   let currentDate = date;
-  if (!date) currentDate = new Date();
+  
+  if (!date) {
+    currentDate = new Date();
+    if (prevDay) {
+      // Subtract 1 day to get the previous day
+      currentDate.setDate(currentDate.getDate() - 1);
+    }
+  }
+
   // Get the day, month, and year
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1; // Month is zero-based, so add 1
   const year = currentDate.getFullYear();
 
-  return`${month}-${day}-${year}`;
-}
+  return `${month}-${day}-${year}`;
+};
 
 const dateStrToMonthStr = (str) => {
   const parts = str.split('-'); // Split the string by the hyphen character
