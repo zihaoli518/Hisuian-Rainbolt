@@ -440,7 +440,7 @@ const createHistoryObject = async (interaction) => {
 
 
 // Cron job 
-const schedule = '17 15 * * *';
+const schedule = '21 22 * * *';
 
 // Schedule the task
 cron.schedule(schedule, async () => {
