@@ -244,13 +244,13 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
     );
 
     embed.addFields(fields);
-    console.log('after addFields ', bestGuess.countryCode, countryGreetings);
-
-
+    
+    
     const endTime = performance.now();
     const elapsedTime = ((endTime - startTime) / 1000).toFixed(3);
     embed.setFooter({text: 'recap generated in ' + elapsedTime + 's'})
-
+    
+    console.log('before client.channels.get ', client.channels.cache.get(outputChannel));
     await client.channels.cache.get(outputChannel).send({embeds: [embed]});
     console.log('after client.channels.cache')
 
@@ -440,7 +440,7 @@ const createHistoryObject = async (interaction) => {
 
 
 // Cron job 
-const schedule = '21 22 * * *';
+const schedule = '57 23 * * *';
 
 // Schedule the task
 cron.schedule(schedule, async () => {

@@ -13,7 +13,7 @@ const generateDailyChallengeLink = async () =>  {
   const url = 'https://www.geoguessr.com/maps/world/play';
   // const url = 'https://www.geoguessr.com/signin?target=%2Fmaps%2Fworld%2Fplay'
 
-  const browser = await puppeteer.launch({headless: false});
+  const browser = await puppeteer.launch({headless: true});
   const page = await browser.newPage();
   await page.goto(url);
 
