@@ -124,16 +124,20 @@ client.login(TOKEN);
 const handleInteractionDailyChallenge = async (interaction, user) => {
     // send url to daily challenge channel 
     try {
+      const generalChannel = process.env.TEST_CHANNEL_ID;
       // reply to command
       if (interaction) interaction.reply('daily challenge url is being created ' + `<@${user}>`);
+      else {
+        await client.channels.cache.get(generalChannel).send('`running chron job...`');
+      }
       // first generate the link 
       const dailyLink = await generateDailyChallengeLink();
       const date = getDateStr();
 
       // const channelID = process.env.DAILY_CHALLENGE_CHANNEL_ID; 
-      const channelID = process.env.TEST_CHANNEL_ID; 
+      const dailyChannel = process.env.DAILY_CHALLENGE_CHANNEL_ID; 
 
-      await client.channels.cache.get(channelID).send(`${dailyLink} \n here's the daily challenge for ${date}, glhf!` );
+      await client.channels.cache.get(dailyChannel).send(`${dailyLink} \n here's the daily challenge for ${date}, glhf!` );
       // await client.channels.cache.get(channelID).send(dailyLink);
     } catch (error) {
       console.log(error)
@@ -250,9 +254,9 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
     const elapsedTime = ((endTime - startTime) / 1000).toFixed(3);
     embed.setFooter({text: 'recap generated in ' + elapsedTime + 's'})
     
-    console.log('before client.channels.get ', client.channels.cache.get(outputChannel));
+    // console.log('before client.channels.get ', client.channels.cache.get(outputChannel));
     await client.channels.cache.get(outputChannel).send({embeds: [embed]});
-    console.log('after client.channels.cache')
+    // console.log('after client.channels.cache')
 
   } catch (error) {
     console.log(error)
@@ -440,7 +444,7 @@ const createHistoryObject = async (interaction) => {
 
 
 // Cron job 
-const schedule = '57 23 * * *';
+const schedule = '0 16 * * *';
 
 // Schedule the task
 cron.schedule(schedule, async () => {
