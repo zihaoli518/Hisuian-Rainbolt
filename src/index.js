@@ -206,7 +206,7 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
               const monthlyStats = await generateMonthlyStats(playerName, monthStr);
               let wins = monthlyStats.wins;
               let top3 = monthlyStats.topThree;
-
+              let games = monthlyStats.gamesPlayed;
               const top3Rate = ((top3 / games) * 100).toFixed(1).toString() + "%";
   
               console.log('checking average: ', totalScore, monthlyStats.monthlyAverage);
