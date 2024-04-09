@@ -20274,6 +20274,66 @@ module.exports = {
     "ranking": [
       {
         "rank": 1,
+        "playerName": "Kanjidai",
+        "totalScore": 12159,
+        "totalDistance": 19818.2,
+        "countryRight": 1,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 48.26031538799953,
+            "lng": 16.31764225798105,
+            "correctCountryCode": "hu",
+            "guessCountryCode": "at",
+            "distance": 73,
+            "score": 4761,
+            "address": "Himmelstraße, KG Grinzing, Döbling, Vienna, 1190, Austria"
+          },
+          {
+            "rightCountry": true,
+            "lat": 42.576862710647084,
+            "lng": -71.77032904144438,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 199.7,
+            "score": 4373,
+            "address": "Laurel Bank Cons. Area, West Acres Drive, Lunenburg, Worcester County, Massachusetts, 01462, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 1.402441478818027,
+            "lng": 103.80109587727196,
+            "correctCountryCode": "us",
+            "guessCountryCode": "sg",
+            "distance": 10798.9,
+            "score": 4,
+            "address": "80, Mandai Lake Road, Mandai Nature Precinct, Central Water Catchment, Northwest, Singapore, 729826, Singapore"
+          },
+          {
+            "rightCountry": false,
+            "lat": 38.83757867920648,
+            "lng": -8.516441779087867,
+            "correctCountryCode": "in",
+            "guessCountryCode": "pt",
+            "distance": 7983,
+            "score": 24,
+            "address": "Posto de Vigia São Torcato, Rua de São Torcato, Pelados, Branca, Coruche, Santarém, Portugal"
+          },
+          {
+            "rightCountry": false,
+            "lat": 51.659479452904314,
+            "lng": -0.09244485482787779,
+            "correctCountryCode": "fr",
+            "guessCountryCode": "gb",
+            "distance": 763.6,
+            "score": 2997,
+            "address": "64-66, Monks Road, London Borough of Enfield, London, Greater London, England, EN2 8BQ, United Kingdom"
+          }
+        ],
+        "averageDistance": 3963.6400000000003
+      },
+      {
+        "rank": 2,
         "playerName": "Z",
         "totalScore": 9749,
         "totalDistance": 25393.3,
@@ -20333,7 +20393,7 @@ module.exports = {
         "averageDistance": 5078.66
       },
       {
-        "rank": 2,
+        "rank": 3,
         "playerName": "erniesbro",
         "totalScore": 9683,
         "totalDistance": 30025.9,
@@ -20393,7 +20453,7 @@ module.exports = {
         "averageDistance": 6005.18
       },
       {
-        "rank": 3,
+        "rank": 4,
         "playerName": "seanhoma47",
         "totalScore": 7693,
         "totalDistance": 24896.5,
@@ -20453,7 +20513,7 @@ module.exports = {
         "averageDistance": 4979.3
       },
       {
-        "rank": 4,
+        "rank": 5,
         "playerName": "hoshibear",
         "totalScore": 2873,
         "totalDistance": 35397.6,
@@ -20515,19 +20575,19 @@ module.exports = {
     ],
     "dailyInfo": {
       "bestGuess": {
-        "playerName": "seanhoma47",
-        "score": 4766,
-        "distance": 71.6,
-        "address": "Andrew Haight Road, Town of Washington, Dutchess County, New York, 12545, United States",
-        "countryCode": "us"
+        "playerName": "Kanjidai",
+        "score": 4761,
+        "distance": 73,
+        "address": "Himmelstraße, KG Grinzing, Döbling, Vienna, 1190, Austria",
+        "countryCode": "hu"
       },
       "worstGuess": {
-        "playerName": "erniesbro",
-        "score": 0,
-        "distance": 16656.4,
-        "guessCountry": "Peru",
-        "correctCountry": "India",
-        "guessCountryCode": "pe"
+        "playerName": "Kanjidai",
+        "score": 4,
+        "distance": 10798.9,
+        "guessCountry": "Singapore",
+        "correctCountry": "United States",
+        "guessCountryCode": "sg"
       }
     }
   },
@@ -20596,6 +20656,66 @@ module.exports = {
       },
       {
         "rank": 2,
+        "playerName": "Kanjidai",
+        "totalScore": 13536,
+        "totalDistance": 5422.7,
+        "countryRight": 3,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 35.347798542485215,
+            "lng": -97.47848021483274,
+            "correctCountryCode": "ca",
+            "guessCountryCode": "us",
+            "distance": 2438.4,
+            "score": 975,
+            "address": "Parkwood Court, Moore, Cleveland County, Oklahoma, 73160, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 55.622732273588355,
+            "lng": 39.75488520646785,
+            "correctCountryCode": "ua",
+            "guessCountryCode": "ru",
+            "distance": 584.6,
+            "score": 3379,
+            "address": "Дмитровка, Shatursky District, Moscow Oblast, Central Federal District, 140720, Russia"
+          },
+          {
+            "rightCountry": true,
+            "lat": 36.00858313271966,
+            "lng": 139.66676614368492,
+            "correctCountryCode": "jp",
+            "guessCountryCode": "jp",
+            "distance": 397.5,
+            "score": 3830,
+            "address": "Koguki, Shiraoka, Saitama Prefecture, 349-0217, Japan"
+          },
+          {
+            "rightCountry": true,
+            "lat": 32.48050304113892,
+            "lng": -93.72160336480603,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 1457,
+            "score": 1883,
+            "address": "Beaumont Street, Shreveport, Caddo Parish, Louisiana, 71104, United States"
+          },
+          {
+            "rightCountry": true,
+            "lat": 44.46630262599099,
+            "lng": 5.55673284521482,
+            "correctCountryCode": "fr",
+            "guessCountryCode": "fr",
+            "distance": 545.2,
+            "score": 3469,
+            "address": "L'Infernet, Montmorin, Valdoule, Gap, Hautes-Alpes, Provence-Alpes-Côte d'Azur, Metropolitan France, 05150, France"
+          }
+        ],
+        "averageDistance": 1084.54
+      },
+      {
+        "rank": 3,
         "playerName": "seanhoma47",
         "totalScore": 13215,
         "totalDistance": 13423.2,
@@ -20655,7 +20775,7 @@ module.exports = {
         "averageDistance": 2684.6400000000003
       },
       {
-        "rank": 3,
+        "rank": 4,
         "playerName": "erniesbro",
         "totalScore": 12285,
         "totalDistance": 6874.1,
@@ -20715,7 +20835,7 @@ module.exports = {
         "averageDistance": 1374.8200000000002
       },
       {
-        "rank": 4,
+        "rank": 5,
         "playerName": "Z",
         "totalScore": 10131,
         "totalDistance": 8408.4,
@@ -20777,19 +20897,19 @@ module.exports = {
     ],
     "dailyInfo": {
       "bestGuess": {
-        "playerName": "hoshibear",
-        "score": 4962,
-        "distance": 11.5,
-        "address": "38, Rue Salvador Allende, Vieux Saint-Ouen, Pleyel - Confluence, Saint-Ouen-sur-Seine, Saint-Denis, Seine-Saint-Denis, Ile-de-France, Metropolitan France, 93200, France",
-        "countryCode": "fr"
+        "playerName": "Kanjidai",
+        "score": 3830,
+        "distance": 397.5,
+        "address": "Koguki, Shiraoka, Saitama Prefecture, 349-0217, Japan",
+        "countryCode": "jp"
       },
       "worstGuess": {
-        "playerName": "seanhoma47",
-        "score": 5,
-        "distance": 10410.8,
-        "guessCountry": "Colombia",
-        "correctCountry": "Ukraine",
-        "guessCountryCode": "co"
+        "playerName": "Kanjidai",
+        "score": 975,
+        "distance": 2438.4,
+        "guessCountry": "United States",
+        "correctCountry": "Canada",
+        "guessCountryCode": "us"
       }
     }
   },
@@ -21622,6 +21742,66 @@ module.exports = {
       },
       {
         "rank": 4,
+        "playerName": "Kanjidai",
+        "totalScore": 9267,
+        "totalDistance": 17465.8,
+        "countryRight": 2,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": -35.20920613195936,
+            "lng": 149.64263233952875,
+            "correctCountryCode": "ar",
+            "guessCountryCode": "au",
+            "distance": 11812.3,
+            "score": 2,
+            "address": "Mount Fairy, Queanbeyan-Palerang Regional Council, New South Wales, 2580, Australia"
+          },
+          {
+            "rightCountry": true,
+            "lat": 45.388127888542705,
+            "lng": -73.96780310379219,
+            "correctCountryCode": "ca",
+            "guessCountryCode": "ca",
+            "distance": 265.4,
+            "score": 4185,
+            "address": "École Virginie-Roy, Grand Boulevard, L'Île-Perrot, Vaudreuil-Soulanges, Montérégie, Quebec, J7V 4X4, Canada"
+          },
+          {
+            "rightCountry": false,
+            "lat": 48.52853042317232,
+            "lng": 11.598320381109643,
+            "correctCountryCode": "bg",
+            "guessCountryCode": "de",
+            "distance": 1114.5,
+            "score": 2369,
+            "address": "Hueb, Preinerszell, Schweitenkirchen, Landkreis Pfaffenhofen an der Ilm, Bavaria, 85301, Germany"
+          },
+          {
+            "rightCountry": false,
+            "lat": -34.622616820380145,
+            "lng": -58.45476905491366,
+            "correctCountryCode": "br",
+            "guessCountryCode": "ar",
+            "distance": 2904.2,
+            "score": 714,
+            "address": "272, Morelos, Caballito, Buenos Aires, Comuna 6, Autonomous City of Buenos Aires, C1406GLE, Argentina"
+          },
+          {
+            "rightCountry": true,
+            "lat": 40.179971227580495,
+            "lng": -74.46775732521124,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 1369.3,
+            "score": 1997,
+            "address": "South Chambers Road, Millstone Township, Monmouth County, New Jersey, 08514, United States"
+          }
+        ],
+        "averageDistance": 3493.16
+      },
+      {
+        "rank": 5,
         "playerName": "erniesbro",
         "totalScore": 5079,
         "totalDistance": 27199.5,
@@ -21681,7 +21861,7 @@ module.exports = {
         "averageDistance": 5439.9
       },
       {
-        "rank": 5,
+        "rank": 6,
         "playerName": "hoshibear",
         "totalScore": 3469,
         "totalDistance": 45894.9,
@@ -21743,19 +21923,19 @@ module.exports = {
     ],
     "dailyInfo": {
       "bestGuess": {
-        "playerName": "geowiz123",
-        "score": 4190,
-        "distance": 263.5,
-        "address": "Benton, Grafton County, New Hampshire, United States",
+        "playerName": "Kanjidai",
+        "score": 4185,
+        "distance": 265.4,
+        "address": "École Virginie-Roy, Grand Boulevard, L'Île-Perrot, Vaudreuil-Soulanges, Montérégie, Quebec, J7V 4X4, Canada",
         "countryCode": "ca"
       },
       "worstGuess": {
-        "playerName": "hoshibear",
-        "score": 0,
-        "distance": 17076.4,
-        "guessCountry": "ocean",
+        "playerName": "Kanjidai",
+        "score": 2,
+        "distance": 11812.3,
+        "guessCountry": "Australia",
         "correctCountry": "Argentina",
-        "guessCountryCode": ""
+        "guessCountryCode": "au"
       }
     }
   },
@@ -21944,6 +22124,66 @@ module.exports = {
       },
       {
         "rank": 4,
+        "playerName": "Kanjidai",
+        "totalScore": 6619,
+        "totalDistance": 15166.2,
+        "countryRight": 1,
+        "guesses": [
+          {
+            "rightCountry": true,
+            "lat": -16.96449097458888,
+            "lng": -52.09951715478519,
+            "correctCountryCode": "br",
+            "guessCountryCode": "br",
+            "distance": 1903.6,
+            "score": 1396,
+            "address": "Caiapônia, Região Geográfica Imediata de Jataí-Mineiros, Região Geográfica Intermediária de Rio Verde, Goiás, Central-West Region, 75850-000, Brazil"
+          },
+          {
+            "rightCountry": false,
+            "lat": 47.69449607581928,
+            "lng": 13.660272112976033,
+            "correctCountryCode": "fr",
+            "guessCountryCode": "at",
+            "distance": 816.7,
+            "score": 2892,
+            "address": "Jubiläumsweg, Perneck, Eck, Bad Ischl, Bezirk Gmunden, Upper Austria, 4820, Austria"
+          },
+          {
+            "rightCountry": false,
+            "lat": -0.28084418615193624,
+            "lng": 37.6298613591926,
+            "correctCountryCode": "za",
+            "guessCountryCode": "ke",
+            "distance": 3234.8,
+            "score": 572,
+            "address": "Muthambi, Tharaka-Nithi, Eastern, Kenya"
+          },
+          {
+            "rightCountry": false,
+            "lat": 49.78925123184767,
+            "lng": 15.186209258988503,
+            "correctCountryCode": "us",
+            "guessCountryCode": "cz",
+            "distance": 7627.3,
+            "score": 30,
+            "address": "03318, Borová, Útěšenovice, Zbraslavice, okres Kutná Hora, Central Bohemia, 285 21, Czechia"
+          },
+          {
+            "rightCountry": false,
+            "lat": 40.48275950546509,
+            "lng": 31.273909322128553,
+            "correctCountryCode": "it",
+            "guessCountryCode": "tr",
+            "distance": 1583.7,
+            "score": 1729,
+            "address": "Yukarı, Pelitözü, Mudurnu, Bolu, Black Sea Region, Turkey"
+          }
+        ],
+        "averageDistance": 3033.2400000000002
+      },
+      {
+        "rank": 5,
         "playerName": "Z",
         "totalScore": 3804,
         "totalDistance": 29784.4,
@@ -22005,19 +22245,19 @@ module.exports = {
     ],
     "dailyInfo": {
       "bestGuess": {
-        "playerName": "erniesbro",
-        "score": 4775,
-        "distance": 68.6,
-        "address": "Kagisano-Molopo Ward 2, Kagisano-Molopo Local Municipality, Dr Ruth Segomotsi Mompati District Municipality, North West, South Africa",
-        "countryCode": "za"
+        "playerName": "Kanjidai",
+        "score": 2892,
+        "distance": 816.7,
+        "address": "Jubiläumsweg, Perneck, Eck, Bad Ischl, Bezirk Gmunden, Upper Austria, 4820, Austria",
+        "countryCode": "fr"
       },
       "worstGuess": {
-        "playerName": "seanhoma47",
-        "score": 0,
-        "distance": 15017.1,
-        "guessCountry": "Mexico",
-        "correctCountry": "South Africa",
-        "guessCountryCode": "mx"
+        "playerName": "Kanjidai",
+        "score": 30,
+        "distance": 7627.3,
+        "guessCountry": "Czech Republic",
+        "correctCountry": "United States",
+        "guessCountryCode": "cz"
       }
     }
   },
@@ -22528,6 +22768,66 @@ module.exports = {
       },
       {
         "rank": 4,
+        "playerName": "Kanjidai",
+        "totalScore": 6603,
+        "totalDistance": 21385.6,
+        "countryRight": 0,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": -26.020009559286937,
+            "lng": 28.160963261672123,
+            "correctCountryCode": "ar",
+            "guessCountryCode": "za",
+            "distance": 8468.4,
+            "score": 17,
+            "address": "Poodle Place, Austin View, Johannesburg Ward 110, Sandton, City of Johannesburg Metropolitan Municipality, Gauteng, South Africa"
+          },
+          {
+            "rightCountry": false,
+            "lat": 47.31680791999379,
+            "lng": 28.916539551336395,
+            "correctCountryCode": "pl",
+            "guessCountryCode": "md",
+            "distance": 1104.9,
+            "score": 2384,
+            "address": "Orhei District, Moldova"
+          },
+          {
+            "rightCountry": false,
+            "lat": -26.075601871678494,
+            "lng": 28.05302928745223,
+            "correctCountryCode": "id",
+            "guessCountryCode": "za",
+            "distance": 9212.8,
+            "score": 10,
+            "address": "David Avenue, Duxberry, Johannesburg Ward 103, Sandton, City of Johannesburg Metropolitan Municipality, Gauteng, 1865, South Africa"
+          },
+          {
+            "rightCountry": false,
+            "lat": 40.537703685451135,
+            "lng": 31.646377393070438,
+            "correctCountryCode": "hr",
+            "guessCountryCode": "tr",
+            "distance": 1394.7,
+            "score": 1963,
+            "address": "Ayman Yaylası, Yuva Köyü, Seben, Bolu, Black Sea Region, 14752, Turkey"
+          },
+          {
+            "rightCountry": false,
+            "lat": 48.73650561032109,
+            "lng": 9.294737742434597,
+            "correctCountryCode": "ua",
+            "guessCountryCode": "de",
+            "distance": 1204.9,
+            "score": 2229,
+            "address": "38, Stuttgarter Straße, Pliensauvorstadt, Esslingen am Neckar, Aichwald, Landkreis Esslingen, Baden-Württemberg, 73734, Germany"
+          }
+        ],
+        "averageDistance": 4277.12
+      },
+      {
+        "rank": 5,
         "playerName": "seanhoma47",
         "totalScore": 5484,
         "totalDistance": 33932.4,
@@ -22589,19 +22889,19 @@ module.exports = {
     ],
     "dailyInfo": {
       "bestGuess": {
-        "playerName": "erniesbro",
-        "score": 4027,
-        "distance": 322.9,
-        "address": "Municipio de Machagai, Departamento Veinticinco de Mayo, Chaco, Argentina",
-        "countryCode": "ar"
+        "playerName": "Kanjidai",
+        "score": 2384,
+        "distance": 1104.9,
+        "address": "Orhei District, Moldova",
+        "countryCode": "pl"
       },
       "worstGuess": {
-        "playerName": "seanhoma47",
-        "score": 1,
-        "distance": 13517.5,
-        "guessCountry": "Russian Federation",
-        "correctCountry": "Argentina",
-        "guessCountryCode": "ru"
+        "playerName": "Kanjidai",
+        "score": 10,
+        "distance": 9212.8,
+        "guessCountry": "South Africa",
+        "correctCountry": "Indonesia",
+        "guessCountryCode": "za"
       }
     }
   },
@@ -22670,6 +22970,66 @@ module.exports = {
       },
       {
         "rank": 2,
+        "playerName": "Kanjidai",
+        "totalScore": 6950,
+        "totalDistance": 26374.1,
+        "countryRight": 0,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 44.9851299832896,
+            "lng": -77.68731755157137,
+            "correctCountryCode": "us",
+            "guessCountryCode": "ca",
+            "distance": 2304.8,
+            "score": 1066,
+            "address": "Bancroft, Hastings County, Central Ontario, Ontario, Canada"
+          },
+          {
+            "rightCountry": false,
+            "lat": 14.49226849017233,
+            "lng": 100.07656013395388,
+            "correctCountryCode": "ng",
+            "guessCountryCode": "th",
+            "distance": 10033.4,
+            "score": 6,
+            "address": "สพ.2058, Ban Pho, Suphan Buri Province, Thailand"
+          },
+          {
+            "rightCountry": false,
+            "lat": 0,
+            "lng": 0,
+            "correctCountryCode": "us",
+            "guessCountryCode": "",
+            "distance": 12393,
+            "score": 0,
+            "address": "Soul Buoy"
+          },
+          {
+            "rightCountry": false,
+            "lat": 52.40340336936079,
+            "lng": 21.339194816668225,
+            "correctCountryCode": "lv",
+            "guessCountryCode": "pl",
+            "distance": 526.3,
+            "score": 3513,
+            "address": "9, Kwiatowa, Zamość, Klembów, gmina Klembów, Wołomin County, Masovian Voivodeship, 05-205, Poland"
+          },
+          {
+            "rightCountry": false,
+            "lat": 20.00910945874778,
+            "lng": -99.72509134012256,
+            "correctCountryCode": "gt",
+            "guessCountryCode": "mx",
+            "distance": 1116.6,
+            "score": 2365,
+            "address": "Los Pilares, Acambay de Ruíz Castañeda, State of Mexico, Mexico"
+          }
+        ],
+        "averageDistance": 5274.82
+      },
+      {
+        "rank": 3,
         "playerName": "seanhoma47",
         "totalScore": 6798,
         "totalDistance": 19147.8,
@@ -22729,7 +23089,7 @@ module.exports = {
         "averageDistance": 3829.56
       },
       {
-        "rank": 3,
+        "rank": 4,
         "playerName": "erniesbro",
         "totalScore": 5657,
         "totalDistance": 17216.1,
@@ -22789,7 +23149,7 @@ module.exports = {
         "averageDistance": 3443.22
       },
       {
-        "rank": 4,
+        "rank": 5,
         "playerName": "hoshibear",
         "totalScore": 5599,
         "totalDistance": 23094.3,
@@ -22851,19 +23211,19 @@ module.exports = {
     ],
     "dailyInfo": {
       "bestGuess": {
-        "playerName": "Z",
-        "score": 4928,
-        "distance": 21.7,
-        "address": "East 160th Avenue, Adams County, Colorado, 80601, United States",
-        "countryCode": "us"
+        "playerName": "Kanjidai",
+        "score": 3513,
+        "distance": 526.3,
+        "address": "9, Kwiatowa, Zamość, Klembów, gmina Klembów, Wołomin County, Masovian Voivodeship, 05-205, Poland",
+        "countryCode": "lv"
       },
       "worstGuess": {
-        "playerName": "seanhoma47",
-        "score": 2,
-        "distance": 11500.1,
-        "guessCountry": "Mexico",
-        "correctCountry": "Nigeria",
-        "guessCountryCode": "mx"
+        "playerName": "Kanjidai",
+        "score": 0,
+        "distance": 12393,
+        "guessCountry": "ocean",
+        "correctCountry": "United States",
+        "guessCountryCode": ""
       }
     }
   },
@@ -22872,6 +23232,66 @@ module.exports = {
     "ranking": [
       {
         "rank": 1,
+        "playerName": "Kanjidai",
+        "totalScore": 18901,
+        "totalDistance": 2249.7,
+        "countryRight": 4,
+        "guesses": [
+          {
+            "rightCountry": true,
+            "lat": 55.8885764857335,
+            "lng": 39.53159376864355,
+            "correctCountryCode": "ru",
+            "guessCountryCode": "ru",
+            "distance": 136.5,
+            "score": 4563,
+            "address": "урочище Ванево, Петушинское сельское поселение, Petushinsky District, Vladimir Oblast, Central Federal District, Russia"
+          },
+          {
+            "rightCountry": true,
+            "lat": 39.69078306195285,
+            "lng": -104.5326331112597,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 627.2,
+            "score": 3284,
+            "address": "South Manila Road, Arapahoe County, Colorado, United States"
+          },
+          {
+            "rightCountry": true,
+            "lat": 41.1387644677032,
+            "lng": 29.54647558915597,
+            "correctCountryCode": "tr",
+            "guessCountryCode": "tr",
+            "distance": 835.3,
+            "score": 2856,
+            "address": "Istanbul, Marmara Region, 34983, Turkey"
+          },
+          {
+            "rightCountry": true,
+            "lat": 52.49704779306476,
+            "lng": -1.9464822320305664,
+            "correctCountryCode": "gb",
+            "guessCountryCode": "gb",
+            "distance": 30.4,
+            "score": 4899,
+            "address": "Soho Foundry Tavern, 154, Foundry Lane, Smethwick, Sandwell, West Midlands Combined Authority, England, B66 2LL, United Kingdom"
+          },
+          {
+            "rightCountry": false,
+            "lat": 50.95482487036096,
+            "lng": 7.902510366945874,
+            "correctCountryCode": "se",
+            "guessCountryCode": "de",
+            "distance": 620.3,
+            "score": 3299,
+            "address": "Altenhof, Wenden, Kreis Olpe, North Rhine-Westphalia, 57482, Germany"
+          }
+        ],
+        "averageDistance": 449.93999999999994
+      },
+      {
+        "rank": 2,
         "playerName": "Z",
         "totalScore": 16130,
         "totalDistance": 3872.8,
@@ -22931,7 +23351,7 @@ module.exports = {
         "averageDistance": 774.5600000000001
       },
       {
-        "rank": 2,
+        "rank": 3,
         "playerName": "seanhoma47",
         "totalScore": 15292,
         "totalDistance": 8991.1,
@@ -22991,7 +23411,7 @@ module.exports = {
         "averageDistance": 1798.22
       },
       {
-        "rank": 3,
+        "rank": 4,
         "playerName": "erniesbro",
         "totalScore": 10715,
         "totalDistance": 17340.8,
@@ -23051,7 +23471,7 @@ module.exports = {
         "averageDistance": 3468.16
       },
       {
-        "rank": 4,
+        "rank": 5,
         "playerName": "hoshibear",
         "totalScore": 7280,
         "totalDistance": 34275.4,
@@ -23113,19 +23533,19 @@ module.exports = {
     ],
     "dailyInfo": {
       "bestGuess": {
-        "playerName": "erniesbro",
-        "score": 4766,
-        "distance": 71.6,
-        "address": "Oxford Golf Club, Hill Top Road, East Oxford, Oxford, Oxfordshire, England, OX4 1PF, United Kingdom",
+        "playerName": "Kanjidai",
+        "score": 4899,
+        "distance": 30.4,
+        "address": "Soho Foundry Tavern, 154, Foundry Lane, Smethwick, Sandwell, West Midlands Combined Authority, England, B66 2LL, United Kingdom",
         "countryCode": "gb"
       },
       "worstGuess": {
-        "playerName": "hoshibear",
-        "score": 0,
-        "distance": 17531.7,
-        "guessCountry": "New Zealand",
-        "correctCountry": "Sweden",
-        "guessCountryCode": "nz"
+        "playerName": "Kanjidai",
+        "score": 2856,
+        "distance": 835.3,
+        "guessCountry": "Turkey",
+        "correctCountry": "Turkey",
+        "guessCountryCode": "tr"
       }
     }
   },
@@ -23456,6 +23876,66 @@ module.exports = {
       },
       {
         "rank": 3,
+        "playerName": "Kanjidai",
+        "totalScore": 15344,
+        "totalDistance": 4435.2,
+        "countryRight": 3,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 44.659159851946946,
+            "lng": 27.83700628271478,
+            "correctCountryCode": "ru",
+            "guessCountryCode": "ro",
+            "distance": 1707.9,
+            "score": 1591,
+            "address": "Lunca, Vlădeni, Ialomița, 927250, Romania"
+          },
+          {
+            "rightCountry": true,
+            "lat": 53.515260116926676,
+            "lng": -2.152561176171921,
+            "correctCountryCode": "gb",
+            "guessCountryCode": "gb",
+            "distance": 71.3,
+            "score": 4767,
+            "address": "Derby Street, Hollinwood, Failsworth, Oldham, Greater Manchester, England, M35 9AP, United Kingdom"
+          },
+          {
+            "rightCountry": true,
+            "lat": 38.2555908467719,
+            "lng": 21.780661017152415,
+            "correctCountryCode": "gr",
+            "guessCountryCode": "gr",
+            "distance": 324.8,
+            "score": 4022,
+            "address": "Mycenaean cemetery of Voudeni, Κοζάνης, 1st Community of Patras - Arctic Sector, Municipal Unit of Patras, Municipality of Patras, Achaia Regional Unit, Western Greece, Peloponnese, Western Greece and the Ionian, 264 43, Greece"
+          },
+          {
+            "rightCountry": false,
+            "lat": 3.471536023844929,
+            "lng": 102.15037981287416,
+            "correctCountryCode": "id",
+            "guessCountryCode": "my",
+            "distance": 1774.2,
+            "score": 1522,
+            "address": "Kampung Kuala Kaung, Temerloh, Pahang, 28500, Malaysia"
+          },
+          {
+            "rightCountry": true,
+            "lat": 37.561085452273545,
+            "lng": -77.33529495271134,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 557,
+            "score": 3442,
+            "address": "402, Forest Avenue, Highland Springs, Henrico County, Virginia, 23223, United States"
+          }
+        ],
+        "averageDistance": 887.04
+      },
+      {
+        "rank": 4,
         "playerName": "erniesbro",
         "totalScore": 12365,
         "totalDistance": 10249.1,
@@ -23515,7 +23995,7 @@ module.exports = {
         "averageDistance": 2049.82
       },
       {
-        "rank": 4,
+        "rank": 5,
         "playerName": "seanhoma47",
         "totalScore": 10586,
         "totalDistance": 31109.9,
@@ -23577,19 +24057,19 @@ module.exports = {
     ],
     "dailyInfo": {
       "bestGuess": {
-        "playerName": "Z",
-        "score": 4818,
-        "distance": 55.3,
-        "address": "Sun Royd, Meltham, Kirklees, West Yorkshire, England, HD9 4HN, United Kingdom",
+        "playerName": "Kanjidai",
+        "score": 4767,
+        "distance": 71.3,
+        "address": "Derby Street, Hollinwood, Failsworth, Oldham, Greater Manchester, England, M35 9AP, United Kingdom",
         "countryCode": "gb"
       },
       "worstGuess": {
-        "playerName": "seanhoma47",
-        "score": 0,
-        "distance": 18036.6,
-        "guessCountry": "Brazil",
+        "playerName": "Kanjidai",
+        "score": 1522,
+        "distance": 1774.2,
+        "guessCountry": "Malaysia",
         "correctCountry": "Indonesia",
-        "guessCountryCode": "br"
+        "guessCountryCode": "my"
       }
     }
   },
@@ -25446,6 +25926,874 @@ module.exports = {
         "guessCountry": "United States",
         "correctCountry": "Japan",
         "guessCountryCode": "us"
+      }
+    }
+  },
+  "4-5-2024": {
+    "url": "https://www.geoguessr.com/challenge/RYtp0SdnvVt3B0GA",
+    "ranking": [
+      {
+        "rank": 1,
+        "playerName": "Kanjidai",
+        "totalScore": 17566,
+        "totalDistance": 12013.1,
+        "countryRight": 4,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 13.868532861029342,
+            "lng": 100.90618018317053,
+            "correctCountryCode": "gh",
+            "guessCountryCode": "th",
+            "distance": 11168.3,
+            "score": 3,
+            "address": "Sala Daeng, Chachoengsao Province, Thailand"
+          },
+          {
+            "rightCountry": true,
+            "lat": -45.857848894679,
+            "lng": -67.82979238172862,
+            "correctCountryCode": "ar",
+            "guessCountryCode": "ar",
+            "distance": 612.6,
+            "score": 3316,
+            "address": "YPF.Ch.S-851, Ruta Nacional 26, Departamento Escalante, Chubut Province, Argentina"
+          },
+          {
+            "rightCountry": true,
+            "lat": 50.128615648013565,
+            "lng": 8.71530801590524,
+            "correctCountryCode": "de",
+            "guessCountryCode": "de",
+            "distance": 75.5,
+            "score": 4753,
+            "address": "10, Falltorstraße, Bornheim, Bornheim/Ostend, Frankfurt, Hesse, 60385, Germany"
+          },
+          {
+            "rightCountry": true,
+            "lat": 52.34555596050177,
+            "lng": -1.22986616281473,
+            "correctCountryCode": "gb",
+            "guessCountryCode": "gb",
+            "distance": 133.1,
+            "score": 4573,
+            "address": "Barby, West Northamptonshire, England, United Kingdom"
+          },
+          {
+            "rightCountry": true,
+            "lat": 35.66757414042904,
+            "lng": 139.60499228491773,
+            "correctCountryCode": "jp",
+            "guessCountryCode": "jp",
+            "distance": 23.6,
+            "score": 4921,
+            "address": "Minami-Karasuyama 2-chome, Setagaya, Tokyo, 157-0062, Japan"
+          }
+        ],
+        "averageDistance": 2402.62
+      },
+      {
+        "rank": 2,
+        "playerName": "Z",
+        "totalScore": 16321,
+        "totalDistance": 14757,
+        "countryRight": 4,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 14.03476574918471,
+            "lng": 121.1384214902696,
+            "correctCountryCode": "gh",
+            "guessCountryCode": "ph",
+            "distance": 13297,
+            "score": 1,
+            "address": "Bulihan, Malvar, Batangas, Calabarzon, 4233, Philippines"
+          },
+          {
+            "rightCountry": true,
+            "lat": -40.494749570115665,
+            "lng": -71.21965971134327,
+            "correctCountryCode": "ar",
+            "guessCountryCode": "ar",
+            "distance": 1146.8,
+            "score": 2318,
+            "address": "Ruta Provincial 63, Departamento Lácar, Neuquén Province, Argentina"
+          },
+          {
+            "rightCountry": true,
+            "lat": 51.35563894044887,
+            "lng": 11.68710393896482,
+            "correctCountryCode": "de",
+            "guessCountryCode": "de",
+            "distance": 186.1,
+            "score": 4414,
+            "address": "Barnstedter Weg, Nemsdorf-Göhrendorf, Weida-Land, Saalekreis, Saxony-Anhalt, 06268, Germany"
+          },
+          {
+            "rightCountry": true,
+            "lat": 52.20099889215506,
+            "lng": -0.8831212158775248,
+            "correctCountryCode": "gb",
+            "guessCountryCode": "gb",
+            "distance": 111.3,
+            "score": 4641,
+            "address": "Chisholm Close, Wootton Village, Wootton, West Northamptonshire, England, NN4 6JN, United Kingdom"
+          },
+          {
+            "rightCountry": true,
+            "lat": 35.70002875219388,
+            "lng": 139.6838188852495,
+            "correctCountryCode": "jp",
+            "guessCountryCode": "jp",
+            "distance": 15.9,
+            "score": 4947,
+            "address": "中野区立 塔山小学校, 桃園川緑道, Chuo 1-chome, Nakano, Tokyo, 164-0003, Japan"
+          }
+        ],
+        "averageDistance": 2951.4
+      },
+      {
+        "rank": 3,
+        "playerName": "seanhoma47",
+        "totalScore": 11845,
+        "totalDistance": 27105.1,
+        "countryRight": 2,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 19.425234234241817,
+            "lng": -155.38351270740878,
+            "correctCountryCode": "gh",
+            "guessCountryCode": "us",
+            "distance": 15975.1,
+            "score": 0,
+            "address": "Hawaiʻi County, Hawaii, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 34.15542935439555,
+            "lng": -103.96193128530281,
+            "correctCountryCode": "ar",
+            "guessCountryCode": "us",
+            "distance": 9969.4,
+            "score": 6,
+            "address": "County Road 2-23, De Baca County, New Mexico, United States"
+          },
+          {
+            "rightCountry": true,
+            "lat": 49.06195844432487,
+            "lng": 12.586343719653419,
+            "correctCountryCode": "de",
+            "guessCountryCode": "de",
+            "distance": 303.9,
+            "score": 4078,
+            "address": "Hauptstraße, Hötzelsdorf, Zinzenzell, Wiesenfelden, Landkreis Straubing-Bogen, Bavaria, 94344, Germany"
+          },
+          {
+            "rightCountry": false,
+            "lat": 47.848212067674325,
+            "lng": 9.51181097021482,
+            "correctCountryCode": "gb",
+            "guessCountryCode": "de",
+            "distance": 818.1,
+            "score": 2889,
+            "address": "K 7968, Ergetsweiler, Fronhofen, Fronreute, Verwaltungsverband Fronreute-Wolpertswende, Landkreis Ravensburg, Baden-Württemberg, 88273, Germany"
+          },
+          {
+            "rightCountry": true,
+            "lat": 35.817202412819704,
+            "lng": 139.44572706465675,
+            "correctCountryCode": "jp",
+            "guessCountryCode": "jp",
+            "distance": 38.7,
+            "score": 4872,
+            "address": "所沢狭山線, 岩岡町, Tokorozawa, Saitama Prefecture, 359-0007, Japan"
+          }
+        ],
+        "averageDistance": 5421.0199999999995
+      },
+      {
+        "rank": 4,
+        "playerName": "erniesbro",
+        "totalScore": 8955,
+        "totalDistance": 27724.3,
+        "countryRight": 2,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": -2.703209052343866,
+            "lng": 102.71860545619457,
+            "correctCountryCode": "gh",
+            "guessCountryCode": "id",
+            "distance": 11610.5,
+            "score": 2,
+            "address": "Rawas Ulu, Musi Rawas Utara, South Sumatra, Sumatra, Indonesia"
+          },
+          {
+            "rightCountry": false,
+            "lat": -32.44872556062332,
+            "lng": 140.42167553513286,
+            "correctCountryCode": "ar",
+            "guessCountryCode": "au",
+            "distance": 10242.7,
+            "score": 5,
+            "address": "Devonborough Downs Road, Wiawera, Oulnina, Pastoral Unincorporated Area, South Australia, 5440, Australia"
+          },
+          {
+            "rightCountry": true,
+            "lat": 53.655361923969046,
+            "lng": 10.21493597021482,
+            "correctCountryCode": "de",
+            "guessCountryCode": "de",
+            "distance": 332.6,
+            "score": 4001,
+            "address": "191, Hamburger Straße, Ahrensburg, Stormarn, Schleswig-Holstein, 22926, Germany"
+          },
+          {
+            "rightCountry": false,
+            "lat": 41.73958631300025,
+            "lng": -74.05767749171366,
+            "correctCountryCode": "gb",
+            "guessCountryCode": "us",
+            "distance": 5483.7,
+            "score": 127,
+            "address": "490, Main Street, Ohioville, Town of New Paltz, Ulster County, New York, 12561, United States"
+          },
+          {
+            "rightCountry": true,
+            "lat": 35.336895601891555,
+            "lng": 139.47914906101744,
+            "correctCountryCode": "jp",
+            "guessCountryCode": "jp",
+            "distance": 54.8,
+            "score": 4820,
+            "address": "Honkugenuma 1-chome, Fujisawa, Kanagawa Prefecture, 251-0053, Japan"
+          }
+        ],
+        "averageDistance": 5544.86
+      }
+    ],
+    "dailyInfo": {
+      "bestGuess": {
+        "playerName": "Z",
+        "score": 4947,
+        "distance": 15.9,
+        "address": "中野区立 塔山小学校, 桃園川緑道, Chuo 1-chome, Nakano, Tokyo, 164-0003, Japan",
+        "countryCode": "jp"
+      },
+      "worstGuess": {
+        "playerName": "seanhoma47",
+        "score": 0,
+        "distance": 15975.1,
+        "guessCountry": "United States",
+        "correctCountry": "Ghana",
+        "guessCountryCode": "us"
+      }
+    }
+  },
+  "4-6-2024": {
+    "url": "https://www.geoguessr.com/challenge/TwR07sb8HzFv5ZGw",
+    "ranking": [
+      {
+        "rank": 1,
+        "playerName": "Z",
+        "totalScore": 13074,
+        "totalDistance": 13249.6,
+        "countryRight": 2,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 47.12929050766865,
+            "lng": 14.25790472021482,
+            "correctCountryCode": "be",
+            "guessCountryCode": "at",
+            "distance": 740,
+            "score": 3045,
+            "address": "Seerainerweg, Teufenbach-Katsch, Bezirk Murau, Styria, 8833, Austria"
+          },
+          {
+            "rightCountry": false,
+            "lat": 8.067551075107811,
+            "lng": 124.25293360551042,
+            "correctCountryCode": "id",
+            "guessCountryCode": "ph",
+            "distance": 1418.3,
+            "score": 1932,
+            "address": "Iligan-Marawi Road, Poblacion, West Pantar, Lanao del Norte, Northern Mindanao, Philippines"
+          },
+          {
+            "rightCountry": true,
+            "lat": 52.54290490061306,
+            "lng": -1.832664598611975,
+            "correctCountryCode": "gb",
+            "guessCountryCode": "gb",
+            "distance": 171.4,
+            "score": 4457,
+            "address": "51, Sunnybank Road, Sutton Coldfield, Boldmere, Birmingham, West Midlands Combined Authority, England, B73 5RJ, United Kingdom"
+          },
+          {
+            "rightCountry": true,
+            "lat": 39.83183026874698,
+            "lng": 33.53071683047202,
+            "correctCountryCode": "tr",
+            "guessCountryCode": "tr",
+            "distance": 475.7,
+            "score": 3635,
+            "address": "Yuva, Yuva Mahallesi, Kırıkkale, Central Anatolia Region, 71300, Turkey"
+          },
+          {
+            "rightCountry": false,
+            "lat": -31.707363623539024,
+            "lng": -65.89934828411324,
+            "correctCountryCode": "ca",
+            "guessCountryCode": "ar",
+            "distance": 10444.3,
+            "score": 5,
+            "address": "Departamento General San Martín, La Rioja, F5273, Argentina"
+          }
+        ],
+        "averageDistance": 2649.92
+      },
+      {
+        "rank": 2,
+        "playerName": "seanhoma47",
+        "totalScore": 9058,
+        "totalDistance": 13807.5,
+        "countryRight": 1,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 45.718812987372786,
+            "lng": -111.24990777978518,
+            "correctCountryCode": "be",
+            "guessCountryCode": "us",
+            "distance": 7710.8,
+            "score": 28,
+            "address": "Bitterroot Road, Gallatin County, Montana, 59772, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 16.74210076477796,
+            "lng": 102.61833292291632,
+            "correctCountryCode": "id",
+            "guessCountryCode": "th",
+            "distance": 2965.2,
+            "score": 685,
+            "address": "Ban Hin Phoeng, Khok Sung, Khon Kaen Province, Thailand"
+          },
+          {
+            "rightCountry": false,
+            "lat": 52.93416805549802,
+            "lng": -7.018968417650684,
+            "correctCountryCode": "gb",
+            "guessCountryCode": "ie",
+            "distance": 495.9,
+            "score": 3586,
+            "address": "Clonpierce, Tankardstown ED, The Municipal District of Graiguecullen — Portarlington, County Laois, Leinster, Ireland"
+          },
+          {
+            "rightCountry": true,
+            "lat": 39.85790093135277,
+            "lng": 32.91718206423167,
+            "correctCountryCode": "tr",
+            "guessCountryCode": "tr",
+            "distance": 507,
+            "score": 3559,
+            "address": "Yakupabdal, Ankara, Çankaya, Ankara, Central Anatolia Region, Turkey"
+          },
+          {
+            "rightCountry": false,
+            "lat": 36.89292033678434,
+            "lng": -97.74632252566691,
+            "correctCountryCode": "ca",
+            "guessCountryCode": "us",
+            "distance": 2128.6,
+            "score": 1200,
+            "address": "CR N2950, Grant County, Oklahoma, 73759, United States"
+          }
+        ],
+        "averageDistance": 2761.5
+      }
+    ],
+    "dailyInfo": {
+      "bestGuess": {
+        "playerName": "Z",
+        "score": 4457,
+        "distance": 171.4,
+        "address": "51, Sunnybank Road, Sutton Coldfield, Boldmere, Birmingham, West Midlands Combined Authority, England, B73 5RJ, United Kingdom",
+        "countryCode": "gb"
+      },
+      "worstGuess": {
+        "playerName": "Z",
+        "score": 5,
+        "distance": 10444.3,
+        "guessCountry": "Argentina",
+        "correctCountry": "Canada",
+        "guessCountryCode": "ar"
+      }
+    }
+  },
+  "4-7-2024": {
+    "url": "https://www.geoguessr.com/challenge/SuEWgLOs39u16wqQ",
+    "ranking": [
+      {
+        "rank": 1,
+        "playerName": "Kanjidai",
+        "totalScore": 14343,
+        "totalDistance": 5117.8,
+        "countryRight": 2,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 50.96884328953583,
+            "lng": 10.671523805224199,
+            "correctCountryCode": "at",
+            "guessCountryCode": "de",
+            "distance": 390.3,
+            "score": 3849,
+            "address": "Sonneborner Straße, Goldbacher Siedlung, Gotha, Landkreis Gotha, Thuringia, 99867, Germany"
+          },
+          {
+            "rightCountry": true,
+            "lat": 39.12407093364162,
+            "lng": -100.89156713160929,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 1144.9,
+            "score": 2321,
+            "address": "CPK379 East Hackberry, Eagle Eye, Logan County, Kansas, 67748, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 13.355948013311593,
+            "lng": 99.10013887906459,
+            "correctCountryCode": "kh",
+            "guessCountryCode": "mm",
+            "distance": 881,
+            "score": 2770,
+            "address": "Dawei Township, Dawei District, Tanintharyi Region, Myanmar"
+          },
+          {
+            "rightCountry": true,
+            "lat": 31.726988155190746,
+            "lng": -97.04348242499991,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 159.3,
+            "score": 4494,
+            "address": "Whiskey Hollow Road, Leroy, McLennan County, Texas, 76691, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 50.101642548837354,
+            "lng": 36.18515166745224,
+            "correctCountryCode": "ru",
+            "guessCountryCode": "ua",
+            "distance": 2542.3,
+            "score": 909,
+            "address": "Малоданилівська селищна громада, Kharkiv Raion, Kharkiv Oblast, Ukraine"
+          }
+        ],
+        "averageDistance": 1023.5600000000001
+      },
+      {
+        "rank": 2,
+        "playerName": "Z",
+        "totalScore": 14213,
+        "totalDistance": 5032.5,
+        "countryRight": 3,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 50.51675857816347,
+            "lng": 15.236626016070545,
+            "correctCountryCode": "at",
+            "guessCountryCode": "cz",
+            "distance": 251.6,
+            "score": 4224,
+            "address": "přírodní rezervace Apolena, 28115, Paseka, Troskovice, okres Semily, Liberecký kraj, Northeast, 507 45, Czechia"
+          },
+          {
+            "rightCountry": true,
+            "lat": 43.42228149082791,
+            "lng": -71.11197395090016,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 1386.1,
+            "score": 1974,
+            "address": "New Durham Corner, New Durham, Strafford County, New Hampshire, 03855, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 18.361744521291147,
+            "lng": 102.56106852765214,
+            "correctCountryCode": "kh",
+            "guessCountryCode": "la",
+            "distance": 821.9,
+            "score": 2882,
+            "address": "ທາງຕັດໃໝ່ລະຫວ່າງ ລີ້ງຊັນ - ວຽງຄຳ, Viengkham, Viengkham District, Vientiane Province, Laos"
+          },
+          {
+            "rightCountry": true,
+            "lat": 33.18468402590788,
+            "lng": -96.6642606486446,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 322.7,
+            "score": 4027,
+            "address": "Chancellor Lane, McKinney, Collin County, Texas, 75070, United States"
+          },
+          {
+            "rightCountry": true,
+            "lat": 55.380595703299164,
+            "lng": 37.56884711462336,
+            "correctCountryCode": "ru",
+            "guessCountryCode": "ru",
+            "distance": 2250.2,
+            "score": 1106,
+            "address": "Креп-Комп, Объездная улица, Koledino, Podolsk, Podolsk Urban Okrug, Moscow Oblast, Central Federal District, 142100, Russia"
+          }
+        ],
+        "averageDistance": 1006.5
+      },
+      {
+        "rank": 3,
+        "playerName": "hoshibear",
+        "totalScore": 9514,
+        "totalDistance": 10380.3,
+        "countryRight": 1,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 49.02451960242134,
+            "lng": 13.62344427099607,
+            "correctCountryCode": "at",
+            "guessCountryCode": "cz",
+            "distance": 89.5,
+            "score": 4709,
+            "address": "Kvilda, okres Prachatice, Jihočeský kraj, Southwest, 384 93, Czechia"
+          },
+          {
+            "rightCountry": false,
+            "lat": 44.45061945783628,
+            "lng": -77.60702447900393,
+            "correctCountryCode": "us",
+            "guessCountryCode": "ca",
+            "distance": 867.8,
+            "score": 2795,
+            "address": "Storms Road, Stirling-Rawdon, Hastings County, Central Ontario, Ontario, Canada"
+          },
+          {
+            "rightCountry": false,
+            "lat": 19.95421317977547,
+            "lng": 77.95938177099606,
+            "correctCountryCode": "kh",
+            "guessCountryCode": "in",
+            "distance": 3223.8,
+            "score": 576,
+            "address": "Sendur Sani, Arni, Yavatmal, Maharashtra, India"
+          },
+          {
+            "rightCountry": true,
+            "lat": 38.54825589110202,
+            "lng": -121.03230059342388,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 2304.6,
+            "score": 1067,
+            "address": "South Shingle Road, Latrobe, El Dorado County, California, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 52.195131564210826,
+            "lng": 12.645679472894814,
+            "correctCountryCode": "ru",
+            "guessCountryCode": "de",
+            "distance": 3894.6,
+            "score": 367,
+            "address": "Fredersdorfer Biber Wanderweg, Fredersdorf, Bad Belzig, Potsdam-Mittelmark, Brandenburg, 14806, Germany"
+          }
+        ],
+        "averageDistance": 2076.06
+      },
+      {
+        "rank": 4,
+        "playerName": "seanhoma47",
+        "totalScore": 6056,
+        "totalDistance": 11282.6,
+        "countryRight": 2,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 56.478019717161494,
+            "lng": 38.96289542882266,
+            "correctCountryCode": "at",
+            "guessCountryCode": "ru",
+            "distance": 1888.8,
+            "score": 1409,
+            "address": "Андреевское сельское поселение, Alexandrovsky District, Vladimir Oblast, Central Federal District, 601612, Russia"
+          },
+          {
+            "rightCountry": true,
+            "lat": 43.848102376849134,
+            "lng": -71.19355267735749,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 1376.9,
+            "score": 1987,
+            "address": "Indian Trail, Tamworth, Carroll County, New Hampshire, 03817, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 35.688525381301424,
+            "lng": 127.982610315555,
+            "correctCountryCode": "kh",
+            "guessCountryCode": "kr",
+            "distance": 3320.7,
+            "score": 540,
+            "address": "Dongnye-ri, Geochang-gun, South Gyeongsang, 50118, South Korea"
+          },
+          {
+            "rightCountry": true,
+            "lat": 39.64530377497464,
+            "lng": -78.45126602317958,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 2029.6,
+            "score": 1283,
+            "address": "East Valley Road, Allegany County, Maryland, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 50.01936578303827,
+            "lng": 34.29696722021482,
+            "correctCountryCode": "ru",
+            "guessCountryCode": "ua",
+            "distance": 2666.7,
+            "score": 837,
+            "address": "Vasyle-Ustymivka, Зіньківська міська громада, Poltava Raion, Poltava Oblast, 38142, Ukraine"
+          }
+        ],
+        "averageDistance": 2256.52
+      }
+    ],
+    "dailyInfo": {
+      "bestGuess": {
+        "playerName": "hoshibear",
+        "score": 4709,
+        "distance": 89.5,
+        "address": "Kvilda, okres Prachatice, Jihočeský kraj, Southwest, 384 93, Czechia",
+        "countryCode": "at"
+      },
+      "worstGuess": {
+        "playerName": "hoshibear",
+        "score": 367,
+        "distance": 3894.6,
+        "guessCountry": "Germany",
+        "correctCountry": "Russian Federation",
+        "guessCountryCode": "de"
+      }
+    }
+  },
+  "4-8-2024": {
+    "url": "https://www.geoguessr.com/challenge/lSELNI1uSFhbO0Vq",
+    "ranking": [
+      {
+        "rank": 1,
+        "playerName": "Z",
+        "totalScore": 8996,
+        "totalDistance": 18323.8,
+        "countryRight": 1,
+        "guesses": [
+          {
+            "rightCountry": true,
+            "lat": 36.474208251857945,
+            "lng": -120.04430951570278,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 1494.6,
+            "score": 1836,
+            "address": "Fresno County, California, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 48.17668264030272,
+            "lng": 14.049931966320068,
+            "correctCountryCode": "hr",
+            "guessCountryCode": "at",
+            "distance": 388.1,
+            "score": 3855,
+            "address": "12a, Flugplatzstraße, Pernau, Wels, Upper Austria, 4600, Austria"
+          },
+          {
+            "rightCountry": false,
+            "lat": 3.77196325450461,
+            "lng": -73.09710890794383,
+            "correctCountryCode": "es",
+            "guessCountryCode": "co",
+            "distance": 7865.5,
+            "score": 26,
+            "address": "La Morena, Puerto López, Rio Meta, Meta, RAP (Especial) Central, Colombia"
+          },
+          {
+            "rightCountry": false,
+            "lat": 63.27569593091132,
+            "lng": 10.618658761953842,
+            "correctCountryCode": "se",
+            "guessCountryCode": "no",
+            "distance": 640.3,
+            "score": 3255,
+            "address": "Tangvoll, Ytter Tangvolla, Heimdal, Trondheim, Trøndelag, Norway"
+          },
+          {
+            "rightCountry": false,
+            "lat": 20.686480841964297,
+            "lng": -103.33308307603767,
+            "correctCountryCode": "uy",
+            "guessCountryCode": "mx",
+            "distance": 7935.3,
+            "score": 24,
+            "address": "Centro Universitario de Ciencias de la Salud - CUCS;Facultad de Odontologia UDG, Calle López Portillo, La Perla, Guadalajara, Región Centro, Jalisco, 44360, Mexico"
+          }
+        ],
+        "averageDistance": 3664.7599999999998
+      },
+      {
+        "rank": 2,
+        "playerName": "Kanjidai",
+        "totalScore": 8826,
+        "totalDistance": 15922.4,
+        "countryRight": 1,
+        "guesses": [
+          {
+            "rightCountry": true,
+            "lat": 35.10836171090978,
+            "lng": -90.15238520259464,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 2323,
+            "score": 1054,
+            "address": "Memphis, Shelby County, West Tennessee, Tennessee, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 38.10735395174355,
+            "lng": 15.374111788802374,
+            "correctCountryCode": "hr",
+            "guessCountryCode": "it",
+            "distance": 737.5,
+            "score": 3050,
+            "address": "Fonte, Liarusa, Oliva, San Pier Niceto, Messina, Sicily, 98045, Italy"
+          },
+          {
+            "rightCountry": false,
+            "lat": 15.77696838648474,
+            "lng": 101.58087230269535,
+            "correctCountryCode": "es",
+            "guessCountryCode": "th",
+            "distance": 10183.2,
+            "score": 5,
+            "address": "Khok Sa-at, Chaiyaphum Province, Thailand"
+          },
+          {
+            "rightCountry": false,
+            "lat": 62.30062711608178,
+            "lng": 21.946345240203193,
+            "correctCountryCode": "se",
+            "guessCountryCode": "fi",
+            "distance": 512.3,
+            "score": 3547,
+            "address": "Kauhajoki, Suupohja sub-region, South Ostrobothnia, Western and Central Finland, Mainland Finland, Finland"
+          },
+          {
+            "rightCountry": false,
+            "lat": -18.08417448736951,
+            "lng": -67.24758256666193,
+            "correctCountryCode": "uy",
+            "guessCountryCode": "bo",
+            "distance": 2166.4,
+            "score": 1170,
+            "address": "RN12: Oruro-Toledo, Municipio El Choro, Provincia Cercado, Oruro, Bolivia"
+          }
+        ],
+        "averageDistance": 3184.48
+      },
+      {
+        "rank": 3,
+        "playerName": "hoshibear",
+        "totalScore": 6972,
+        "totalDistance": 22600.5,
+        "countryRight": 1,
+        "guesses": [
+          {
+            "rightCountry": true,
+            "lat": 41.92504677403291,
+            "lng": -93.33944635400394,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 1620.7,
+            "score": 1687,
+            "address": "295th Street, Iowa Center, Story County, Iowa, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 40.33967105087387,
+            "lng": 18.203677951433818,
+            "correctCountryCode": "hr",
+            "guessCountryCode": "it",
+            "distance": 561.1,
+            "score": 3433,
+            "address": "Via Vecchia Merine, Lecce, Apulia, 73100, Italy"
+          },
+          {
+            "rightCountry": false,
+            "lat": 3.6606936411075175,
+            "lng": 103.5828287135394,
+            "correctCountryCode": "es",
+            "guessCountryCode": "my",
+            "distance": 11303.2,
+            "score": 3,
+            "address": "Malaysia"
+          },
+          {
+            "rightCountry": false,
+            "lat": 53.791585703943994,
+            "lng": 13.998686501082158,
+            "correctCountryCode": "se",
+            "guessCountryCode": "de",
+            "distance": 1509.1,
+            "score": 1818,
+            "address": "Vorpommern-Greifswald, Mecklenburg-Vorpommern, Germany"
+          },
+          {
+            "rightCountry": false,
+            "lat": 19.95421317977547,
+            "lng": -99.22811822900393,
+            "correctCountryCode": "uy",
+            "guessCountryCode": "mx",
+            "distance": 7606.4,
+            "score": 31,
+            "address": "Atotonilco de Tula, Hidalgo, 42988, Mexico"
+          }
+        ],
+        "averageDistance": 4520.1
+      }
+    ],
+    "dailyInfo": {
+      "bestGuess": {
+        "playerName": "Z",
+        "score": 3855,
+        "distance": 388.1,
+        "address": "12a, Flugplatzstraße, Pernau, Wels, Upper Austria, 4600, Austria",
+        "countryCode": "hr"
+      },
+      "worstGuess": {
+        "playerName": "hoshibear",
+        "score": 3,
+        "distance": 11303.2,
+        "guessCountry": "Malaysia",
+        "correctCountry": "Spain",
+        "guessCountryCode": "my"
       }
     }
   }

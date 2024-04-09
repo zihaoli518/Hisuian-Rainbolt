@@ -6,6 +6,8 @@ const fs = require('fs');
 const fetch = require('node-fetch');
 const GEOCODING_API_KEY = process.env.GEOCODING_API_KEY;
 const countryCodeDict = require('./utils/countryCodes.js');
+const adminDiscordID = process.env.ADMIN_DISCORD_ID;
+
 
 
 let challengeScoreHistory = require('../challengeScoreHistory.js');
@@ -80,14 +82,14 @@ const getScores = async (challengeURL, dateStr, interaction) => {
       rankingArray.push(result);
       rankCounter++;
     }
-    updateChallengeHistory(dateStr, challengeURL, rankingArray, dailyInfo);
+    updatechallengeLinksHistory(dateStr, challengeURL, rankingArray, dailyInfo);
 
     return {rankingArray: rankingArray, dailyInfo: dailyInfo};
 
   } catch (error) {
     console.error('Error fetching data in getScores:', error, typeof(error), error.type);
     const errorType = error.type;
-    if (interaction) interaction.reply('an error has occured: ' + errorType + '. this is most likely due to no one completing the challenge yet ')
+    if (interaction) interaction.reply('an error has occured: ' + errorType + '. this is most likely due to no one completing the challenge yet ' + `<@${adminDiscordID}>`)
     throw error;
   }
 };
@@ -182,6 +184,7 @@ async function getCountryCode(latitude, longitude, i) {
           return(data);
         } catch (error) {
           console.error('Error fetching country code:', error);
+          if (interaction) interaction.reply('an error has occured: ' + error + '. this is most likely due to no one completing the challenge yet ' + `<@${adminDiscordID}>`)
         }
   };
 
@@ -197,7 +200,7 @@ async function getCountryCode(latitude, longitude, i) {
   });
 }
 
-const updateChallengeHistory = async (dateStr, url, rankingArray, dailyInfo) => {
+const updatechallengeLinksHistory = async (dateStr, url, rankingArray, dailyInfo) => {
   challengeScoreHistory[dateStr] = {url: url, ranking: rankingArray, dailyInfo: dailyInfo}; 
 
   fs.writeFile('challengeScoreHistory.js', `module.exports = ${JSON.stringify(challengeScoreHistory, null, 2)};`, err => {

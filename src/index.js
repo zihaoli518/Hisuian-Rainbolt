@@ -5,7 +5,7 @@ const puppeteer = require('puppeteer');
 const fetch = require('node-fetch');
 const cron = require('node-cron');
 const { spawn } = require('child_process');
-const challengeHistory = require('../challengeHistory.js')
+const challengeLinksHistory = require('../challengeLinksHistory.js')
 
 const generateDailyChallengeLink = require('./generateDailyChallengeLink.js');
 const getScores = require('./getScores.js');
@@ -14,6 +14,8 @@ const challengeScoreHistory = require('../challengeScoreHistory.js');
 const countryGreetings = require('./utils/countryGreetings.js');
 const getAllTimeStats = require('./getAllTimeStats.js')
 const countryCodeDict = require('./utils/countryCodes.js');
+
+const adminDiscordID = process.env.ADMIN_DISCORD_ID;
 
 
 console.log(Object.keys(challengeScoreHistory).sort())
@@ -109,6 +111,13 @@ client.on('interactionCreate', async (interaction) => {
   if (interaction.commandName === 'test_alert') {
     testAlert();
   }
+  if (interaction.isCommand() && interaction.timedOut) {
+    // Ping yourself
+    await interaction.reply({
+      content: `<@${adminDiscordID}>` + '`the interaction timed out. check console logs`',
+      ephemeral: false // This ensures that the message is only visible to the user who triggered the command
+    });
+  }
 })
 
 client.login(TOKEN);
@@ -126,12 +135,16 @@ const handleInteractionDailyChallenge = async (interaction, user) => {
     try {
       const generalChannel = process.env.TEST_CHANNEL_ID;
       // reply to command
-      if (interaction) interaction.reply('daily challenge url is being created ' + `<@${user}>`);
+      if (interaction) await client.channels.cache.get(generalChannel).send('daily challenge url is being created ' + `<@${user}>`);
       else {
         await client.channels.cache.get(generalChannel).send('`running chron job...`');
       }
       // first generate the link 
-      const dailyLink = await generateDailyChallengeLink();
+      const dailyLink = await generateDailyChallengeLink(interaction);
+      if (!dailyLink) {
+        interaction.reply('`an error has occured in handleInteractionDailyChallenge();`'  + `<@${adminDiscordID}>`);
+        return;
+      }
       const date = getDateStr();
 
       // const channelID = process.env.DAILY_CHALLENGE_CHANNEL_ID; 
@@ -140,7 +153,8 @@ const handleInteractionDailyChallenge = async (interaction, user) => {
       await client.channels.cache.get(dailyChannel).send(`${dailyLink} \n here's the daily challenge for ${date}, glhf!` );
       // await client.channels.cache.get(channelID).send(dailyLink);
     } catch (error) {
-      console.log(error)
+      console.log(error.type);
+      if (interaction) interaction.reply('`an error has occured in generateDailyChallengeLink();`'  + `<@${adminDiscordID}>`)
     }
 }
 
@@ -150,7 +164,7 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
   // interaction.reply(`generating daily challenge recap for ${date}... this might take a while`);
   const outputChannel = process.env.GENERAL_CHANNEL_ID; 
   // check if date exists in challenge history 
-  if (!challengeHistory[date]) {
+  if (!challengeLinksHistory[date]) {
     if (interaction) interaction.reply('`oops, the requested date does not exist. check your formatting of the date again, it should be 2-19-2024. or I forgot to post a link that day.`')
     return
   }
@@ -165,7 +179,7 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
   // Get the channel you want to go through messages in
   // const channel = client.channels.cache.get(dailyChallengeChannel);
   try {
-    const url = challengeHistory[date];
+    const url = challengeLinksHistory[date];
     const dailyScoreObj = await getScores(url, date, interaction);
     const rankingArray = dailyScoreObj.rankingArray;
     const bestGuess = dailyScoreObj.dailyInfo.bestGuess;
@@ -402,7 +416,7 @@ const pbAlert = async (interaction, playerName, newScore, oldScore) => {
 const createHistoryObject = async (interaction) => {
   console.log('inside createHistoryObject...'); 
   // Check if the file exists
-  if (Object.keys(challengeHistory).length !== 0) {
+  if (Object.keys(challengeLinksHistory).length !== 0) {
     console.error('File does not exist');
     interaction.reply('file already exists, cannot overwrite')
     return;
@@ -426,15 +440,15 @@ const createHistoryObject = async (interaction) => {
   });
   console.log('done with forEach, ', historyObject)
 
-  fs.writeFile('challengeHistory.js', `module.exports = ${JSON.stringify(historyObject, null, 2)};`, err => {
+  fs.writeFile('challengeLinksHistory.js', `module.exports = ${JSON.stringify(historyObject, null, 2)};`, err => {
     if (err) {
         console.error('Error writing to file:', err);
         return;
     } else {
-        console.log('Message history object saved to challengeHistory.js');
+        console.log('Message history object saved to challengeLinksHistory.js');
     }
   });
-  await client.channels.cache.get(outputChannel).send('successfully created challengeHistory.js in root directory');
+  await client.channels.cache.get(outputChannel).send('successfully created challengeLinksHistory.js in root directory');
 };
 
 

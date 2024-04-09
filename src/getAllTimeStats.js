@@ -1,7 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const fetch = require('node-fetch');
-let historyObject = require('../challengeHistory.js');
+let historyObject = require('../challengeLinksHistory.js');
 const challengeScoreHistory = require('../challengeScoreHistory.js');
 // const db = require('../dbModel.js');
 const getScores = require('./getScores.js');

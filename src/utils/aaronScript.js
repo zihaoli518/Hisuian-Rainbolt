@@ -16,8 +16,8 @@ let once = false
 const update = async() => {
 
   console.log('inside update')
-  const challengeHistoryKeys = Object.keys(challengeScoreHistory);
-  for (let date of challengeHistoryKeys) {
+  const challengeLinksHistoryKeys = Object.keys(challengeScoreHistory);
+  for (let date of challengeLinksHistoryKeys) {
     console.log('processing...', date);
     try {
       const { ranking } = await getScores(challengeScoreHistory[date].url, date);
@@ -38,8 +38,8 @@ if (!once) {
   update()
   once = true
   const realResult = []
-  const challengeHistoryKeys = Object.keys(challengeScoreHistory);
-  for (let date of challengeHistoryKeys) {
+  const challengeLinksHistoryKeys = Object.keys(challengeScoreHistory);
+  for (let date of challengeLinksHistoryKeys) {
     if (!result.includes(date)) realResult.push(date)
   }
   console.log(realResult)

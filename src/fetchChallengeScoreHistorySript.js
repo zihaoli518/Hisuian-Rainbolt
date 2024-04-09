@@ -4,7 +4,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const fetch = require('node-fetch');
-let challengeHistory = require('../challengeHistory.js');
+let challengeLinksHistory = require('../challengeLinksHistory.js');
 let challengeScoreHistory = require('../challengeScoreHistory.js');
 
 const getScores = require('./getScores.js');
@@ -18,19 +18,19 @@ const getScores = require('./getScores.js');
 const fetchMonthlyStats = async () => {
   console.log('inside fetchMonthlyStats')
   const resultObj = challengeScoreHistory;
-  const challengeHistoryKeys = Object.keys(challengeHistory);
+  const challengeLinksHistoryKeys = Object.keys(challengeLinksHistory);
   let counter = 0;
-  for (let date of challengeHistoryKeys) {
+  for (let date of challengeLinksHistoryKeys) {
     counter++;
     if (date[0]==='3') continue;
     console.log('processing......', date,)
     // const currentObj = challengeScoreHistory[date];
     // if (currentObj.dailyInfo && currentObj.dailyInfo.worstGuess && currentObj.dailyInfo.worstGuess.guessCountryCode) continue;
-    const url = challengeHistory[date]; 
+    const url = challengeLinksHistory[date]; 
 
     const {rankingArray, dailyInfo} = await getScores(url, date);                                                        
     // resultObj[date] = {url: url, ranking: rankingArray, dailyInfo: dailyInfo}; 
-    console.log('finished updating ', date, counter, ' / ', challengeHistoryKeys.length)
+    console.log('finished updating ', date, counter, ' / ', challengeLinksHistoryKeys.length)
   }
 
   // fs.writeFile('challengeScoreHistory.js', `module.exports = ${JSON.stringify(resultObj, null, 2)};`, err => {
@@ -44,7 +44,7 @@ const fetchMonthlyStats = async () => {
 };
 
 
-// await client.channels.cache.get(outputChannel).send('successfully created challengeHistory.js in root directory');
+// await client.channels.cache.get(outputChannel).send('successfully created challengeLinksHistory.js in root directory');
 
 
 

@@ -20,16 +20,16 @@ const createHistoryObject = () => {
 const fs = require('fs');
 
 // Load the current data from the file
-let historyObject = require('./challengeHistory.js');
+let historyObject = require('./challengeLinksHistory.js');
 
 // Add a new entry for a new date and URL
 historyObject["3-12-2024"] = "https://www.geoguessr.com/challenge/new-challenge";
 
 // Convert the object to a string and write it back to the file
-fs.writeFile('challengeHistory.js', `module.exports = ${JSON.stringify(historyObject, null, 2)};`, err => {
+fs.writeFile('challengeLinksHistory.js', `module.exports = ${JSON.stringify(historyObject, null, 2)};`, err => {
     if (err) {
         console.error('Error writing to file:', err);
     } else {
-        console.log('Message history object saved to challengeHistory.js');
+        console.log('Message history object saved to challengeLinksHistory.js');
     }
 });
