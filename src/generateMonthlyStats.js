@@ -16,23 +16,25 @@ const getScores = require('./getScores.js');
 // outpu: {monthlyAverage: 1000, }
 const generateMonthlyStats = async (playerName, monthStr) => {
   console.log('inside generateMonthlyStats...', playerName, monthStr)
-  const dateArray = Object.keys(challengeScoreHistory); 
   let totalScore = 0; 
   let gamesPlayed = 0; 
   let allTimeHighscore = 0; 
   let wins = 0; 
   let topThree = 0;  
-
+  
+  const dateArray = Object.keys(challengeScoreHistory); 
   for (const date of dateArray) {
+    console.log('date in dateArray: ', date)
     let rankingArray = challengeScoreHistory[date].ranking;
 
-    rankingArray = challengeScoreHistory[date].ranking;
+    // rankingArray = challengeScoreHistory[date].ranking;
 
     // update challengeScoreHistory by running getScore
     rankingArray.forEach(playerObj => {
       if (playerObj.playerName === playerName) {
         allTimeHighscore = Math.max(allTimeHighscore, playerObj.totalScore);
         if (dateStrToMonthStr(date) === monthStr) {
+          console.log('match, about to increase games', gamesPlayed)
           totalScore += playerObj.totalScore;
           gamesPlayed++;
           if (playerObj.rank === 1) wins++;

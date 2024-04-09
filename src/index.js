@@ -162,7 +162,7 @@ const handleInteractionDailyChallenge = async (interaction, user) => {
 // input: date has to be in this format: '3-23-2024'
 const handleInteractionDailyScoreOf = async (interaction, date) => {
   // interaction.reply(`generating daily challenge recap for ${date}... this might take a while`);
-  const outputChannel = process.env.GENERAL_CHANNEL_ID; 
+  const outputChannel = process.env.TEST_CHANNEL_ID; 
   // check if date exists in challenge history 
   if (!challengeLinksHistory[date]) {
     if (interaction) interaction.reply('`oops, the requested date does not exist. check your formatting of the date again, it should be 2-19-2024. or I forgot to post a link that day.`')
@@ -206,9 +206,7 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
               const monthlyStats = await generateMonthlyStats(playerName, monthStr);
               let wins = monthlyStats.wins;
               let top3 = monthlyStats.topThree;
-              let games = monthlyStats.gamesPlayed + 1;
-              if (rank === 1) wins++;
-              if (rank <= 3) top3++;
+
               const top3Rate = ((top3 / games) * 100).toFixed(1).toString() + "%";
   
               console.log('checking average: ', totalScore, monthlyStats.monthlyAverage);
