@@ -133,11 +133,11 @@ client.login(TOKEN);
 const handleInteractionDailyChallenge = async (interaction, user) => {
     // send url to daily challenge channel 
     try {
-      const generalChannel = process.env.TEST_CHANNEL_ID;
+      const generalChannel = process.env.GENERAL_CHANNEL_ID;
       // reply to command
       if (interaction) await client.channels.cache.get(generalChannel).send('daily challenge url is being created ' + `<@${user}>`);
       else {
-        await client.channels.cache.get(generalChannel).send('`running chron job...`');
+        await client.channels.cache.get(generalChannel).send('`running cron job...`');
       }
       // first generate the link 
       const dailyLink = await generateDailyChallengeLink(interaction);
