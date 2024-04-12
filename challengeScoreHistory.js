@@ -26796,5 +26796,229 @@ module.exports = {
         "guessCountryCode": "my"
       }
     }
+  },
+  "4-9-2024": {
+    "url": "https://www.geoguessr.com/challenge/1akHw4xcwW7bj9LW",
+    "ranking": [
+      {
+        "rank": 1,
+        "playerName": "Z",
+        "totalScore": 15364,
+        "totalDistance": 4377,
+        "countryRight": 3,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 46.15562616960288,
+            "lng": -72.41817867073873,
+            "correctCountryCode": "us",
+            "guessCountryCode": "ca",
+            "distance": 355.2,
+            "score": 3940,
+            "address": "Saint-Célestin (municipalité), Nicolet-Yamaska, Centre-du-Québec, Quebec, Canada"
+          },
+          {
+            "rightCountry": false,
+            "lat": 55.89830903524026,
+            "lng": 12.86697491094353,
+            "correctCountryCode": "no",
+            "guessCountryCode": "se",
+            "distance": 825.4,
+            "score": 2875,
+            "address": "E 6;E 20, Weibullsholm, Landskrona kommun, Skåne County, 261 51, Sweden"
+          },
+          {
+            "rightCountry": true,
+            "lat": -41.24315238995353,
+            "lng": 174.86514986037517,
+            "correctCountryCode": "nz",
+            "guessCountryCode": "nz",
+            "distance": 257.3,
+            "score": 4208,
+            "address": "Korokoro, Lower Hutt, Lower Hutt City, Wellington, 5012, New Zealand"
+          },
+          {
+            "rightCountry": true,
+            "lat": 41.81257139327825,
+            "lng": -70.7329317903815,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 2309.2,
+            "score": 1063,
+            "address": "Hammond Street, Carver, Plymouth County, Massachusetts, 02506, United States"
+          },
+          {
+            "rightCountry": true,
+            "lat": 38.22745482930263,
+            "lng": 140.82979923963137,
+            "correctCountryCode": "jp",
+            "guessCountryCode": "jp",
+            "distance": 629.8,
+            "score": 3278,
+            "address": "Kaminoyama Elementary School, 1, Kaminoyama 1-chome, Taihaku Ward, Sendai, Miyagi Prefecture, 982-0812, Japan"
+          }
+        ],
+        "averageDistance": 875.4
+      }
+    ],
+    "dailyInfo": {
+      "bestGuess": {
+        "playerName": "Z",
+        "score": 4208,
+        "distance": 257.3,
+        "address": "Korokoro, Lower Hutt, Lower Hutt City, Wellington, 5012, New Zealand",
+        "countryCode": "nz"
+      },
+      "worstGuess": {
+        "playerName": "Z",
+        "score": 1063,
+        "distance": 2309.2,
+        "guessCountry": "United States",
+        "correctCountry": "United States",
+        "guessCountryCode": "us"
+      }
+    }
+  },
+  "4-10-2024": {
+    "url": "https://www.geoguessr.com/challenge/Av5MB2GmO8EaBcCj",
+    "ranking": [
+      {
+        "rank": 1,
+        "playerName": "Z",
+        "totalScore": 18843,
+        "totalDistance": 2357.1,
+        "countryRight": 4,
+        "guesses": [
+          {
+            "rightCountry": true,
+            "lat": 51.52529385994534,
+            "lng": -0.14599637699845847,
+            "correctCountryCode": "gb",
+            "guessCountryCode": "gb",
+            "distance": 277.1,
+            "score": 4152,
+            "address": "Outer Circle, Fitzrovia, London Borough of Camden, London, Greater London, England, NW1 4LH, United Kingdom"
+          },
+          {
+            "rightCountry": true,
+            "lat": -27.516957150280597,
+            "lng": 153.03774046418107,
+            "correctCountryCode": "au",
+            "guessCountryCode": "au",
+            "distance": 95.6,
+            "score": 4690,
+            "address": "215, Ekibin Road East, Tarragindi, Brisbane City, Queensland, 4121, Australia"
+          },
+          {
+            "rightCountry": false,
+            "lat": 55.907605806020925,
+            "lng": 24.172529070235743,
+            "correctCountryCode": "hr",
+            "guessCountryCode": "lt",
+            "distance": 1260.3,
+            "score": 2148,
+            "address": "Kruopinė, Buojaragis, Pušalotas eldership, Pasvalio rajono savivaldybė, Panevezys County, 39262, Lithuania"
+          },
+          {
+            "rightCountry": true,
+            "lat": 40.8001427371992,
+            "lng": -75.79675771351612,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 431,
+            "score": 3745,
+            "address": "Mahoning Drive West, Pleasant Corners, Mahoning Township, Carbon County, Pennsylvania, United States"
+          },
+          {
+            "rightCountry": true,
+            "lat": 35.079507506791586,
+            "lng": 136.95419877419755,
+            "correctCountryCode": "jp",
+            "guessCountryCode": "jp",
+            "distance": 293,
+            "score": 4108,
+            "address": "那爛陀学院, 緑瑞穂線, Sone 1-chome, Midori Ward, Nagoya, Aichi Prefecture, Chubu Region, 458-0835, Japan"
+          }
+        ],
+        "averageDistance": 471.41999999999996
+      },
+      {
+        "rank": 2,
+        "playerName": "Kanjidai",
+        "totalScore": 10908,
+        "totalDistance": 13531.6,
+        "countryRight": 2,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 51.23818965060055,
+            "lng": 5.976066112366043,
+            "correctCountryCode": "gb",
+            "guessCountryCode": "nl",
+            "distance": 646,
+            "score": 3243,
+            "address": "23, Molenweg, Berik, Buggenum, Leudal, Limburg, Netherlands, 6082 NB, Netherlands"
+          },
+          {
+            "rightCountry": true,
+            "lat": -37.77135126755369,
+            "lng": 145.00705892445845,
+            "correctCountryCode": "au",
+            "guessCountryCode": "au",
+            "distance": 1448.3,
+            "score": 1894,
+            "address": "Whalley Street, Northcote, Melbourne, City of Darebin, Victoria, 3070, Australia"
+          },
+          {
+            "rightCountry": false,
+            "lat": 47.68310405812926,
+            "lng": 13.709876767676343,
+            "correctCountryCode": "hr",
+            "guessCountryCode": "at",
+            "distance": 349.2,
+            "score": 3956,
+            "address": "Pitzingmoos, Bad Ischl, Bezirk Gmunden, Upper Austria, 4820, Austria"
+          },
+          {
+            "rightCountry": true,
+            "lat": 39.898294213929965,
+            "lng": -89.06075329411496,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 1518.3,
+            "score": 1807,
+            "address": "Park Road, Macon County, Illinois, 62526, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 51.61414816693356,
+            "lng": -0.5594303634778797,
+            "correctCountryCode": "jp",
+            "guessCountryCode": "gb",
+            "distance": 9569.8,
+            "score": 8,
+            "address": "Amersham Road, Chalfont Common, Chalfont St. Peter, Denham, Gerrards Cross and Chalfonts Community Board, Chalfont St Peter, Buckinghamshire, England, SL9 0NT, United Kingdom"
+          }
+        ],
+        "averageDistance": 2706.32
+      }
+    ],
+    "dailyInfo": {
+      "bestGuess": {
+        "playerName": "Z",
+        "score": 4690,
+        "distance": 95.6,
+        "address": "215, Ekibin Road East, Tarragindi, Brisbane City, Queensland, 4121, Australia",
+        "countryCode": "au"
+      },
+      "worstGuess": {
+        "playerName": "Kanjidai",
+        "score": 8,
+        "distance": 9569.8,
+        "guessCountry": "United Kingdom",
+        "correctCountry": "Japan",
+        "guessCountryCode": "gb"
+      }
+    }
   }
 };

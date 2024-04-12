@@ -88,5 +88,6 @@ module.exports = {
   "4-6-2024": "https://www.geoguessr.com/challenge/TwR07sb8HzFv5ZGw",
   "4-7-2024": "https://www.geoguessr.com/challenge/SuEWgLOs39u16wqQ",
   "4-8-2024": "https://www.geoguessr.com/challenge/lSELNI1uSFhbO0Vq",
-  "4-9-2024": "https://www.geoguessr.com/challenge/AIGhV8y1ybXlO3WB"
+  "4-9-2024": "https://www.geoguessr.com/challenge/1akHw4xcwW7bj9LW",
+  "4-10-2024": "https://www.geoguessr.com/challenge/Av5MB2GmO8EaBcCj"
 };
