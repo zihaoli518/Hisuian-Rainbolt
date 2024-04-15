@@ -14,6 +14,8 @@ const challengeScoreHistory = require('../challengeScoreHistory.js');
 const countryGreetings = require('./utils/countryGreetings.js');
 const getAllTimeStats = require('./getAllTimeStats.js')
 const countryCodeDict = require('./utils/countryCodes.js');
+const updatePreviousGames = require('./utils/updatePreviousGames.js');
+
 
 const adminDiscordID = process.env.ADMIN_DISCORD_ID;
 
@@ -474,6 +476,7 @@ cron.schedule(schedule, async () => {
   handleInteractionDailyChallenge();
   const prevDate = getDateStr(undefined, true); 
   handleInteractionDailyScoreOf(undefined, prevDate);
+  updatePreviousGames();
 });
 
 

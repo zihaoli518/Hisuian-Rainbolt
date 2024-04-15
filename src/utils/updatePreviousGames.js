@@ -50,7 +50,9 @@ const resetDailyInfo = () => {
 }
 
 
-if (!once) {
-  updatePreviousGames();
-  once = true
-}
+// if (!once) {
+//   updatePreviousGames();
+//   once = true
+// }
+
+modules.exports = updatePreviousGames;
