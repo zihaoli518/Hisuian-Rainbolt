@@ -91,5 +91,8 @@ module.exports = {
   "4-9-2024": "https://www.geoguessr.com/challenge/1akHw4xcwW7bj9LW",
   "4-10-2024": "https://www.geoguessr.com/challenge/Av5MB2GmO8EaBcCj",
   "4-11-2024": "https://www.geoguessr.com/challenge/h8Cecys3BhqZfHkR",
-  "4-12-2024": "https://www.geoguessr.com/challenge/UVABUlvwS57SApYx"
+  "4-12-2024": "https://www.geoguessr.com/challenge/UVABUlvwS57SApYx",
+  "4-13-2024": "https://www.geoguessr.com/challenge/b4Luk3N5Pj3UwOhK",
+  "4-14-2024": "https://www.geoguessr.com/challenge/GAjcpSIvdGNMAsOC",
+  "4-15-2024": "https://www.geoguessr.com/challenge/D5KG0DqojosWFp2v"
 };
