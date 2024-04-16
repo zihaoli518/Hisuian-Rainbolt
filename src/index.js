@@ -168,6 +168,7 @@ const handleInteractionDailyChallenge = async (interaction, user) => {
 const handleInteractionDailyScoreOf = async (interaction, date) => {
   // interaction.reply(`generating daily challenge recap for ${date}... this might take a while`);
   const outputChannel = process.env.GENERAL_CHANNEL_ID; 
+
   // check if date exists in challenge history 
   if (!challengeLinksHistory[date]) {
     if (interaction) interaction.reply('`oops, the requested date does not exist. check your formatting of the date again, it should be 2-19-2024. or I forgot to post a link that day.`')
@@ -179,10 +180,7 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
   }
   const startTime = performance.now();
 
-  
-  // const outputChannel = process.env.GENERAL_CHANNEL_ID; 
-  // Get the channel you want to go through messages in
-  // const channel = client.channels.cache.get(dailyChallengeChannel);
+
   try {
     const url = challengeLinksHistory[date];
     const dailyScoreObj = await getScores(url, date, interaction);
@@ -190,6 +188,9 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
     const bestGuess = dailyScoreObj.dailyInfo.bestGuess;
     const worstGuess = dailyScoreObj.dailyInfo.worstGuess;
     const aboveAverage = [];
+
+    let twentyK = false;
+    let pbArray = [];
 
     
     console.log('index.js rankingArray generated. Building embed.... ')
@@ -216,8 +217,9 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
   
               console.log('checking average: ', totalScore, monthlyStats.monthlyAverage);
               if (totalScore > monthlyStats.monthlyAverage) aboveAverage.push(playerName);
-              if (totalScore>19999) await twentyKAlert(interaction, playerName);
-              if (totalScore>monthlyStats.allTimeHighscore) await pbAlert(interaction, playerName, totalScore, monthlyStats.allTimeHighscore);
+
+              if (totalScore>19999) twentyKAlert(interaction, playerName);
+              if (totalScore>monthlyStats.allTimeHighscore) pbAlert(interaction, playerName, totalScore, monthlyStats.allTimeHighscore);
   
               const field1 = { name: rankStr + '. ' + playerName, value: `🌍 score: ${totalScoreStr} 🚎 distance: ${totalDistance}km 📍country: ${countryRight}/5`, inline: true };
               const field2 = { name: 'monthly stats', value: `avg: ${monthlyStats.monthlyAverage} 👑 wins: ${wins}, GP: ${games}, 🏆 top 3: ${top3}, ${top3Rate}` };
@@ -276,8 +278,7 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
     
     // console.log('before client.channels.get ', client.channels.cache.get(outputChannel));
     await client.channels.cache.get(outputChannel).send({embeds: [embed]});
-    // console.log('after client.channels.cache')
-
+    // 20k and pb alerts 
   } catch (error) {
     console.log(error)
   }
@@ -301,7 +302,6 @@ const handleInteractionGetAllTimeStats = async (interaction, user) => {
     const embed = new EmbedBuilder()
       .setTitle(`let's scope out your all time stats, ***${playerNameArg}*** : `)
       .setDescription(` <@${user}>, a ${getRandomWord(randomTroll)} ***${allTimeStats.gamesPlayed}*** games `)
-
       .setColor('Orange')
     // Iterate over the data and add fields dynamically
     const fields = [];
@@ -369,43 +369,43 @@ const handleInteractionGetAllTimeStats = async (interaction, user) => {
 const twentyKAlert = async (interaction, playerName) => {
   try {
     const channelID = process.env.GENERAL_CHANNEL_ID; 
-    const message = `🚨🚨🚨20k alert🚨🚨🚨\n congrats ${playerName} on breaking 20k!`
-    await client.channels.cache.get(channelID).send(message);
-
+    const discordID = discordUsernameObj[playerName];
     const gifURL = 'https://media.tenor.com/bCWhbbjF8dwAAAAM/poggers-pepe.gif';
-    await client.channels.cache.get(channelID).send({ files: [gifURL] })
+    const message = `🚨🚨🚨20k alert🚨🚨🚨\n congrats ${playerName} aka <@${discordID}> on breaking 20k!\n${gifURL}`
+    await client.channels.cache.get(channelID).send(message);
+    // await client.channels.cache.get(channelID).send({ files: [gifURL] });
   } catch (error) {
     console.log(error)
   }
 }
 
-const testAlert = async (interaction, playerName) => {
-  try {
-    console.log(discordUsernameObj)
-      const channelID = process.env.TEST_CHANNEL_ID; 
-      const trollID = discordUsernameObj['Z'];
-      const user = client.users.cache.get(trollID);
-      const message = `🚨🚨🚨poggers alert🚨🚨🚨\n congrats <@${trollID}> on winning a free extended car warranty!`
-      client.channels.cache.get(channelID).send(message);
+// const testAlert = async (interaction, playerName) => {
+//   try {
+//     console.log(discordUsernameObj)
+//       const channelID = process.env.TEST_CHANNEL_ID; 
+//       const trollID = discordUsernameObj['Z'];
+//       const user = client.users.cache.get(trollID);
+//       const message = `🚨🚨🚨poggers alert🚨🚨🚨\n congrats <@${trollID}> on winning a free extended car warranty!`
+//       client.channels.cache.get(channelID).send(message);
   
-      const gifURL = 'https://media.tenor.com/bCWhbbjF8dwAAAAM/poggers-pepe.gif';
-      client.channels.cache.get(channelID).send({ files: [gifURL] })
+//       const gifURL = 'https://media.tenor.com/bCWhbbjF8dwAAAAM/poggers-pepe.gif';
+//       client.channels.cache.get(channelID).send({ files: [gifURL] })
 
-  } catch (error) {
-    console.log(error)
-  }
-}
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
 
 const pbAlert = async (interaction, playerName, newScore, oldScore) => {
   try {
     const channelID = process.env.GENERAL_CHANNEL_ID; 
     const discordID = discordUsernameObj[playerName];
     const user = client.users.cache.get(discordID);
-    const message = `🚨🚨🚨new PB alert🚨🚨🚨\n congrats <@${discordID}> on beating their old record of${oldScore} with a new PB of ${newScore}!`
-    client.channels.cache.get(channelID).send(message);
 
     const gifURL = 'https://media.tenor.com/bCWhbbjF8dwAAAAM/poggers-pepe.gif';
-    client.channels.cache.get(channelID).send({ files: [gifURL] })
+    const message = `🚨🚨🚨new PB alert🚨🚨🚨\n congrats <@${discordID}> on beating their old record of${oldScore} with a new PB of ${newScore}!\n${gifURL}`;
+    
+    await client.channels.cache.get(channelID).send(message);
   } catch (error) {
     console.log(error)
   }
@@ -464,8 +464,7 @@ const createHistoryObject = async (interaction) => {
 
 
 // Cron job 
-// const schedule = '0 16 * * *';
-const schedule = '15 10 * * *';
+const schedule = '0 16 * * *';
 
 // Schedule the task
 cron.schedule(schedule, async () => {
