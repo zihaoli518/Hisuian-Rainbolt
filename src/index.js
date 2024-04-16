@@ -137,7 +137,8 @@ const handleInteractionDailyChallenge = async (interaction, user) => {
     try {
       const generalChannel = process.env.GENERAL_CHANNEL_ID;
       // reply to command
-      if (interaction) await client.channels.cache.get(generalChannel).send('daily challenge url is being created ' + `<@${user}>`);
+      // if (interaction) await client.channels.cache.get(generalChannel).send('daily challenge url is being created ' + `<@${user}>`);
+      if (interaction) console.log('handleInteractionDailyChallenge...')
       else {
         await client.channels.cache.get(generalChannel).send('`running cron job...`');
       }
@@ -161,6 +162,8 @@ const handleInteractionDailyChallenge = async (interaction, user) => {
 }
 
 
+
+
 // input: date has to be in this format: '3-23-2024'
 const handleInteractionDailyScoreOf = async (interaction, date) => {
   // interaction.reply(`generating daily challenge recap for ${date}... this might take a while`);
@@ -172,7 +175,7 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
   }
   if (interaction) interaction.reply('`generating daily recap... this might take a while because free APIs limit my speed :/`');
   else {
-    await client.channels.cache.get(outputChannel).send(`generating daily recap... this might take a while because free APIs limit my speed :/` );
+    await client.channels.cache.get(outputChannel).send('`generating daily recap... this might take a while because free APIs limit my speed :/`' );
   }
   const startTime = performance.now();
 
@@ -461,7 +464,8 @@ const createHistoryObject = async (interaction) => {
 
 
 // Cron job 
-const schedule = '0 16 * * *';
+// const schedule = '0 16 * * *';
+const schedule = '15 10 * * *';
 
 // Schedule the task
 cron.schedule(schedule, async () => {
@@ -473,10 +477,10 @@ cron.schedule(schedule, async () => {
   // await client.channels.cache.get(channelID).send(dailyLink);
   // await client.channels.cache.get(channelID).send(`here's the daily challenge for ${date}, glhf! @everyone      (generated with cron job)` );
   console.log('Running scheduled task...');
-  handleInteractionDailyChallenge();
+  const update = await updatePreviousGames();
+  const daily = await handleInteractionDailyChallenge();
   const prevDate = getDateStr(undefined, true); 
-  handleInteractionDailyScoreOf(undefined, prevDate);
-  updatePreviousGames();
+  const recap = await handleInteractionDailyScoreOf(undefined, prevDate);
 });
 
 

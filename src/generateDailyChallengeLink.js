@@ -39,19 +39,20 @@ const generateDailyChallengeLink = async (interaction) =>  {
       await page.click('img[alt="Challenge"]');
     
       // change settings 
-      const checkbox = await page.$('input[type="checkbox"].toggle_toggle__hwnyw');
-      await checkbox.click();
+      const checkbox = await page.$('input[type="checkbox"].toggle_toggle__qfXpL');
+      if (checkbox) await checkbox.click();
     
       // Calculate the new position (e.g., halfway across the slider)
       const timeLimit = 40;
     
-      const sliderElement = await page.$('.game-options_slider__JwEe2 .styles_rangeslider__y45WS');
+      
+      const sliderElement = await page.$('.styles_rangeslider__8vVg3');
       const box = await sliderElement.boundingBox(); 
       let newX = box.x + ((timeLimit/600) * box.width) + box.width*0.086;
       await page.mouse.click(newX, box.y, { clickCount: 2 });
     
       // disable move pan zoom 
-      const checkboxes = await page.$$('.game-options_optionInput__TAqdI input[type="checkbox"].toggle_toggle__hwnyw');
+      const checkboxes = await page.$$('.game-options_optionInput__paPBZ input[type="checkbox"].toggle_toggle__qfXpL');
       for (const checkbox of checkboxes) {
           await checkbox.click();
       }
@@ -64,7 +65,7 @@ const generateDailyChallengeLink = async (interaction) =>  {
     
       const gameURL = await page.evaluate(() => {
         const inputElement = document.querySelector('input[name="copy-link"]');
-        console.log('inside gameURL await...', inputElement)
+        console.log('inside gameURL await...', inputElement);
         return inputElement ? inputElement.value : null;
       });
     
