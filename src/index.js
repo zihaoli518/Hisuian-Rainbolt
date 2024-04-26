@@ -4,7 +4,7 @@ const { Client, IntentsBitField, EmbedBuilder, MessageEmbed } = require('discord
 const puppeteer = require('puppeteer');
 const fetch = require('node-fetch');
 const cron = require('node-cron');
-const { spawn } = require('child_process');
+// const { spawn } = require('child_process');
 const challengeLinksHistory = require('../challengeLinksHistory.js')
 
 const generateDailyChallengeLink = require('./generateDailyChallengeLink.js');
@@ -15,6 +15,7 @@ const countryGreetings = require('./utils/countryGreetings.js');
 const getAllTimeStats = require('./getAllTimeStats.js')
 const countryCodeDict = require('./utils/countryCodes.js');
 const updatePreviousGames = require('./utils/updatePreviousGames.js');
+const createChart = require('./createChart.js');
 
 
 const adminDiscordID = process.env.ADMIN_DISCORD_ID;
@@ -23,6 +24,7 @@ const adminDiscordID = process.env.ADMIN_DISCORD_ID;
 console.log(Object.keys(challengeScoreHistory).sort())
 
 const db = require('./dbFunctions/dbModel.js');
+
 
 // importing and mapping playerName and discordID
 const getAllDiscordID = async () => {
@@ -106,6 +108,10 @@ client.on('interactionCreate', async (interaction) => {
   if (interaction.commandName === 'get_all_time_stats_of') {
     const userId = interaction.options.get('user').value.toString();
     handleInteractionGetAllTimeStats(interaction, userId)
+  }
+  if (interaction.commandName === 'my_monthly_chart') {
+    const userId = user;
+    handleMyMonthlyChart(interaction, userId);
   }
   if (interaction.commandName === 'create_history_object') {
     createHistoryObject(interaction);
@@ -406,7 +412,25 @@ const pbAlert = async (interaction, playerName, newScore, oldScore) => {
     const message = `🚨🚨🚨new PB alert🚨🚨🚨\n congrats <@${discordID}> on beating their old record of${oldScore} with a new PB of ${newScore}!\n${gifURL}`;
     
     await client.channels.cache.get(channelID).send(message);
-  } catch (error) {
+  } catch(error) {
+    console.log(error)
+  }
+}
+
+
+
+
+// handle interaction of my monthly chart 
+const handleMyMonthlyChart = async (interaction, userId) => {
+  const channelID = process.env.TEST_CHANNEL_ID; 
+
+  try {
+    console.log('before createChart()')
+    await createChart();
+    console.log('after createChart()')
+
+    await client.channels.cache.get(channelID).send('testing');
+  } catch(error) {
     console.log(error)
   }
 }

@@ -39,6 +39,10 @@ const commands = [
     ]
   },
   {
+    name: 'my_monthly_chart',
+    description: 'create a chart for your monthly stats'
+  },
+  {
     name: 'create_history_object',
     description: 'parses thru all messages in challenge channel and save all URL to javascript object'
   },
