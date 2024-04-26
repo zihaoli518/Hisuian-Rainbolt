@@ -13,6 +13,11 @@ const generateDailyChallengeLink = async (interaction) =>  {
   try {
       const url = 'https://www.geoguessr.com/maps/world/play';
       // const url = 'https://www.geoguessr.com/signin?target=%2Fmaps%2Fworld%2Fplay'
+      // const chromeExecutablePath = '/Users/z/.cache/puppeteer/chrome/mac-124.0.6367.78/chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing';
+      // const browser = await puppeteer.launch({
+      //     executablePath: chromeExecutablePath,
+      //     headless: true,
+      // });
     
       const browser = await puppeteer.launch({headless: true});
       const page = await browser.newPage();
