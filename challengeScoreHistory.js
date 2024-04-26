@@ -30751,23 +30751,83 @@ module.exports = {
           }
         ],
         "averageDistance": 4002.2400000000002
+      },
+      {
+        "rank": 2,
+        "playerName": "hehe",
+        "totalScore": 7523,
+        "totalDistance": 15064.6,
+        "countryRight": 2,
+        "guesses": [
+          {
+            "rightCountry": false,
+            "lat": 36.566304625268174,
+            "lng": -79.77906661042788,
+            "correctCountryCode": "co",
+            "guessCountryCode": "us",
+            "distance": 3587,
+            "score": 451,
+            "address": "Cox Road, Henry County, Virginia, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 53.384455733410334,
+            "lng": -1.9758463549930783,
+            "correctCountryCode": "it",
+            "guessCountryCode": "gb",
+            "distance": 1693.7,
+            "score": 1606,
+            "address": "Sitch Lane, Thornsett, New Mills, Little Hayfield, High Peak, Derbyshire, England, SK22 1AN, United Kingdom"
+          },
+          {
+            "rightCountry": true,
+            "lat": 37.79804673247762,
+            "lng": -92.59073452958681,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 1309.1,
+            "score": 2079,
+            "address": "Riley Drive, Laclede County, Missouri, 65536, United States"
+          },
+          {
+            "rightCountry": false,
+            "lat": 48.98849295157835,
+            "lng": 32.21395297041318,
+            "correctCountryCode": "jp",
+            "guessCountryCode": "ua",
+            "distance": 7882.8,
+            "score": 25,
+            "address": "162, Тясминська вулиця, Oleksandrivka, Олександрівська селищна громада, Kropyvnytskyi Raion, Kirovohrad Oblast, 27300, Ukraine"
+          },
+          {
+            "rightCountry": true,
+            "lat": 26.521188758576507,
+            "lng": -103.13760952958681,
+            "correctCountryCode": "mx",
+            "guessCountryCode": "mx",
+            "distance": 591.9,
+            "score": 3362,
+            "address": "Francisco I. Madero, Coahuila, Mexico"
+          }
+        ],
+        "averageDistance": 3012.92
       }
     ],
     "dailyInfo": {
       "bestGuess": {
-        "playerName": "Z",
-        "score": 4955,
-        "distance": 13.4,
-        "address": "Reserva Forestal Bosque Oriental de Bogotá, Localidad Chapinero, Bogota, Capital District, RAP (Especial) Central, 110231, Colombia",
-        "countryCode": "co"
+        "playerName": "hehe",
+        "score": 3362,
+        "distance": 591.9,
+        "address": "Francisco I. Madero, Coahuila, Mexico",
+        "countryCode": "mx"
       },
       "worstGuess": {
-        "playerName": "Z",
-        "score": 7,
-        "distance": 9749.8,
-        "guessCountry": "Japan",
-        "correctCountry": "Italy",
-        "guessCountryCode": "jp"
+        "playerName": "hehe",
+        "score": 25,
+        "distance": 7882.8,
+        "guessCountry": "Ukraine",
+        "correctCountry": "Japan",
+        "guessCountryCode": "ua"
       }
     }
   }
