@@ -1,6 +1,6 @@
 require('dotenv').config();
 const fs = require('fs');
-const { Client, IntentsBitField, EmbedBuilder, MessageEmbed } = require('discord.js'); 
+const { Client, IntentsBitField, EmbedBuilder, MessageEmbed, AttachmentBuilder, ButtonBuilder, StringSelectMenuBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js'); 
 const puppeteer = require('puppeteer');
 const fetch = require('node-fetch');
 const cron = require('node-cron');
@@ -424,6 +424,30 @@ const pbAlert = async (interaction, playerName, newScore, oldScore) => {
 const handleMyMonthlyChart = async (interaction, userId) => {
   const channelID = (process.env.NODE_ENV === 'production') ? process.env.GENERAL_CHANNEL_ID : process.env.TEST_CHANNEL_ID;
 
+
+  const score = new ButtonBuilder()
+    .setCustomId('score')
+    .setLabel('score')
+    .setStyle(ButtonStyle.Primary);
+  const distance = new ButtonBuilder()
+    .setCustomId('distance')
+    .setLabel('distance')
+    .setStyle(ButtonStyle.Primary);
+  const rank = new ButtonBuilder()
+    .setCustomId('rank')
+    .setLabel('rank')
+    .setStyle(ButtonStyle.Primary);
+  const country = new ButtonBuilder()
+    .setCustomId('country')
+    .setLabel('country')
+    .setStyle(ButtonStyle.Primary);
+  const row = new ActionRowBuilder()
+    .addComponents(score, distance, rank, country);
+  const response = await interaction.reply({
+    content: `pick a stat you would like to see a chart of:`,
+    components: [row],
+  });
+
   let playerNameArg = '';
   for (let playerName in discordUsernameObj) {
     if (discordUsernameObj[playerName] === userId) playerNameArg = playerName
@@ -431,7 +455,21 @@ const handleMyMonthlyChart = async (interaction, userId) => {
 
   try {
     console.log('before createChart()')
-    await createChart('Z', '4-2024', interaction);
+    // await createChart('Z', '4-2024', interaction);
+
+    const collectorFilter = i => i.user.id === interaction.user.id;
+
+    const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
+
+	  if (confirmation.customId === 'score') {
+	    await createChart('Z', '4-2024', interaction, 'totalScore', client);
+    } else if (confirmation.customId === 'rank') {
+      await createChart('Z', '4-2024', interaction, 'rank', client);
+    } else if (confirmation.customId === 'distance') {
+      await createChart('Z', '4-2024', interaction, 'totalDistance', client);
+    } else if (confirmation.customId === 'country') {
+      await createChart('Z', '4-2024', interaction, 'countryRight', client);
+    } 
     console.log('after createChart()')
 
     await client.channels.cache.get(channelID).send('testing');

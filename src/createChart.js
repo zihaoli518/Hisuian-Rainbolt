@@ -8,31 +8,45 @@ let historyObject = require('../challengeLinksHistory.js');
 const challengeScoreHistory = require('../challengeScoreHistory.js');
 // const db = require('../dbModel.js');
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { EmbedBuilder, AttachmentBuilder, ButtonBuilder, StringSelectMenuBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { Client, IntentsBitField, EmbedBuilder, AttachmentBuilder, ButtonBuilder, StringSelectMenuBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
 let chartEmbed = {};
 
 
+// global parameters
+const minY = {
+  score: 0,
+  rank: 1,
+  distance: 0,
+  countryRight: 0,
+}
+
+const maxY = {
+  score: 25000,
+  rank: 8, 
+  distance: 15000,
+  countryRight: 5,
+}
+
 
 // input: (playerName, monthStr) 
 // output: send a chart to general channel 
-const createChart = async (playerName, monthStr, interaction) => {
+const createChart = async (playerName, monthStr, interaction, statStr, client) => {
   console.log('inside createChart...', playerName, monthStr);
 
-  let labels = ["3/15"];
-  let data = [0];
+  let labels = [];
+  let data = [];
 
   // populate labels and data 
   for (let i=1; i<=31; i++) {
     let splitArray = monthStr.split('-');
     const dateStr = splitArray[0] + '-' + i + '-' + splitArray[1];
-    console.log(dateStr, challengeScoreHistory[dateStr])
     if (!challengeScoreHistory[dateStr]) break;
     const rankingArray = challengeScoreHistory[dateStr].ranking;
     rankingArray.forEach(object => {
       if (object.playerName===playerName) {
         labels.push(dateStr);
-        data.push(object.totalScore)
+        data.push(object[statStr])
       }
     })
   }
@@ -45,30 +59,21 @@ const createChart = async (playerName, monthStr, interaction) => {
     chartEmbed.setImage("attachment://graph.png");
 
 
-  const button = new ButtonBuilder();
-  const selectMenu = new StringSelectMenuBuilder();
-  const confirm = new ButtonBuilder()
-    .setCustomId('confirm')
-    .setLabel('Confirm Ban')
-    .setStyle(ButtonStyle.Danger);
-  const cancel = new ButtonBuilder()
-    .setCustomId('cancel')
-    .setLabel('Cancel')
-    .setStyle(ButtonStyle.Secondary);
-  const row = new ActionRowBuilder()
-    .addComponents(cancel, confirm);
+
 
   // Generate your graph & get the picture as response
-  const attachment = await generateCanva(labels, data);
+  const attachment = await generateCanva(labels, data, statStr);
+
 
 
   // Reply to server / channel you  want passing MessageEmbed & messageAttachment objects
-  interaction.reply({ embeds: [chartEmbed], files: [attachment], components: [row],});
+  const channelID = (process.env.NODE_ENV === 'production') ? process.env.GENERAL_CHANNEL_ID : process.env.TEST_CHANNEL_ID;
+  await client.channels.cache.get(channelID).send({ embeds: [chartEmbed], files: [attachment],});
 
 };
 
 // This function will return MessageAttachment object from discord.js
-const generateCanva = async (labels, datas) => {
+const generateCanva = async (labels, datas, statStr) => {
   const renderer = new ChartJSNodeCanvas({ width: 1200, height: 500 });
   const image = await renderer.renderToBuffer({
     type: "line",
@@ -91,8 +96,8 @@ const generateCanva = async (labels, datas) => {
     options: {
       scales: {
         y: {
-          min: 0,
-          max: 25000,
+          min: minY[statStr],
+          max: maxY[statStr],
           grid: {
             color: "rgba(192, 192, 192, 0.5)", // Light grey for grid lines
           },
