@@ -141,7 +141,7 @@ client.login(TOKEN);
 const handleInteractionDailyChallenge = async (interaction, user) => {
     // send url to daily challenge channel 
     try {
-      const generalChannel = process.env.GENERAL_CHANNEL_ID;
+      const generalChannel = (process.env.NODE_ENV === 'production') ? process.env.GENERAL_CHANNEL_ID : process.env.TEST_CHANNEL_ID;
       // reply to command
       // if (interaction) await client.channels.cache.get(generalChannel).send('daily challenge url is being created ' + `<@${user}>`);
       if (interaction) console.log('handleInteractionDailyChallenge...')
@@ -157,7 +157,7 @@ const handleInteractionDailyChallenge = async (interaction, user) => {
       const date = getDateStr();
 
       // const channelID = process.env.DAILY_CHALLENGE_CHANNEL_ID; 
-      const dailyChannel = process.env.DAILY_CHALLENGE_CHANNEL_ID; 
+      const dailyChannel = (process.env.NODE_ENV === 'production') ? process.env.DAILY_CHALLENGE_CHANNEL_ID : process.env.TEST_CHANNEL_ID; 
 
       await client.channels.cache.get(dailyChannel).send(`${dailyLink} \n here's the daily challenge for ${date}, glhf!` );
       // await client.channels.cache.get(channelID).send(dailyLink);
@@ -173,8 +173,8 @@ const handleInteractionDailyChallenge = async (interaction, user) => {
 // input: date has to be in this format: '3-23-2024'
 const handleInteractionDailyScoreOf = async (interaction, date) => {
   // interaction.reply(`generating daily challenge recap for ${date}... this might take a while`);
-  const outputChannel = process.env.GENERAL_CHANNEL_ID; 
-
+  const outputChannel = (process.env.NODE_ENV === 'production') ? process.env.GENERAL_CHANNEL_ID : process.env.TEST_CHANNEL_ID;
+  console.log('inside handle..... ', process.env.NODE_ENV, (process.env.NODE_ENV === 'production'))
   // check if date exists in challenge history 
   if (!challengeLinksHistory[date]) {
     if (interaction) interaction.reply('`oops, the requested date does not exist. check your formatting of the date again, it should be 2-19-2024. or I forgot to post a link that day.`')
@@ -293,7 +293,7 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
 
 
 const handleInteractionGetAllTimeStats = async (interaction, user) => {
-  const outputChannel = process.env.GENERAL_CHANNEL_ID;
+  const outputChannel = (process.env.NODE_ENV === 'production') ? process.env.GENERAL_CHANNEL_ID : process.env.TEST_CHANNEL_ID;
   const startTime = performance.now();
 
   try {
@@ -374,7 +374,7 @@ const handleInteractionGetAllTimeStats = async (interaction, user) => {
 
 const twentyKAlert = async (interaction, playerName) => {
   try {
-    const channelID = process.env.GENERAL_CHANNEL_ID; 
+    const channelID = (process.env.NODE_ENV === 'production') ? process.env.GENERAL_CHANNEL_ID : process.env.TEST_CHANNEL_ID;
     const discordID = discordUsernameObj[playerName];
     const gifURL = 'https://media.tenor.com/bCWhbbjF8dwAAAAM/poggers-pepe.gif';
     const message = `🚨🚨🚨20k alert🚨🚨🚨\n congrats ${playerName} aka <@${discordID}> on breaking 20k!\n${gifURL}`
@@ -404,7 +404,7 @@ const twentyKAlert = async (interaction, playerName) => {
 
 const pbAlert = async (interaction, playerName, newScore, oldScore) => {
   try {
-    const channelID = process.env.GENERAL_CHANNEL_ID; 
+    const channelID = (process.env.NODE_ENV === 'production') ? process.env.GENERAL_CHANNEL_ID : process.env.TEST_CHANNEL_ID;
     const discordID = discordUsernameObj[playerName];
     const user = client.users.cache.get(discordID);
 
@@ -422,11 +422,16 @@ const pbAlert = async (interaction, playerName, newScore, oldScore) => {
 
 // handle interaction of my monthly chart 
 const handleMyMonthlyChart = async (interaction, userId) => {
-  const channelID = process.env.TEST_CHANNEL_ID; 
+  const channelID = (process.env.NODE_ENV === 'production') ? process.env.GENERAL_CHANNEL_ID : process.env.TEST_CHANNEL_ID;
+
+  let playerNameArg = '';
+  for (let playerName in discordUsernameObj) {
+    if (discordUsernameObj[playerName] === userId) playerNameArg = playerName
+  }
 
   try {
     console.log('before createChart()')
-    await createChart();
+    await createChart('Z', '4-2024', interaction);
     console.log('after createChart()')
 
     await client.channels.cache.get(channelID).send('testing');
@@ -448,7 +453,7 @@ const createHistoryObject = async (interaction) => {
     interaction.reply('file already exists, cannot overwrite')
     return;
   }
-  const outputChannel = process.env.TEST_CHANNEL_ID; 
+  const outputChannel = (process.env.NODE_ENV === 'production') ? process.env.GENERAL_CHANNEL_ID : process.env.TEST_CHANNEL_ID;
   const dailyChallengeChannel = process.env.DAILY_CHALLENGE_CHANNEL_ID;
   const channel = client.channels.cache.get(dailyChallengeChannel);
   const messages = await channel.messages.fetch({ limit: 100 }); // Increase limit if needed

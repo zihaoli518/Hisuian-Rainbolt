@@ -30688,5 +30688,87 @@ module.exports = {
         "guessCountryCode": "ru"
       }
     }
+  },
+  "4-25-2024": {
+    "url": "https://www.geoguessr.com/challenge/peXNpCxjdk3QRDAP",
+    "ranking": [
+      {
+        "rank": 1,
+        "playerName": "Z",
+        "totalScore": 10452,
+        "totalDistance": 20011.2,
+        "countryRight": 3,
+        "guesses": [
+          {
+            "rightCountry": true,
+            "lat": 4.638559314328106,
+            "lng": -74.04178873211517,
+            "correctCountryCode": "co",
+            "guessCountryCode": "co",
+            "distance": 13.4,
+            "score": 4955,
+            "address": "Reserva Forestal Bosque Oriental de Bogotá, Localidad Chapinero, Bogota, Capital District, RAP (Especial) Central, 110231, Colombia"
+          },
+          {
+            "rightCountry": false,
+            "lat": 35.306644699837065,
+            "lng": 137.03833949084068,
+            "correctCountryCode": "it",
+            "guessCountryCode": "jp",
+            "distance": 9749.8,
+            "score": 7,
+            "address": "Kasugai, Aichi Prefecture, Chubu Region, 480-0304, Japan"
+          },
+          {
+            "rightCountry": true,
+            "lat": 38.03964023231456,
+            "lng": -94.49425025455336,
+            "correctCountryCode": "us",
+            "guessCountryCode": "us",
+            "distance": 1465,
+            "score": 1873,
+            "address": "Rock, Vernon County, Missouri, United States"
+          },
+          {
+            "rightCountry": true,
+            "lat": 34.86669595709911,
+            "lng": 135.40509975367448,
+            "correctCountryCode": "jp",
+            "guessCountryCode": "jp",
+            "distance": 490.9,
+            "score": 3598,
+            "address": "Midoridai 3-chome, Kawanishi, Hyogo Prefecture, 666-0125, Japan"
+          },
+          {
+            "rightCountry": false,
+            "lat": -32.951099597942886,
+            "lng": -60.70540716451313,
+            "correctCountryCode": "mx",
+            "guessCountryCode": "ar",
+            "distance": 8292,
+            "score": 19,
+            "address": "6120, Cerro Catedral, Villa Urquiza, Distrito Oeste, Rosario, Municipio de Rosario, Gran Rosario, Departamento Rosario, Santa Fe, S2009, Argentina"
+          }
+        ],
+        "averageDistance": 4002.2400000000002
+      }
+    ],
+    "dailyInfo": {
+      "bestGuess": {
+        "playerName": "Z",
+        "score": 4955,
+        "distance": 13.4,
+        "address": "Reserva Forestal Bosque Oriental de Bogotá, Localidad Chapinero, Bogota, Capital District, RAP (Especial) Central, 110231, Colombia",
+        "countryCode": "co"
+      },
+      "worstGuess": {
+        "playerName": "Z",
+        "score": 7,
+        "distance": 9749.8,
+        "guessCountry": "Japan",
+        "correctCountry": "Italy",
+        "guessCountryCode": "jp"
+      }
+    }
   }
 };
