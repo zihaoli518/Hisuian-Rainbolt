@@ -43,6 +43,44 @@ const commands = [
     description: 'create a chart for your monthly stats'
   },
   {
+    name: 'get_monthly_chart_of',
+    description: 'create a chart and recap for any player any month',
+    options: [
+      {
+        name: 'user',
+        description: 'please select the player',
+        type: ApplicationCommandOptionType.User,
+        required: true
+      },
+      {
+        name: 'month',
+        description: 'please enter a month you want to generate a recap for. example: 2-2024',
+        type: ApplicationCommandOptionType.String,
+        required: true
+      }
+    ]
+  },
+  {
+    name: 'monthly_recap',
+    description: 'create chart and stats for the month',
+    options: [
+      {
+        name: 'month',
+        description: 'please enter a month you want to generate a recap for. example: 2-2024',
+        type: ApplicationCommandOptionType.String,
+        required: true
+      }
+    ]
+  },
+  {
+    name: 'all_time_country_chart',
+    description: 'create a chart for your all time country guessing stats'
+  },
+  {
+    name: 'all_time_region_chart',
+    description: 'create a chart for your all time region guessing stats'
+  },
+  {
     name: 'create_history_object',
     description: 'parses thru all messages in challenge channel and save all URL to javascript object'
   },

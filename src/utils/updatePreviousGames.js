@@ -2,7 +2,7 @@
 
 require('dotenv').config();
 const fs = require('fs');
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
 const challengeLinksHistory = require('../../challengeLinksHistory.js');
 const challengeScoreHistory = require('../../challengeScoreHistory.js');
 const countryCodeDict = require('./countryCodes.js');

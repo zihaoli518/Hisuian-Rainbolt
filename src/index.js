@@ -16,6 +16,7 @@ const getAllTimeStats = require('./getAllTimeStats.js')
 const countryCodeDict = require('./utils/countryCodes.js');
 const updatePreviousGames = require('./utils/updatePreviousGames.js');
 const createChart = require('./createChart.js');
+const createCountryBarChart = require('./createCountryBarChart.js')
 
 
 const adminDiscordID = process.env.ADMIN_DISCORD_ID;
@@ -86,7 +87,12 @@ client.on('messageCreate', (message) => {
 // handle all interactions 
 client.on('interactionCreate', async (interaction) => {
   const user = interaction.user.id
+  console.log('NEW interaction! ', user)
   
+  if (interaction.type===3) {
+    await interaction.deferReply(); 
+    // interaction.reply({content: 'thanks'})
+  }
   if (!interaction.isChatInputCommand()) return;
   
   console.log(interaction.commandName, user);
@@ -109,9 +115,22 @@ client.on('interactionCreate', async (interaction) => {
     const userId = interaction.options.get('user').value.toString();
     handleInteractionGetAllTimeStats(interaction, userId)
   }
+  if (interaction.commandName === 'all_time_country_chart') {
+    const userId = user;
+    handleAllTimeCountryChart(interaction, userId, );
+  }
+  if (interaction.commandName === 'all_time_region_chart') {
+    const userId = user;
+    handleAllTimeRegionChart(interaction, userId, );
+  }
   if (interaction.commandName === 'my_monthly_chart') {
     const userId = user;
-    handleMyMonthlyChart(interaction, userId);
+    handleMyMonthlyChart(interaction, userId, );
+  }
+  if (interaction.commandName === 'get_monthly_chart_of') {
+    const userId = interaction.options.get('user').value.toString();
+    const monthStr = interaction.options.get('month').value.toString();
+    handleMyMonthlyChart(interaction, userId, monthStr);
   }
   if (interaction.commandName === 'create_history_object') {
     createHistoryObject(interaction);
@@ -421,61 +440,94 @@ const pbAlert = async (interaction, playerName, newScore, oldScore) => {
 
 
 // handle interaction of my monthly chart 
-const handleMyMonthlyChart = async (interaction, userId) => {
+const handleMyMonthlyChart = async (interaction, userId, monthStr) => {
   const channelID = (process.env.NODE_ENV === 'production') ? process.env.GENERAL_CHANNEL_ID : process.env.TEST_CHANNEL_ID;
 
 
   const score = new ButtonBuilder()
     .setCustomId('score')
-    .setLabel('score')
+    .setLabel('🌍 score')
     .setStyle(ButtonStyle.Primary);
   const distance = new ButtonBuilder()
     .setCustomId('distance')
-    .setLabel('distance')
-    .setStyle(ButtonStyle.Primary);
+    .setLabel('🚎 distance')
+    .setStyle(ButtonStyle.Secondary);
   const rank = new ButtonBuilder()
     .setCustomId('rank')
-    .setLabel('rank')
-    .setStyle(ButtonStyle.Primary);
+    .setLabel('🏆 rank')
+    .setStyle(ButtonStyle.Secondary);
   const country = new ButtonBuilder()
     .setCustomId('country')
-    .setLabel('country')
-    .setStyle(ButtonStyle.Primary);
+    .setLabel('📍 country')
+    .setStyle(ButtonStyle.Secondary);
   const row = new ActionRowBuilder()
     .addComponents(score, distance, rank, country);
+
   const response = await interaction.reply({
     content: `pick a stat you would like to see a chart of:`,
     components: [row],
   });
 
+
   let playerNameArg = '';
   for (let playerName in discordUsernameObj) {
     if (discordUsernameObj[playerName] === userId) playerNameArg = playerName
   }
+  const discordID = discordUsernameObj[playerNameArg];
+  const dateStr = getDateStr(); 
+  let monthStrArg = monthStr;
+  if (!monthStr) monthStrArg = dateStrToMonthStr(dateStr);
+
+  const response2 = await interaction.fetchReply(); 
 
   try {
-    console.log('before createChart()')
     // await createChart('Z', '4-2024', interaction);
-
     const collectorFilter = i => i.user.id === interaction.user.id;
 
     const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
+    if (confirmation) {
+      row.components.map((button) => {
+        return button.setDisabled(true);
+      });
+      await interaction.editReply({ content: "you chose to see a chart of: " + confirmation.customId, components: [row] });
+    }
 
 	  if (confirmation.customId === 'score') {
-	    await createChart('Z', '4-2024', interaction, 'totalScore', client);
+	    await createChart(playerNameArg, discordID, monthStrArg, 'score', 'totalScore', client);
     } else if (confirmation.customId === 'rank') {
-      await createChart('Z', '4-2024', interaction, 'rank', client);
+      await createChart(playerNameArg, discordID, monthStrArg, 'rank', 'rank', client);
     } else if (confirmation.customId === 'distance') {
-      await createChart('Z', '4-2024', interaction, 'totalDistance', client);
+      await createChart(playerNameArg, discordID, monthStrArg, 'distance', 'totalDistance', client);
     } else if (confirmation.customId === 'country') {
-      await createChart('Z', '4-2024', interaction, 'countryRight', client);
+      await createChart(playerNameArg, discordID, monthStrArg, 'countries', 'countryRight', client);
     } 
-    console.log('after createChart()')
 
-    await client.channels.cache.get(channelID).send('testing');
+    // await client.channels.cache.get(channelID).send('testing');
   } catch(error) {
     console.log(error)
   }
+}
+
+
+
+const handleAllTimeCountryChart = async(interaction, userId) => {
+  let playerNameArg = '';
+  for (let playerName in discordUsernameObj) {
+    if (discordUsernameObj[playerName] === userId) playerNameArg = playerName
+  }
+  const discordID = discordUsernameObj[playerNameArg];
+
+  await createCountryBarChart(playerNameArg, discordID, client, 'country')
+}
+
+const handleAllTimeRegionChart = async(interaction, userId) => {
+  let playerNameArg = '';
+  for (let playerName in discordUsernameObj) {
+    if (discordUsernameObj[playerName] === userId) playerNameArg = playerName
+  }
+  const discordID = discordUsernameObj[playerNameArg];
+
+  await createCountryBarChart(playerNameArg, discordID, client, 'region')
 }
 
 
@@ -531,7 +583,9 @@ const createHistoryObject = async (interaction) => {
 
 
 // Cron job 
-const schedule = '0 16 * * *';
+// const schedule = '0 16 * * *';
+const schedule = '5 11 * * *';
+
 
 // Schedule the task
 cron.schedule(schedule, async () => {
@@ -548,6 +602,9 @@ cron.schedule(schedule, async () => {
   const prevDate = getDateStr(undefined, true); 
   const recap = await handleInteractionDailyScoreOf(undefined, prevDate);
 });
+
+
+
 
 
 

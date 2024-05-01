@@ -11,7 +11,7 @@ const getScores = require('./getScores.js');
 
 // input: (playerName) 
 // outpu: {average score: 1000, average distance: 1000, Number((totalRank / allTimeStats.gamesPlayed).toFixed(2));: 40, wins: 10, topThree: 20, bestGuessOfTheDay: 3, worstGuessOfTheDay:10,}
-const getAllTimeStats = (playerName, monthStr) => {
+const getAllTimeStats = (playerName) => {
   const dateKeys = Object.keys(challengeScoreHistory); 
 
   let totalScore = 0;

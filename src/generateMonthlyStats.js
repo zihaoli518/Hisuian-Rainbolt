@@ -17,6 +17,8 @@ const getScores = require('./getScores.js');
 const generateMonthlyStats = async (playerName, monthStr) => {
   console.log('inside generateMonthlyStats...', playerName, monthStr)
   let totalScore = 0; 
+  let totalDistance = 0;
+  let totalCountries = 0;
   let gamesPlayed = 0; 
   let allTimeHighscore = 0; 
   let wins = 0; 
@@ -24,7 +26,6 @@ const generateMonthlyStats = async (playerName, monthStr) => {
   
   const dateArray = Object.keys(challengeScoreHistory); 
   for (const date of dateArray) {
-    console.log('date in dateArray: ', date)
     let rankingArray = challengeScoreHistory[date].ranking;
 
     // rankingArray = challengeScoreHistory[date].ranking;
@@ -34,8 +35,9 @@ const generateMonthlyStats = async (playerName, monthStr) => {
       if (playerObj.playerName === playerName) {
         allTimeHighscore = Math.max(allTimeHighscore, playerObj.totalScore);
         if (dateStrToMonthStr(date) === monthStr) {
-          console.log('match, about to increase games', gamesPlayed)
           totalScore += playerObj.totalScore;
+          totalDistance += playerObj.totalDistance;
+          totalCountries += playerObj.countryRight;
           gamesPlayed++;
           if (playerObj.rank === 1) wins++;
           if (playerObj.rank <= 3) topThree++;
@@ -47,10 +49,12 @@ const generateMonthlyStats = async (playerName, monthStr) => {
   
   const result = {};
   result['monthlyAverage'] = (totalScore/gamesPlayed).toFixed(1); 
+  result['distance'] = (totalDistance/gamesPlayed).toFixed(1);
   result['gamesPlayed'] = gamesPlayed; 
   result['allTimeHighscore'] = allTimeHighscore; 
   result['wins'] = wins; 
   result['topThree'] = topThree; 
+  result['averageCountries'] = (totalCountries/gamesPlayed).toFixed(1); 
   return result;
 };
 
