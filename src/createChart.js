@@ -53,21 +53,26 @@ const createChart = async (playerName, discordID, monthStr, statLabel, statStr, 
     if (!challengeScoreHistory[dateStr]) continue;
     const rankingArray = challengeScoreHistory[dateStr].ranking;
     labels.push(dateStr);
+    let pushNull = true;
     // each loop here is a player 
-    rankingArray.forEach(object => {
+    for (let object of rankingArray) {
       dailyPlayers++;
       dailyTotalScore += object.totalScore;
       dailyTotalDistance += object.totalDistance;
       dailyTotalCountries += object.countryRight;
       if (object.playerName===playerName) {
+        pushNull = false; 
         data.push(object[statStr]);
         currentGamesPlayed++;
         currentTotalScore += object.totalScore;
         currentTotalDistance += object.totalDistance;
         currentTotalCountries += object.countryRight;
         if (object.rank <= 3) currentTopThree++;
+        break
       }
-    })
+    }
+    if (pushNull) data.push(null)
+
     if (statStr === 'totalScore') average.push((dailyTotalScore/dailyPlayers).toFixed(1));
     if (statStr === 'totalDistance') average.push((dailyTotalDistance/dailyPlayers).toFixed(1));
     if (statStr === 'countryRight') average.push((dailyTotalCountries/dailyPlayers).toFixed(1));
@@ -147,6 +152,7 @@ const generateCanva = async (labels, datas, statStr, average, playerName) => {
           pointBorderColor: "rgb(255, 99, 132)",
           pointRadius: 5, // Increase point size
           fill: false, // Fill the area below the line with the background color
+          spanGaps: true,
           tension: 0,
         },
         {

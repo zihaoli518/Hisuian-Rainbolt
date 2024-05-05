@@ -19,10 +19,13 @@ const generateMonthlyStats = async (playerName, monthStr) => {
   let totalScore = 0; 
   let totalDistance = 0;
   let totalCountries = 0;
+  let totalRegions = 0;
   let gamesPlayed = 0; 
   let allTimeHighscore = 0; 
   let wins = 0; 
   let topThree = 0;  
+  let monthlyHighScore = 0;
+  let bestGuess = {distance: Infinity, address: '', countryCode: ''}
   
   const dateArray = Object.keys(challengeScoreHistory); 
   for (const date of dateArray) {
@@ -38,9 +41,18 @@ const generateMonthlyStats = async (playerName, monthStr) => {
           totalScore += playerObj.totalScore;
           totalDistance += playerObj.totalDistance;
           totalCountries += playerObj.countryRight;
+          totalRegions += playerObj.regionRight;
           gamesPlayed++;
           if (playerObj.rank === 1) wins++;
           if (playerObj.rank <= 3) topThree++;
+          monthlyHighScore = Math.max(monthlyHighScore, playerObj.totalScore);
+          playerObj.guesses.forEach(guess => {
+            if (guess.distance<bestGuess.distance) {
+              bestGuess.distance = guess.distance; 
+              bestGuess.address = guess.address
+              bestGuess.countryCode = guess.guessCountryCode
+            }
+          })
         }
       }
     })
@@ -55,6 +67,9 @@ const generateMonthlyStats = async (playerName, monthStr) => {
   result['wins'] = wins; 
   result['topThree'] = topThree; 
   result['averageCountries'] = (totalCountries/gamesPlayed).toFixed(1); 
+  result['averageRegions'] = (totalRegions/gamesPlayed).toFixed(1); 
+  result['monthlyHighScore'] = monthlyHighScore;
+  result['bestGuess'] = bestGuess;
   return result;
 };
 

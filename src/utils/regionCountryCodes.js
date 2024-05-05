@@ -2,12 +2,12 @@ module.exports = {
   "north america": {
     "us": true, // United States
     "ca": true, // Canada
-    "mx": true, // Mexico
     "gl": true, // Greenland
     "pm": true, // Saint Pierre and Miquelon
     "um": true // United States Outlying Islands
   },
   "central america": {
+    "mx": true, // Mexico
     "bz": true, // Belize
     "cr": true, // Costa Rica
     "sv": true, // El Salvador
@@ -79,11 +79,12 @@ module.exports = {
     "im": true, // Isle of Man
     "je": true, // Jersey
     "mt": true, // Malta
-    "tr": true // Turkey
+    "ch": true, // Switzerland
+    "it": true, // Italy
   },
   "central europe": {
+    "de": true, // Germany
     "at": true, // Austria
-    "ch": true, // Switzerland
     "it": true, // Italy
     "sm": true, // San Marino
     "va": true, // Vatican City
@@ -95,6 +96,31 @@ module.exports = {
     "hr": true, // Croatia
     "mk": true, // North Macedonia
     "me": true // Montenegro
+  },
+  "mediterranean": {
+    "es": true, // Spain
+    "pt": true, // Portugal
+    "mc": true, // Monaco
+    "it": true, // Italy
+    "sm": true, // San Marino
+    "va": true, // Vatican City
+    "hr": true, // Croatia
+    "si": true, // Slovenia
+    "ba": true, // Bosnia and Herzegovina
+    "me": true, // Montenegro
+    "al": true, // Albania
+    "gr": true, // Greece
+    "cy": true, // Cyprus
+    "tr": true, // Turkey
+    "sy": true, // Syria
+    "lb": true, // Lebanon
+    "il": true, // Israel
+    "ps": true, // Palestinian Territories
+    "eg": true, // Egypt
+    "ly": true, // Libya
+    "tn": true, // Tunisia
+    "dz": true, // Algeria
+    "ma": true // Morocco
   },
   "eastern europe": {
     "rs": true, // Serbia
@@ -113,7 +139,8 @@ module.exports = {
     "tj": true, // Tajikistan
     "ee": true, // Estonia
     "lv": true, // Latvia
-    "lt": true // Lithuania
+    "lt": true, // Lithuania
+    "pl": true, // Poland
   },
   "scandinavia": {
     "se": true, // Sweden
@@ -126,16 +153,7 @@ module.exports = {
     "fo": true, // Faroe Islands
     "sj": true // Svalbard and Jan Mayen
   },
-  "north africa": {
-    "ma": true, // Morocco
-    "dz": true, // Algeria
-    "tn": true, // Tunisia
-    "ly": true, // Libya
-    "eg": true, // Egypt
-    "sd": true, // Sudan
-    "eh": true // Western Sahara
-  },
-  "west africa": {
+  "Sub-Saharan africa": {
     "sn": true, // Senegal
     "gm": true, // Gambia
     "gn": true, // Guinea
@@ -154,17 +172,8 @@ module.exports = {
     "ml": true, // Mali
     "mr": true, // Mauritania
     "ne": true, // Niger
-    "st": true // São Tomé and Príncipe
-  },
-  "central africa": {
-    "ao": true, // Angola
-    "td": true, // Chad
-    "cg": true, // Republic of the Congo
-    "cd": true, // Democratic Republic of the Congo
-    "gq": true, // Equatorial Guinea
-    "ga": true // Gabon
-  },
-  "east africa": {
+    "st": true, // São Tomé and Príncipe
+    // east africa
     "et": true, // Ethiopia
     "er": true, // Eritrea
     "dj": true, // Djibouti
@@ -182,9 +191,15 @@ module.exports = {
     "yt": true, // Mayotte
     "re": true, // Réunion
     "sh": true, // Saint Helena
-    "sc": true // Seychelles
-  },
-  "south africa": {
+    "sc": true, // Seychelles
+    // central africa
+    "ao": true, // Angola
+    "td": true, // Chad
+    "cg": true, // Republic of the Congo
+    "cd": true, // Democratic Republic of the Congo
+    "gq": true, // Equatorial Guinea
+    "ga": true, // Gabon
+    // south africa
     "za": true, // South Africa
     "sz": true, // Eswatini (formerly Swaziland)
     "ls": true, // Lesotho
@@ -205,14 +220,20 @@ module.exports = {
     "mv": true, // Maldives
     "io": true // British Indian Ocean Territory
   },
-  "east asia": {
+  "east & central asia": {
     "cn": true, // China
     "jp": true, // Japan
     "kr": true, // South Korea
     "mo": true, // Macao
     "tw": true, // Taiwan
     "hk": true, // Hong Kong
-    "mn": true // Mongolia
+    "mn": true, // Mongolia
+
+    "uz": true, // Uzbekistan
+    "kz": true, // Kazakhstan
+    "kg": true, // Kyrgyzstan
+    "tm": true, // Turkmenistan
+    "tj": true // Tajikistan
   },
   "southeast asia": {
     "vn": true, // Vietnam
@@ -227,14 +248,9 @@ module.exports = {
     "id": true, // Indonesia
     "tl": true // Timor-Leste
   },
-  "central asia": {
-    "uz": true, // Uzbekistan
-    "kz": true, // Kazakhstan
-    "kg": true, // Kyrgyzstan
-    "tm": true, // Turkmenistan
-    "tj": true // Tajikistan
-  },
-  "middle east": {
+
+  "middle east & north africa": {
+    "tr": true, // Turkey
     "ir": true, // Iran
     "iq": true, // Iraq
     "sy": true, // Syria
@@ -248,7 +264,15 @@ module.exports = {
     "ye": true, // Yemen
     "qa": true, // Qatar
     "bh": true, // Bahrain
-    "il": true // Israel
+    "il": true, // Israel
+
+    "ma": true, // Morocco
+    "dz": true, // Algeria
+    "tn": true, // Tunisia
+    "ly": true, // Libya
+    "eg": true, // Egypt
+    "sd": true, // Sudan
+    "eh": true // Western Sahara
   },
   "oceania": {
     "au": true, // Australia

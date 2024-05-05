@@ -3,7 +3,7 @@ const fs = require('fs');
 const fetch = require('node-fetch');
 let historyObject = require('../challengeLinksHistory.js');
 const challengeScoreHistory = require('../challengeScoreHistory.js');
-// const db = require('../dbModel.js');
+const regionCodeDict = require('./utils/regionCountryCodes');
 const getScores = require('./getScores.js');
 
 
@@ -32,10 +32,18 @@ const getAllTimeStats = (playerName) => {
     allTimeBestGuessAddress: '',
     allTimeWorstGuess: 0, 
     correctCountries: 0,
+    correctRegions: 0, 
     countryStats: {
       // us : {right: 1, wrong: 3}, ru: 3, .... 
     },
+    regionStats: {
+      // 'north america' : {right: 1, wrong: 3, total: 4}
+    }
   };
+  // initialize regionStats object
+  for (let regionName in regionCodeDict) {
+    allTimeStats.regionStats[regionName] = {right: 0, wrong: 0, total: 0}
+  }
 
   for (let date of dateKeys) {
     const dailyData = challengeScoreHistory[date];
@@ -59,7 +67,7 @@ const getAllTimeStats = (playerName) => {
           allTimeStats.allTimeBestGuessAddress = guess.address;
         }
         if (guess.distance>allTimeStats.allTimeWorstGuess) allTimeStats.allTimeWorstGuess = guess.distance;
-        // go thru country codes 
+        // go thru country guessing stats  
         if (!allTimeStats.countryStats[guess.correctCountryCode]) allTimeStats.countryStats[guess.correctCountryCode] = {right: 0, wrong: 0, total: 0};
         allTimeStats.countryStats[guess.correctCountryCode].total++;
         if (guess.rightCountry) {
@@ -67,6 +75,21 @@ const getAllTimeStats = (playerName) => {
           allTimeStats.correctCountries++;
         }
         if (!guess.rightCountry) allTimeStats.countryStats[guess.correctCountryCode].wrong++;
+        // go thru region guesing stats 
+        for (let region in guess.correctRegion) {
+          allTimeStats.regionStats[region].total++; 
+        }
+        if (guess.rightRegion) {
+          allTimeStats.correctRegions++;
+          for (let region in guess.correctRegion) {
+            allTimeStats.regionStats[region].right++; 
+          }
+        }
+        if (!guess.rightRegion) {
+          for (let region in guess.correctRegion) {
+            allTimeStats.regionStats[region].wrong++; 
+          }
+        }
       });
     }
     if (dailyData.dailyInfo.bestGuess.playerName===playerName) allTimeStats.bestGuessOfTheDay++;

@@ -6,6 +6,8 @@ const fs = require('fs');
 const fetch = require('node-fetch');
 const GEOCODING_API_KEY = process.env.GEOCODING_API_KEY;
 const countryCodeDict = require('./utils/countryCodes.js');
+const regionCodeDict = require('./utils/regionCountryCodes.js')
+
 const adminDiscordID = process.env.ADMIN_DISCORD_ID;
 
 
@@ -79,10 +81,30 @@ const getScores = async (challengeURL, dateStr, interaction) => {
       result['countryRight'] = guessData.totalRight;
       result['guesses'] = guessData.resultArray;
       result['averageDistance'] = distanceInKm/5;
+
+      // add region guessing data 
+      let regionCounter = 0; 
+      result.guesses.forEach(guess => {
+        let guessRegion={}; let rightRegion={}; 
+        for (let region in regionCodeDict) {
+          if (regionCodeDict[region][guess.guessCountryCode]) guessRegion[region] = true; 
+          if (regionCodeDict[region][guess.correctCountryCode]) rightRegion[region] = true; 
+        }
+        guess['guessRegion'] = guessRegion; 
+        guess['correctRegion'] = rightRegion; 
+        let correct = false; 
+        for (let key in guessRegion) {
+          if (rightRegion[key]) correct=true
+        }
+        guess['rightRegion'] = correct;
+        if (correct) regionCounter++;
+      })
+      result['regionRight'] = regionCounter;
+
       rankingArray.push(result);
       rankCounter++;
     }
-    updatechallengeLinksHistory(dateStr, challengeURL, rankingArray, dailyInfo);
+    updateChallengeScoreHistory(dateStr, challengeURL, rankingArray, dailyInfo);
 
     return {rankingArray: rankingArray, dailyInfo: dailyInfo};
 
@@ -200,7 +222,7 @@ async function getCountryCode(latitude, longitude, i) {
   });
 }
 
-const updatechallengeLinksHistory = async (dateStr, url, rankingArray, dailyInfo) => {
+const updateChallengeScoreHistory = async (dateStr, url, rankingArray, dailyInfo) => {
   challengeScoreHistory[dateStr] = {url: url, ranking: rankingArray, dailyInfo: dailyInfo}; 
 
   fs.writeFile('challengeScoreHistory.js', `module.exports = ${JSON.stringify(challengeScoreHistory, null, 2)};`, err => {

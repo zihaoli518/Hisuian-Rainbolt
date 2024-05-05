@@ -16,7 +16,8 @@ const getAllTimeStats = require('./getAllTimeStats.js')
 const countryCodeDict = require('./utils/countryCodes.js');
 const updatePreviousGames = require('./utils/updatePreviousGames.js');
 const createChart = require('./createChart.js');
-const createCountryBarChart = require('./createCountryBarChart.js')
+const createCountryBarChart = require('./createCountryBarChart.js');
+const handleInteractionMonthlyRecap = require('./handleInteractions/handleInteractionMonthlyRecap.js');
 
 
 const adminDiscordID = process.env.ADMIN_DISCORD_ID;
@@ -132,6 +133,12 @@ client.on('interactionCreate', async (interaction) => {
     const monthStr = interaction.options.get('month').value.toString();
     handleMyMonthlyChart(interaction, userId, monthStr);
   }
+
+  if (interaction.commandName === 'monthly_recap') {
+    const monthStr = interaction.options.get('month').value.toString();
+    handleInteractionMonthlyRecap(client, interaction, monthStr, discordUsernameObj)
+  } 
+
   if (interaction.commandName === 'create_history_object') {
     createHistoryObject(interaction);
   } 
@@ -329,12 +336,11 @@ const handleInteractionGetAllTimeStats = async (interaction, user) => {
       .setDescription(` <@${user}>, a ${getRandomWord(randomTroll)} ***${allTimeStats.gamesPlayed}*** games `)
       .setColor('Orange')
     // Iterate over the data and add fields dynamically
-    const fields = [];
 
     const top3rate = (allTimeStats.topThree*100/allTimeStats.gamesPlayed).toFixed(1) + '%'
     const countryRightStr = allTimeStats.correctCountries + ' / ' + (allTimeStats.gamesPlayed*5);
     // console.log('about to top, ', allTimeStats)
-    const {topCountries, troubleCountries} = topAndBottomCountries(allTimeStats.countryStats, allTimeStats.gamesPlayed);
+    const {topCountries, troubleCountries} = topAndBottomCountries(allTimeStats.countryStats, allTimeStats.gamesPlayed, 4);
 
     const maxLengthTop = Math.max(...topCountries.map(countryObj => countryCodeDict[countryObj.country].length));
     let topCountriesStr = '';
@@ -351,7 +357,7 @@ const handleInteractionGetAllTimeStats = async (interaction, user) => {
       bottomCountriesStr += `😈 ${countryName} ${padding} ${countryObj.right} / ${countryObj.total}-- ${countryObj.percentage}% \n`;
     });
 
-
+    const fields = [];
     fields.push(
       { name: 'average score', value: `🎲 ${allTimeStats.averageScore}`, inline: true},
       { name: 'wins', value: `👑 ${allTimeStats.wins}`, inline: true},
@@ -388,7 +394,7 @@ const handleInteractionGetAllTimeStats = async (interaction, user) => {
 }
 
 
-
+ 
 
 
 const twentyKAlert = async (interaction, playerName) => {
@@ -404,22 +410,6 @@ const twentyKAlert = async (interaction, playerName) => {
   }
 }
 
-// const testAlert = async (interaction, playerName) => {
-//   try {
-//     console.log(discordUsernameObj)
-//       const channelID = process.env.TEST_CHANNEL_ID; 
-//       const trollID = discordUsernameObj['Z'];
-//       const user = client.users.cache.get(trollID);
-//       const message = `🚨🚨🚨poggers alert🚨🚨🚨\n congrats <@${trollID}> on winning a free extended car warranty!`
-//       client.channels.cache.get(channelID).send(message);
-  
-//       const gifURL = 'https://media.tenor.com/bCWhbbjF8dwAAAAM/poggers-pepe.gif';
-//       client.channels.cache.get(channelID).send({ files: [gifURL] })
-
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
 
 const pbAlert = async (interaction, playerName, newScore, oldScore) => {
   try {
@@ -511,14 +501,58 @@ const handleMyMonthlyChart = async (interaction, userId, monthStr) => {
 
 
 const handleAllTimeCountryChart = async(interaction, userId) => {
+  const countries = new ButtonBuilder()
+    .setCustomId('countries')
+    .setLabel('🌍 countries')
+    .setStyle(ButtonStyle.Primary);
+  const countriesSorted = new ButtonBuilder()
+    .setCustomId('countries-sorted')
+    .setLabel('🌎 countries (sorted by regions)')
+    .setStyle(ButtonStyle.Primary);
+  const regions = new ButtonBuilder()
+    .setCustomId('regions')
+    .setLabel('🗺️ regions')
+    .setStyle(ButtonStyle.Primary);
+  const row = new ActionRowBuilder()
+    .addComponents(countries, countriesSorted, regions);
+
+  const response = await interaction.reply({
+    content: `pick a chart to generate:`,
+    components: [row],
+  });
+
+
   let playerNameArg = '';
   for (let playerName in discordUsernameObj) {
     if (discordUsernameObj[playerName] === userId) playerNameArg = playerName
   }
   const discordID = discordUsernameObj[playerNameArg];
 
-  await createCountryBarChart(playerNameArg, discordID, client, 'country')
+
+  const response2 = await interaction.fetchReply(); 
+
+  try {
+    // await createChart('Z', '4-2024', interaction);
+    const collectorFilter = i => i.user.id === interaction.user.id;
+
+    const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
+    if (confirmation) {
+      row.components.map((button) => {
+        return button.setDisabled(true);
+      });
+      await interaction.editReply({ content: "you chose to see a chart of: " + confirmation.customId, components: [row] });
+    }
+
+    await createCountryBarChart(playerNameArg, discordID, client, confirmation.customId);
+
+    // await client.channels.cache.get(channelID).send('testing');
+  } catch(error) {
+    console.log(error)
+  }
+
 }
+
+
 
 const handleAllTimeRegionChart = async(interaction, userId) => {
   let playerNameArg = '';
@@ -529,6 +563,8 @@ const handleAllTimeRegionChart = async(interaction, userId) => {
 
   await createCountryBarChart(playerNameArg, discordID, client, 'region')
 }
+
+
 
 
 
@@ -584,7 +620,7 @@ const createHistoryObject = async (interaction) => {
 
 // Cron job 
 // const schedule = '0 16 * * *';
-const schedule = '5 11 * * *';
+const schedule = '0 11 * * *';
 
 
 // Schedule the task
@@ -646,7 +682,7 @@ const getRandomWord = (array) => {
 }
 
 
-function topAndBottomCountries(countryStats, gamesPlayed) {
+function topAndBottomCountries(countryStats, gamesPlayed, returnRows) {
   console.log('topAndBottomCountries', countryStats);
   const filterThreshhold = gamesPlayed/11
   const filteredStats = Object.entries(countryStats)
@@ -662,7 +698,7 @@ function topAndBottomCountries(countryStats, gamesPlayed) {
   const sortedByPercentage = countriesWithPercentage.sort((a, b) => b.percentage - a.percentage);
 
   // Get the top 3 countries with the highest percentage of correct answers
-  const topCountries = sortedByPercentage.slice(0, 4);
+  const topCountries = sortedByPercentage.slice(0, returnRows);
 
   // Get the top 3 countries with the lowest percentage of correct answers
   const troubleCountries = sortedByPercentage.sort((a, b) => {
@@ -672,7 +708,7 @@ function topAndBottomCountries(countryStats, gamesPlayed) {
         // If percentage is the same, use the total as tiebreaker
         return b.total - a.total;
     }
-  }).slice(0,4);
+  }).slice(0, returnRows);
   console.log(topCountries, troubleCountries)
 
 return { topCountries, troubleCountries };
