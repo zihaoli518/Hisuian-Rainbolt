@@ -11,9 +11,9 @@ const getScores = require('./getScores.js');
 
 // input: (playerName) 
 // outpu: {average score: 1000, average distance: 1000, Number((totalRank / allTimeStats.gamesPlayed).toFixed(2));: 40, wins: 10, topThree: 20, bestGuessOfTheDay: 3, worstGuessOfTheDay:10,}
-const getAllTimeStats = (playerName) => {
-  const dateKeys = Object.keys(challengeScoreHistory); 
-
+const getAllTimeStats = (playerName, monthStr) => {
+  // console.log('inside getAllTimeStats... ', playerName, monthStr)
+  
   let totalScore = 0;
   let totalDistance = 0;
   let totalRank = 0; 
@@ -44,9 +44,14 @@ const getAllTimeStats = (playerName) => {
   for (let regionName in regionCodeDict) {
     allTimeStats.regionStats[regionName] = {right: 0, wrong: 0, total: 0}
   }
-
+  
+  const dateKeys = Object.keys(challengeScoreHistory); 
   for (let date of dateKeys) {
     const dailyData = challengeScoreHistory[date];
+    // filter date 
+    if (monthStr) {
+       if (dateStrToMonthStr(date) !== monthStr) continue;
+    }
     // look for userName in ranking array 
     for (let player of dailyData.ranking) {
       if (player.playerName !== playerName) continue;
@@ -101,7 +106,7 @@ const getAllTimeStats = (playerName) => {
   allTimeStats.averageScore = Number((totalScore / allTimeStats.gamesPlayed).toFixed(1));
   allTimeStats.averageRank = Number((totalRank / allTimeStats.gamesPlayed).toFixed(2));
   allTimeStats.averageDistance = Number(((totalDistance / allTimeStats.gamesPlayed) / 5).toFixed(2));
-  console.log(allTimeStats);
+  // console.log('allTimeStats', allTimeStats);
   return allTimeStats;
 }
 
@@ -110,4 +115,8 @@ module.exports = getAllTimeStats;
 
 
 
-// getAllTimeStats('hoshibear')
+const dateStrToMonthStr = (str) => {
+  const parts = str.split('-'); // Split the string by the hyphen character
+  const monthYearString = `${parts[0]}-${parts[2]}`;
+  return monthYearString
+}

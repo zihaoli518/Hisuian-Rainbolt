@@ -97,38 +97,30 @@ client.on('interactionCreate', async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   
   console.log(interaction.commandName, user);
-  if (interaction.commandName === 'daily_challenge_link') {
+  if (interaction.commandName === 'send_daily_challenge_link') {
     handleInteractionDailyChallenge(interaction, user);
   }
-  if (interaction.commandName === 'daily_recap') {
+  if (interaction.commandName === 'daily_recap_today') {
     const dateToday = new Date(); 
     const dateStr = getDateStr(dateToday)
     handleInteractionDailyScoreOf(interaction, dateStr)
   } 
-  if (interaction.commandName === 'get_recap_of') {
+  if (interaction.commandName === 'daily_recap_of') {
     const dateStr = interaction.options.get('date').value.toString();
     handleInteractionDailyScoreOf(interaction, dateStr)
   }
-  if (interaction.commandName === 'get_my_all_time_stats') {
+  if (interaction.commandName === 'my_all_time_stats') {
     handleInteractionGetAllTimeStats(interaction, user)
   }
-  if (interaction.commandName === 'get_all_time_stats_of') {
+  if (interaction.commandName === 'all_time_stats_of') {
     const userId = interaction.options.get('user').value.toString();
     handleInteractionGetAllTimeStats(interaction, userId)
-  }
-  if (interaction.commandName === 'all_time_country_chart') {
-    const userId = user;
-    handleAllTimeCountryChart(interaction, userId, );
-  }
-  if (interaction.commandName === 'all_time_region_chart') {
-    const userId = user;
-    handleAllTimeRegionChart(interaction, userId, );
   }
   if (interaction.commandName === 'my_monthly_chart') {
     const userId = user;
     handleMyMonthlyChart(interaction, userId, );
   }
-  if (interaction.commandName === 'get_monthly_chart_of') {
+  if (interaction.commandName === 'monthly_chart_of') {
     const userId = interaction.options.get('user').value.toString();
     const monthStr = interaction.options.get('month').value.toString();
     handleMyMonthlyChart(interaction, userId, monthStr);
@@ -139,12 +131,22 @@ client.on('interactionCreate', async (interaction) => {
     handleInteractionMonthlyRecap(client, interaction, monthStr, discordUsernameObj)
   } 
 
-  if (interaction.commandName === 'create_history_object') {
-    createHistoryObject(interaction);
-  } 
-  if (interaction.commandName === 'test_alert') {
-    testAlert();
+  if (interaction.commandName === 'all_time_breakdown_chart') {
+    let userId = interaction.options.get('user').value.toString();
+    if (!userId) userId = user;
+    handleAllTimeCountryChart(interaction, userId);
   }
+  if (interaction.commandName === 'all_time_breakdown_everyone') {
+    handleAllTimeCountryChart(interaction, user, true);
+  }
+
+
+  // if (interaction.commandName === 'create_history_object') {
+  //   createHistoryObject(interaction);
+  // } 
+  // if (interaction.commandName === 'test_alert') {
+  //   testAlert();
+  // }
   if (interaction.isCommand() && interaction.timedOut) {
     // Ping yourself
     await interaction.reply({
@@ -241,7 +243,7 @@ const handleInteractionDailyScoreOf = async (interaction, date) => {
           const monthStr = dateStrToMonthStr(date);
   
           try {
-              const monthlyStats = await generateMonthlyStats(playerName, monthStr);
+              const monthlyStats = generateMonthlyStats(playerName, monthStr);
               let wins = monthlyStats.wins;
               let top3 = monthlyStats.topThree;
               let games = monthlyStats.gamesPlayed;
@@ -340,21 +342,21 @@ const handleInteractionGetAllTimeStats = async (interaction, user) => {
     const top3rate = (allTimeStats.topThree*100/allTimeStats.gamesPlayed).toFixed(1) + '%'
     const countryRightStr = allTimeStats.correctCountries + ' / ' + (allTimeStats.gamesPlayed*5);
     // console.log('about to top, ', allTimeStats)
-    const {topCountries, troubleCountries} = topAndBottomCountries(allTimeStats.countryStats, allTimeStats.gamesPlayed, 4);
+    const {topCountries, troubleCountries} = topAndBottomCountries(allTimeStats.countryStats, allTimeStats.gamesPlayed, 5);
 
     const maxLengthTop = Math.max(...topCountries.map(countryObj => countryCodeDict[countryObj.country].length));
     let topCountriesStr = '';
     topCountries.forEach(countryObj => {
       const countryName = countryCodeDict[countryObj.country];
       const padding = '-'.repeat(maxLengthTop - countryName.length + 2); // Adjust padding as needed
-      topCountriesStr += `📍 ${countryName} ${padding} ${countryObj.right} / ${countryObj.total} -- ${countryObj.percentage}% \n`;
+      topCountriesStr += `\'📍 ${countryName} ${padding} ${countryObj.right} / ${countryObj.total} -- ${countryObj.percentage}%\` \n`;
     });
     const maxLengthBot = Math.max(...troubleCountries.map(countryObj => countryCodeDict[countryObj.country].length));
     let bottomCountriesStr = '';
     troubleCountries.forEach(countryObj => {
       const countryName = countryCodeDict[countryObj.country];
       const padding = '-'.repeat(maxLengthBot - countryName.length + 2); // Adjust padding as needed
-      bottomCountriesStr += `😈 ${countryName} ${padding} ${countryObj.right} / ${countryObj.total}-- ${countryObj.percentage}% \n`;
+      bottomCountriesStr += `\'😈 ${countryName} ${padding} ${countryObj.right} / ${countryObj.total}-- ${countryObj.percentage}%\' \n`;
     });
 
     const fields = [];
@@ -373,7 +375,7 @@ const handleInteractionGetAllTimeStats = async (interaction, user) => {
       { name: 'daily shoutouts', value: `best: ${allTimeStats.bestGuessOfTheDay}, furthest: ${allTimeStats.worstGuessOfTheDay}`, inline: true},
 
       { name: `🤯 you are killing it when we are in: 🤯`, value: topCountriesStr},
-      { name: `😅 you get trolled by these countries: 😅`, value: bottomCountriesStr}
+      { name: `😈 you get trolled by these countries: 😈`, value: bottomCountriesStr}
 
     );
     embed.addFields(fields);
@@ -384,9 +386,46 @@ const handleInteractionGetAllTimeStats = async (interaction, user) => {
     embed.setFooter({text: 'stats generated in ' + elapsedTime + 's'})
   
     await client.channels.cache.get(outputChannel).send({embeds: [embed]});
-    const reply = `\`your all time stats have been generated in ${elapsedTime}s\``
-    interaction.reply(reply)
-  }
+    
+    // ask if they wanna see a chart 
+    const countries = new ButtonBuilder()
+      .setCustomId('countries')
+      .setLabel('🌍 countries')
+    .setStyle(ButtonStyle.Primary);
+    const countriesSorted = new ButtonBuilder()
+      .setCustomId('countries-sorted')
+      .setLabel('🌎 countries (grouped by regions)')
+      .setStyle(ButtonStyle.Primary);
+    const regions = new ButtonBuilder()
+      .setCustomId('regions')
+      .setLabel('🗺️ regions')
+      .setStyle(ButtonStyle.Primary);
+    const row = new ActionRowBuilder()
+      .addComponents(countries, countriesSorted, regions);
+
+    
+    
+    const discordID = discordUsernameObj[playerNameArg];
+    if (!discordID) interaction.reply('`sorry, user not found... please check again`')
+    
+    const contentPlayer = `would you like to see a more detailed region guessing breakdown for <@${discordID}>?`;
+    const response = await interaction.reply({
+      content: contentPlayer,
+      components: [row],
+    });
+
+    // await createChart('Z', '4-2024', interaction);
+    const collectorFilter = i => i.user.id === interaction.user.id;
+
+    const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
+    if (confirmation) {
+      row.components.map((button) => {
+        return button.setDisabled(true);
+      });
+      await interaction.editReply({ content: "you chose to see a chart of: " + confirmation.customId, components: [row] });
+      await createCountryBarChart(playerNameArg, discordUsernameObj, client, confirmation.customId, false, null);
+    }
+}
   catch(error) {
     console.log(error)
   }
@@ -500,14 +539,14 @@ const handleMyMonthlyChart = async (interaction, userId, monthStr) => {
 
 
 
-const handleAllTimeCountryChart = async(interaction, userId) => {
+const handleAllTimeCountryChart = async(interaction, userId, forAll) => {
   const countries = new ButtonBuilder()
     .setCustomId('countries')
     .setLabel('🌍 countries')
     .setStyle(ButtonStyle.Primary);
   const countriesSorted = new ButtonBuilder()
     .setCustomId('countries-sorted')
-    .setLabel('🌎 countries (sorted by regions)')
+    .setLabel('🌎 countries (grouped by regions)')
     .setStyle(ButtonStyle.Primary);
   const regions = new ButtonBuilder()
     .setCustomId('regions')
@@ -516,18 +555,21 @@ const handleAllTimeCountryChart = async(interaction, userId) => {
   const row = new ActionRowBuilder()
     .addComponents(countries, countriesSorted, regions);
 
-  const response = await interaction.reply({
-    content: `pick a chart to generate:`,
-    components: [row],
-  });
-
-
-  let playerNameArg = '';
-  for (let playerName in discordUsernameObj) {
-    if (discordUsernameObj[playerName] === userId) playerNameArg = playerName
-  }
-  const discordID = discordUsernameObj[playerNameArg];
-
+    
+    
+    let playerNameArg = '';
+    for (let playerName in discordUsernameObj) {
+      if (discordUsernameObj[playerName] === userId) playerNameArg = playerName
+    }
+    const discordID = discordUsernameObj[playerNameArg];
+    if (!discordID) interaction.reply('`sorry, user not found... please check again`')
+    
+    const contentPlayer = `pick a chart to generate for <@${discordID}>:`;
+    const contentAll = 'pick a chart to generate for the whole server'
+    const response = await interaction.reply({
+      content: forAll ? contentAll : contentPlayer,
+      components: [row],
+    });
 
   const response2 = await interaction.fetchReply(); 
 
@@ -542,8 +584,11 @@ const handleAllTimeCountryChart = async(interaction, userId) => {
       });
       await interaction.editReply({ content: "you chose to see a chart of: " + confirmation.customId, components: [row] });
     }
-
-    await createCountryBarChart(playerNameArg, discordID, client, confirmation.customId);
+    if (forAll) {
+      await createCountryBarChart(null, discordUsernameObj, client, confirmation.customId, true, null);
+      return
+    }
+    await createCountryBarChart(playerNameArg, discordUsernameObj, client, confirmation.customId, false, null);
 
     // await client.channels.cache.get(channelID).send('testing');
   } catch(error) {
@@ -552,17 +597,6 @@ const handleAllTimeCountryChart = async(interaction, userId) => {
 
 }
 
-
-
-const handleAllTimeRegionChart = async(interaction, userId) => {
-  let playerNameArg = '';
-  for (let playerName in discordUsernameObj) {
-    if (discordUsernameObj[playerName] === userId) playerNameArg = playerName
-  }
-  const discordID = discordUsernameObj[playerNameArg];
-
-  await createCountryBarChart(playerNameArg, discordID, client, 'region')
-}
 
 
 
@@ -620,7 +654,7 @@ const createHistoryObject = async (interaction) => {
 
 // Cron job 
 // const schedule = '0 16 * * *';
-const schedule = '0 11 * * *';
+const schedule = '0 9 * * *';
 
 
 // Schedule the task

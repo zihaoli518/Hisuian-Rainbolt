@@ -15,33 +15,22 @@ const regionCountryCodes = require('./utils/regionCountryCodes.js');
 
 let chartEmbed = {};
 
-
-// global parameters
-const minY = {
-  totalScore: 0,
-  rank: 1,
-  totalDistance: 0,
-  countryRight: 0,
-}
-
-const maxY = {
-  totalScore: 25000,
-  rank: 8, 
-  totalDistance: 30000,
-  countryRight: 5,
-}
+const topGuessesPlayerStrArray = ['you are killing it when we are in', 'your radar for these is crazy', 'you tend to pop off in'];
+const botGuessesPlayerStrArray = ['you get trolled by', 'you get rekt by', 'these are way too hard'];
+const topGuessesServerStrArray = ['we are killing it when we are in', 'our radar for these is crazy', 'we tend to pop off in'];
+const botGuessesServerStrArray = ['we get trolled by', 'we get rekt by', 'these are way too hard'];
 
 
 // input: () 
 // output: send a chart to general channel 
-const createCountryBarChart = async (playerName, discordID, client, CountryOrRegion) => {
-  console.log('inside createCountryBarChart...', playerName, CountryOrRegion);
+const createCountryBarChart = async (playerName, discordUsernameObj, client, CountryOrRegion, forAll, monthStr) => {
+  console.log('inside createCountryBarChart...', playerName, CountryOrRegion, forAll, monthStr);
   const channelID = (process.env.NODE_ENV === 'production') ? process.env.GENERAL_CHANNEL_ID : process.env.TEST_CHANNEL_ID;
   if (CountryOrRegion==='countries-sorted') {
-    await createCountrySortedBarChart(playerName, discordID, client, channelID, CountryOrRegion)
+    await createCountrySortedBarChart(playerName, discordUsernameObj, client, CountryOrRegion, forAll, monthStr)
     return
   } else if (CountryOrRegion==='regions') {
-    await createRegionsBarChart(playerName, discordID, client, channelID, CountryOrRegion)
+    await createRegionsBarChart(playerName, discordUsernameObj, client, CountryOrRegion, forAll, monthStr)
     return
   } 
 
@@ -51,9 +40,29 @@ const createCountryBarChart = async (playerName, discordID, client, CountryOrReg
   const right = [];
   const wrong = [];
 
-  const allTimeStats = getAllTimeStats(playerName);
-  const countryStats = allTimeStats.countryStats; 
-  console.log(countryStats);
+  let allTimeStats = {gamesPlayed: 0}
+  let countryStats = {}; 
+
+  if (forAll) {
+    for (let playerName in discordUsernameObj) {
+      const currentAllTimeStats = getAllTimeStats(playerName, (monthStr) ? monthStr : null);
+      allTimeStats.gamesPlayed += currentAllTimeStats.gamesPlayed;
+      const currentCountryStats = currentAllTimeStats.countryStats; 
+      for (let country in currentCountryStats) {
+        if (!countryStats[country]) countryStats[country] = {right: 0, wrong: 0, total: 0}
+        countryStats[country].right += currentCountryStats[country].right;
+        countryStats[country].wrong += currentCountryStats[country].wrong;
+        countryStats[country].total += currentCountryStats[country].total;
+      }
+    }
+
+  } else {
+    allTimeStats = getAllTimeStats(playerName, monthStr ? monthStr: null);
+    countryStats = allTimeStats.countryStats; 
+  }
+  // console.log('after conditionals....', forAll, monthStr)
+  // console.log(countryStats);
+  
   
   const arrayOfObjects = Object.entries(countryStats).map(([country, data]) => ({
     country,
@@ -63,9 +72,14 @@ const createCountryBarChart = async (playerName, discordID, client, CountryOrReg
   // Sort the array by the 'total' property in descending order
   const countryStatsRanked = arrayOfObjects.sort((a, b) => b.total - a.total);
   // console.log(countryStatsRanked)
+  let yMax = countryStatsRanked[0].right;
+  // increase it to the nearest 5 or 10
+  while (yMax%5!==0) yMax++;
 
-  const maxCountries = 20; 
-  for (let i=0; i<=maxCountries; i++) {
+  const maxCountries = 21; 
+  const currentTotalCountries = countryStatsRanked.length;
+  const maxLoop = Math.min(maxCountries, currentTotalCountries);
+  for (let i=0; i<maxLoop; i++) {
     const currentCountryCode = countryStatsRanked[i].country;
     const currentObj = countryStats[currentCountryCode];
     const currentName = countryCodeDict[currentCountryCode];
@@ -77,40 +91,57 @@ const createCountryBarChart = async (playerName, discordID, client, CountryOrReg
 
 
   chartEmbed = new EmbedBuilder()
-    .setTitle('all time country breakdown: ' + playerName )
-    .setColor('Yellow');
-    chartEmbed.setImage("attachment://graph.png");
-  const {topCountries, troubleCountries} = topAndBottomCountries(allTimeStats.countryStats, allTimeStats.gamesPlayed, 6);
+    .setDescription(`from **${allTimeStats.gamesPlayed*5}** guesses`)
+    chartEmbed.setColor('Orange');
+
+  const discordID = discordUsernameObj[playerName];
+
+  chartEmbed.setImage("attachment://graph.png");
+  if (forAll) {
+    chartEmbed.setTitle((monthStr) ? 'monthly country guessing breakdown for: '+monthStr : 'all time country breakdown for server: ')
+  } else {
+    chartEmbed.setTitle((monthStr) ? 'monthly country guessing breakdown for '+ `<@${discordID}>` + 'in ' +monthStr : 'all time country breakdown for ' + playerName)
+  }
+  const {topCountries, troubleCountries} = topAndBottomCountries(countryStats, allTimeStats.gamesPlayed, 7);
 
   const maxLengthTop = Math.max(...topCountries.map(countryObj => countryCodeDict[countryObj.country].length));
+  const maxLengthBot = Math.max(...troubleCountries.map(countryObj => countryCodeDict[countryObj.country].length));
+  const maxLengthBoth = Math.max(maxLengthTop, maxLengthBot);
   let topCountriesStr = '';
   topCountries.forEach(countryObj => {
     const countryName = countryCodeDict[countryObj.country];
-    const padding = '-'.repeat(maxLengthTop - countryName.length + 2); // Adjust padding as needed
-    topCountriesStr += `📍 ${countryName} ${padding} ${countryObj.right} / ${countryObj.total} -- ${countryObj.percentage}% \n`;
+    const padding = '-'.repeat(maxLengthBoth - countryName.length + 2); // Adjust padding as needed
+    topCountriesStr += `📍 \`${countryName} ${padding} ${countryObj.right} / ${countryObj.total} -- ${countryObj.percentage}%\`\n`;
   });
-  const maxLengthBot = Math.max(...troubleCountries.map(countryObj => countryCodeDict[countryObj.country].length));
   let bottomCountriesStr = '';
+
   troubleCountries.forEach(countryObj => {
     const countryName = countryCodeDict[countryObj.country];
-    const padding = '-'.repeat(maxLengthBot - countryName.length + 2); // Adjust padding as needed
-    bottomCountriesStr += `😈 ${countryName} ${padding} ${countryObj.right} / ${countryObj.total}-- ${countryObj.percentage}% \n`;
+    const padding = '-'.repeat(maxLengthBoth - countryName.length + 2); // Adjust padding as needed
+    bottomCountriesStr += `📍 \`${countryName} ${padding} ${countryObj.right} / ${countryObj.total} -- ${countryObj.percentage}%\`\n`;
   });
   
   const fields = [];
-  fields.push(
-    { name: `🤯 you are killing it when we are in: 🤯`, value: topCountriesStr},
-    { name: `😅 you get trolled by these countries: 😅`, value: bottomCountriesStr}
-  );
+  if (forAll) {
+    fields.push(
+      { name: `🤯 ${getRandomWord(topGuessesServerStrArray)}: 🤯`, value: topCountriesStr},
+      { name: `😈 ${getRandomWord(botGuessesServerStrArray)}: 😈`, value: bottomCountriesStr}
+    );
+  } else {
+    fields.push(
+      { name: `🤯 ${getRandomWord(topGuessesPlayerStrArray)}: 🤯`, value: topCountriesStr},
+      { name: `😈 ${getRandomWord(botGuessesPlayerStrArray)}: 😈`, value: bottomCountriesStr}
+    );
+  }
   chartEmbed.addFields(fields);
 
   // Generate your graph & get the picture as response
-  const attachment = await generateCanva(labels, right, wrong, playerName);
+  const attachment = await generateCanva(labels, right, wrong, playerName, yMax);
 
   // Reply to server / channel you  want passing MessageEmbed & messageAttachment objects
   const endTime = performance.now();
   const elapsedTime = ((endTime - startTime) / 1000).toFixed(3);
-  chartEmbed.setFooter({text: 'chart generated in ' + elapsedTime + 's'});
+  chartEmbed.setFooter({text: `-chart generated in ${elapsedTime}s`});
 
   await client.channels.cache.get(channelID).send({ embeds: [chartEmbed], files: [attachment],});
 };
@@ -118,7 +149,8 @@ const createCountryBarChart = async (playerName, discordID, client, CountryOrReg
 
 
 
-const createCountrySortedBarChart = async(playerName, discordID, client, channelID, CountryOrRegion) => {
+
+const createCountrySortedBarChart = async(playerName, discordUsernameObj, client, CountryOrRegion, forAll, monthStr) => {
   console.log('inside createCountrySortedBarChart...', playerName);
   const startTime = performance.now();
 
@@ -126,9 +158,26 @@ const createCountrySortedBarChart = async(playerName, discordID, client, channel
   const right = [];
   const wrong = [];
 
-  const allTimeStats = getAllTimeStats(playerName);
-  const countryStats = allTimeStats.countryStats; 
-  console.log(countryStats);
+  let allTimeStats = {gamesPlayed: 0}
+  let countryStats = {}; 
+  
+  if (forAll) {
+    for (let playerName in discordUsernameObj) {
+      const currentAllTimeStats = getAllTimeStats(playerName, (monthStr) ? monthStr : null);
+      allTimeStats.gamesPlayed += currentAllTimeStats.gamesPlayed;
+      const currentCountryStats = currentAllTimeStats.countryStats; 
+      for (let country in currentCountryStats) {
+        if (!countryStats[country]) countryStats[country] = {right: 0, wrong: 0, total: 0}
+        countryStats[country].right += currentCountryStats[country].right;
+        countryStats[country].wrong += currentCountryStats[country].wrong;
+        countryStats[country].total += currentCountryStats[country].total;
+      }
+    }
+  
+  } else {
+    allTimeStats = getAllTimeStats(playerName, monthStr ? monthStr: null);
+    countryStats = allTimeStats.countryStats; 
+  }
   
   const arrayOfRegions = Object.keys(regionCountryCodes);
   const regionStats = arrayOfRegions.reduce((obj, region) => {
@@ -155,6 +204,10 @@ const createCountrySortedBarChart = async(playerName, discordID, client, channel
   const regionStatsRanked = arrayOfObjects.sort((a, b) => b.total - a.total);
   console.log(regionStatsRanked)
 
+  let yMax = regionStatsRanked[0].right;
+  // increase it to the nearest 5 or 10
+  while (yMax%5!==0) yMax++;
+
 
   for (let i=0; i<regionStatsRanked.length; i++) {
     const currentRegion = regionStatsRanked[i];
@@ -166,19 +219,61 @@ const createCountrySortedBarChart = async(playerName, discordID, client, channel
     wrong.push(currentRegion.wrong*-1);
   }
 
+  const discordID = discordUsernameObj[playerName];
 
   chartEmbed = new EmbedBuilder()
-    .setTitle('all time guessing breakdown (countries grouped by regions): ' + playerName )
+    .setDescription(`from **${allTimeStats.gamesPlayed*5}** guesses`)
     .setColor('Orange');
+    if (forAll) {
+      chartEmbed.setTitle((monthStr) ? 'monthly country guessing (grouped by regions) breakdown for: '+monthStr : 'all time country breakdown (grouped by regions) for server: ')
+    } else {
+      chartEmbed.setTitle((monthStr) ? 'monthly country guessing (grouped by regions) breakdown for '+ `<@${discordID}>` + 'in ' +monthStr : 'all time country breakdown (grouped by regions) for ' + playerName)
+    }
     chartEmbed.setImage("attachment://graph.png");
 
+  const {topCountries, troubleCountries} = topAndBottomCountries(regionStats, allTimeStats.gamesPlayed, 6);
+
+  const maxLengthTop = Math.max(...topCountries.map(countryObj => countryObj.country.length));
+  const maxLengthBot = Math.max(...troubleCountries.map(countryObj =>  countryObj.country.length));
+  const maxLengthBoth = Math.max(maxLengthTop, maxLengthBot);
+  let topCountriesStr = '';
+  topCountries.forEach(countryObj => {
+    const countryName =  countryObj.country;
+    const padding = '-'.repeat(maxLengthBoth - countryName.length + 2); // Adjust padding as needed
+    topCountriesStr += `📍 \`${capitalizeFirstLetter(countryName)} ${padding} ${countryObj.right} / ${countryObj.total} -- ${countryObj.percentage}%\`\n`;
+  });
+  let bottomCountriesStr = '';
+
+  troubleCountries.forEach(countryObj => {
+    const countryName =  countryObj.country;
+    const padding = '-'.repeat(maxLengthBoth - countryName.length + 2); // Adjust padding as needed
+    bottomCountriesStr += `📍 \`${capitalizeFirstLetter(countryName)} ${padding} ${countryObj.right} / ${countryObj.total} -- ${countryObj.percentage}%\`\n`;
+  });
+  
+  const fields = [];
+  if (forAll) {
+    fields.push(
+      { name: `🤯 ${getRandomWord(topGuessesServerStrArray)}: 🤯`, value: topCountriesStr},
+      { name: `😈 ${getRandomWord(botGuessesServerStrArray)}: 😈`, value: bottomCountriesStr}
+    );
+  } else {
+    fields.push(
+      { name: `🤯 ${getRandomWord(topGuessesPlayerStrArray)}: 🤯`, value: topCountriesStr},
+      { name: `😈 ${getRandomWord(botGuessesPlayerStrArray)}: 😈`, value: bottomCountriesStr}
+    );
+  }
+  chartEmbed.addFields(fields);
+
   // Generate your graph & get the picture as response
-  const attachment = await generateCanva(labels, right, wrong, playerName);
+  const attachment = await generateCanva(labels, right, wrong, playerName, yMax);
 
   // Reply to server / channel you  want passing MessageEmbed & messageAttachment objects
   const endTime = performance.now();
   const elapsedTime = ((endTime - startTime) / 1000).toFixed(3);
-  chartEmbed.setFooter({text: 'chart generated in ' + elapsedTime + 's'});
+  chartEmbed.setFooter({text: `* if you guessed Philippines for Indonesia, that would be considered a wrong Southeast Asia region guess in this chart \n-chart generated in ${elapsedTime}s`});
+
+
+  const channelID = (process.env.NODE_ENV === 'production') ? process.env.GENERAL_CHANNEL_ID : process.env.TEST_CHANNEL_ID;
 
   await client.channels.cache.get(channelID).send({ embeds: [chartEmbed], files: [attachment],});
 }
@@ -187,7 +282,7 @@ const createCountrySortedBarChart = async(playerName, discordID, client, channel
 
 
 
-const createRegionsBarChart = async(playerName, discordID, client, channelID, CountryOrRegion) => {
+const createRegionsBarChart = async(playerName, discordUsernameObj, client, CountryOrRegion, forAll, monthStr) => {
   console.log('inside createRegionsBarChart...', playerName);
   const startTime = performance.now();
 
@@ -195,19 +290,27 @@ const createRegionsBarChart = async(playerName, discordID, client, channelID, Co
   const right = [];
   const wrong = [];
 
-  const allTimeStats = getAllTimeStats(playerName);
-  const allTimeRegionStats = allTimeStats.regionStats; 
-  
-  const arrayOfRegions = Object.keys(regionCountryCodes);
-  // const regionStats = arrayOfRegions.reduce((obj, region) => {
-  //   obj[region] = {right: 0, wrong: 0, total: 0}; // Initialize each region with an empty object
-  //   return obj;
-  // }, {}); // Start with an empty object
-  // // ADD UP and calculate region stats
-  // for (let regionName in allTimeRegionStats) {
-  //   labels.push(regionName);
-  //   right.push(allTimeRegionStats)
-  // }
+  let allTimeStats = {gamesPlayed: 0}
+  let allTimeRegionStats = {}; 
+
+  if (forAll) {
+    for (let playerName in discordUsernameObj) {
+      const currentAllTimeStats = getAllTimeStats(playerName, (monthStr) ? monthStr : null);
+      allTimeStats.gamesPlayed += currentAllTimeStats.gamesPlayed;
+      const currentRegionStats = currentAllTimeStats.regionStats; 
+      for (let region in currentRegionStats) {
+        if (!allTimeRegionStats[region]) allTimeRegionStats[region] = {right: 0, wrong: 0, total: 0}
+        allTimeRegionStats[region].right += currentRegionStats[region].right;
+        allTimeRegionStats[region].wrong += currentRegionStats[region].wrong;
+        allTimeRegionStats[region].total += currentRegionStats[region].total;
+      }
+    }
+
+  } else {
+    allTimeStats = getAllTimeStats(playerName, monthStr ? monthStr: null);
+    allTimeRegionStats = allTimeStats.regionStats; 
+  }
+    
   const arrayOfObjects = Object.entries(allTimeRegionStats).map(([region, data]) => ({
     region,
     ...data,
@@ -215,6 +318,10 @@ const createRegionsBarChart = async(playerName, discordID, client, channelID, Co
   // Sort the array by the 'total' property in descending order
   const regionStatsRanked = arrayOfObjects.sort((a, b) => b.total - a.total);
   console.log(regionStatsRanked)
+
+  let yMax = regionStatsRanked[0].right;
+  // increase it to the nearest 5 or 10
+  while (yMax%5!==0) yMax++;
 
 
   for (let i=0; i<regionStatsRanked.length; i++) {
@@ -226,19 +333,63 @@ const createRegionsBarChart = async(playerName, discordID, client, channelID, Co
     wrong.push(currentRegion.wrong*-1);
   }
 
+  const discordID = discordUsernameObj[playerName];
 
   chartEmbed = new EmbedBuilder()
-    .setTitle('all time region guessing breakdown: ' + playerName )
+    .setDescription(`from **${allTimeStats.gamesPlayed*5}** guesses`)
     .setColor('Orange');
+    if (forAll) {
+      chartEmbed.setTitle((monthStr) ? 'monthly region guessing breakdown for: '+monthStr : 'all time region guessing breakdown for server: ')
+    } else {
+      chartEmbed.setTitle((monthStr) ? 'monthly region guessing breakdown for '+ `<@${discordID}>` + 'in ' +monthStr : 'all time region guessing breakdown for ' + playerName)
+    }
     chartEmbed.setImage("attachment://graph.png");
 
+  const {topCountries, troubleCountries} = topAndBottomCountries(allTimeRegionStats, allTimeStats.gamesPlayed, 6);
+
+  const maxLengthTop = Math.max(...topCountries.map(countryObj => countryObj.country.length));
+  const maxLengthBot = Math.max(...troubleCountries.map(countryObj => countryObj.country.length));
+  const maxLengthBoth = Math.max(maxLengthTop, maxLengthBot);
+  console.log('maxLength: ', maxLengthBoth)
+  let topCountriesStr = '';
+  topCountries.forEach(countryObj => {
+    const countryName = countryObj.country;
+    console.log('countryName: ', countryName)
+    const padding = '-'.repeat(maxLengthBoth - countryName.length + 2); // Adjust padding as needed
+    topCountriesStr += `📍 \`${capitalizeFirstLetter(countryName)} ${padding} ${countryObj.right} / ${countryObj.total} -- ${countryObj.percentage}%\`\n`;
+  });
+  let bottomCountriesStr = '';
+  troubleCountries.forEach(countryObj => {
+    const countryName = countryObj.country;
+    const padding = '-'.repeat(maxLengthBoth - countryName.length + 2); // Adjust padding as needed
+    bottomCountriesStr += `📍 \`${capitalizeFirstLetter(countryName)} ${padding} ${countryObj.right} / ${countryObj.total} -- ${countryObj.percentage}%\`\n`;
+  });
+  
+  const fields = [];
+
+  if (forAll) {
+    fields.push(
+      { name: `🤯 ${getRandomWord(topGuessesServerStrArray)}: 🤯`, value: topCountriesStr},
+      { name: `😈 ${getRandomWord(botGuessesServerStrArray)}: 😈`, value: bottomCountriesStr}
+    );
+  } else {
+    fields.push(
+      { name: `🤯 ${getRandomWord(topGuessesPlayerStrArray)}: 🤯`, value: topCountriesStr},
+      { name: `😈 ${getRandomWord(botGuessesPlayerStrArray)}: 😈`, value: bottomCountriesStr}
+    );
+  }
+  chartEmbed.addFields(fields);
+
   // Generate your graph & get the picture as response
-  const attachment = await generateCanva(labels, right, wrong, playerName);
+  const attachment = await generateCanva(labels, right, wrong, playerName, yMax);
 
   // Reply to server / channel you  want passing MessageEmbed & messageAttachment objects
   const endTime = performance.now();
   const elapsedTime = ((endTime - startTime) / 1000).toFixed(3);
-  chartEmbed.setFooter({text: 'chart generated in ' + elapsedTime + 's'});
+  chartEmbed.setFooter({text: `* if you guessed Ireland for UK, that would be considered a correct Western Europe region guess for this chart \n-chart generated in ${elapsedTime}s`});
+
+
+  const channelID = (process.env.NODE_ENV === 'production') ? process.env.GENERAL_CHANNEL_ID : process.env.TEST_CHANNEL_ID;
 
   await client.channels.cache.get(channelID).send({ embeds: [chartEmbed], files: [attachment],});
 }
@@ -246,8 +397,12 @@ const createRegionsBarChart = async(playerName, discordID, client, channelID, Co
 
 
 // This function will return MessageAttachment object from discord.js
-const generateCanva = async (labels, right, wrong, playerName, CountryOrRegion) => {
-  const renderer = new ChartJSNodeCanvas({ width: 3000, height: 1200 });
+const generateCanva = async (labels, right, wrong, playerName, yMax) => {
+  const renderer = new ChartJSNodeCanvas({ width: 3000, height: 1200, plugins: {
+    modern: ["chartjs-plugin-datalabels"],
+  }});
+  const rightColor = 'rgb(179, 255, 174)';
+  const wrongColor = 'rgb(255, 100, 100)';
   const image = await renderer.renderToBuffer({
     type: "bar",
     data: {
@@ -257,8 +412,8 @@ const generateCanva = async (labels, right, wrong, playerName, CountryOrRegion) 
           // label: `${playerName}'s Monthly ${statStr}`,
           data: right,
           // backgroundColor: "rgba(75, 192, 192, 0.2)", // Light greenish-blue with some transparency
-          backgroundColor: "rgb(179, 255, 174)",
-          borderColor: "rgb(179, 255, 174)", // Matching border color for the line
+          backgroundColor: rightColor,
+          borderColor: rightColor, // Matching border color for the line
           borderWidth: 2, // Thicker line for better visibility
           clip: {top: 100, left:false, right:false, bottom: false},
           categoryPercentage: 0.8
@@ -266,8 +421,8 @@ const generateCanva = async (labels, right, wrong, playerName, CountryOrRegion) 
         {
           // label: "Server Average",
           data: wrong,
-          backgroundColor: "red", 
-          borderColor: "rgb(255, 100, 100)", // Matching border color for the line
+          backgroundColor: wrongColor, 
+          borderColor: wrongColor, // Matching border color for the line
           borderWidth: 2, // Thicker line for better visibilit
           categoryPercentage: 0.8
 
@@ -280,7 +435,7 @@ const generateCanva = async (labels, right, wrong, playerName, CountryOrRegion) 
         y: {
           stacked:true, 
           // min: minY[statStr],
-          // max: maxY[statStr],
+          max: yMax,
           grid: {
             color: "rgba(192, 192, 192, 0.5)", // Light grey for grid lines
           },
@@ -323,11 +478,36 @@ const generateCanva = async (labels, right, wrong, playerName, CountryOrRegion) 
           },
         },
         datalabels: {
-          color: '#36A2EB'
-        }
+          color:(context) => {
+            // Position positive labels at the top, negative at the bottom
+            const value = context.dataset.data[context.dataIndex];
+            return value >= 0 ? rightColor : wrongColor; 
+          },
+          font: {
+            size: 38,
+            weight: 'bold'
+          },
+          anchor: (context) => {
+            // Position positive labels at the top, negative at the bottom
+            const value = context.dataset.data[context.dataIndex];
+            return value >= 0 ? 'end' : 'start'; // Anchor position
+          },
+          align: (context) => {
+            // Align positive labels to the top, negative to the bottom
+            const value = context.dataset.data[context.dataIndex];
+            return value >= 0 ? 'top' : 'bottom'; // Align position
+          },
+          offset: 4, // Adjust for label distance from the bar
+          formatter: (value) => {
+            // Remove the negative sign if the value is negative
+            return Math.abs(value).toString();
+          },
+        },
+
       },
     },
   });
+  console.log(image)
   return new AttachmentBuilder(image, {name:"graph.png"});
 };
 
@@ -375,8 +555,9 @@ function capitalizeFirstLetter(str) {
 
 
 function topAndBottomCountries(countryStats, gamesPlayed, returnRows) {
-  console.log('topAndBottomCountries', countryStats);
-  const filterThreshhold = gamesPlayed/11
+  console.log('topAndBottomCountries');
+  console.log(countryStats)
+  const filterThreshhold = gamesPlayed/12
   const filteredStats = Object.entries(countryStats)
     .filter(([country, stats]) => stats.total > filterThreshhold);
   const countriesWithPercentage = filteredStats.map(([country, stats]) => {
@@ -385,6 +566,7 @@ function topAndBottomCountries(countryStats, gamesPlayed, returnRows) {
       const total = stats.total
       return { country, percentage, right, total};
   });
+  console.log(filteredStats)
 
   // Sort countries by percentage of correct answers
   const sortedByPercentage = countriesWithPercentage.sort((a, b) => b.percentage - a.percentage);
@@ -406,4 +588,10 @@ function topAndBottomCountries(countryStats, gamesPlayed, returnRows) {
 return { topCountries, troubleCountries };
 }
 
+const getRandomWord = (array) => {
+  // Generate a random index between 0 and 2 (inclusive)
+  const randomIndex = Math.floor(Math.random() * array.length);
+  // Return the word at the random index
+  return array[randomIndex];
+}
 

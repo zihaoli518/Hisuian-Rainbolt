@@ -14,7 +14,7 @@ const getScores = require('./getScores.js');
 
 // input: (playerName, monthStr) 
 // outpu: {monthlyAverage: 1000, }
-const generateMonthlyStats = async (playerName, monthStr) => {
+const generateMonthlyStats = (playerName, monthStr) => {
   console.log('inside generateMonthlyStats...', playerName, monthStr)
   let totalScore = 0; 
   let totalDistance = 0;
@@ -26,6 +26,7 @@ const generateMonthlyStats = async (playerName, monthStr) => {
   let topThree = 0;  
   let monthlyHighScore = 0;
   let bestGuess = {distance: Infinity, address: '', countryCode: ''}
+  let topScores = [];
   
   const dateArray = Object.keys(challengeScoreHistory); 
   for (const date of dateArray) {
@@ -38,6 +39,7 @@ const generateMonthlyStats = async (playerName, monthStr) => {
       if (playerObj.playerName === playerName) {
         allTimeHighscore = Math.max(allTimeHighscore, playerObj.totalScore);
         if (dateStrToMonthStr(date) === monthStr) {
+          if (monthStr==='5-2024') console.log('game played by... ', playerName, 'on... ', date )
           totalScore += playerObj.totalScore;
           totalDistance += playerObj.totalDistance;
           totalCountries += playerObj.countryRight;
@@ -52,6 +54,11 @@ const generateMonthlyStats = async (playerName, monthStr) => {
               bestGuess.address = guess.address
               bestGuess.countryCode = guess.guessCountryCode
             }
+          })
+          updateTopScores(topScores, {
+            score: playerObj.totalScore,
+            playerName: playerName,
+            date: date
           })
         }
       }
@@ -70,6 +77,7 @@ const generateMonthlyStats = async (playerName, monthStr) => {
   result['averageRegions'] = (totalRegions/gamesPlayed).toFixed(1); 
   result['monthlyHighScore'] = monthlyHighScore;
   result['bestGuess'] = bestGuess;
+  result['topScores'] = topScores;
   return result;
 };
 
@@ -82,3 +90,25 @@ const dateStrToMonthStr = (str) => {
 
 
 module.exports = generateMonthlyStats;
+
+
+
+
+// utils 
+function updateTopScores(topScores, newEntry) {
+  // If the topScores array has fewer than 3 elements, simply add the new entry
+  if (topScores.length < 3) {
+    topScores.push(newEntry);
+  } else {
+    // Find the lowest score in the array
+    const lowestScore = Math.min(...topScores.map((item) => item.score));
+    // Replace the lowest score if the new score is higher
+    if (newEntry.score > lowestScore) {
+      const lowestIndex = topScores.findIndex((item) => item.score === lowestScore);
+      topScores[lowestIndex] = newEntry;
+    }
+  }
+  // Sort the array to maintain the top scores in descending order
+  topScores.sort((a, b) => b.score - a.score);
+}
+
