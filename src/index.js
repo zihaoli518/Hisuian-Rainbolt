@@ -349,14 +349,14 @@ const handleInteractionGetAllTimeStats = async (interaction, user) => {
     topCountries.forEach(countryObj => {
       const countryName = countryCodeDict[countryObj.country];
       const padding = '-'.repeat(maxLengthTop - countryName.length + 2); // Adjust padding as needed
-      topCountriesStr += `\'📍 ${countryName} ${padding} ${countryObj.right} / ${countryObj.total} -- ${countryObj.percentage}%\` \n`;
+      topCountriesStr += `📍 \`${countryName} ${padding} ${countryObj.right} / ${countryObj.total} -- ${countryObj.percentage}%\`\n`;
     });
     const maxLengthBot = Math.max(...troubleCountries.map(countryObj => countryCodeDict[countryObj.country].length));
     let bottomCountriesStr = '';
     troubleCountries.forEach(countryObj => {
       const countryName = countryCodeDict[countryObj.country];
       const padding = '-'.repeat(maxLengthBot - countryName.length + 2); // Adjust padding as needed
-      bottomCountriesStr += `\'😈 ${countryName} ${padding} ${countryObj.right} / ${countryObj.total}-- ${countryObj.percentage}%\' \n`;
+      bottomCountriesStr += `😈 \`${countryName} ${padding} ${countryObj.right} / ${countryObj.total} -- ${countryObj.percentage}%\`\n`;
     });
 
     const fields = [];

@@ -87,7 +87,7 @@ const createChart = async (playerName, discordID, monthStr, statLabel, statStr, 
 
   // add other stats from previous month 
   const prevMonthStr = getPreviousMonth(monthStr);
-  const prevMonthStats = await generateMonthlyStats(playerName, prevMonthStr);
+  const prevMonthStats = generateMonthlyStats(playerName, prevMonthStr);
 
   const currentAverageScore = (currentTotalScore / currentGamesPlayed).toFixed(1);
   const averageChangeScore = (((currentAverageScore - prevMonthStats.monthlyAverage) / currentAverageScore)*100).toFixed(1);

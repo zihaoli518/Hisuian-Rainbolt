@@ -1,5 +1,4 @@
-// 
-
+// updates all preivous games in case new players 
 require('dotenv').config();
 const fs = require('fs');
 // const fetch = require('node-fetch');
@@ -18,12 +17,16 @@ const updatePreviousGames = async () => {
   console.log('inside updatePreviousGames');
   const dateArray = Object.keys(challengeLinksHistory);
 
+  let counter = 0;
+  let total = dateArray.length;
+
   for (let date in challengeLinksHistory) {
+    counter++;
     console.log('processing...   ', date);
     const url = challengeLinksHistory[date];
     console.log(url);
     const data = await getScores(url, date);
-    console.log('finished...   ', date);
+    console.log(counter + ' / ' + total + ' finished.... ' + (counter * 100 / total).toFixed(1) + '%  ----------');
   }
 
     // fs.writeFile('challengeScoreHistory2.js', `module.exports = ${JSON.stringify(resultObj, null, 2)};`, err => {
