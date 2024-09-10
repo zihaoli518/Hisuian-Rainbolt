@@ -30,7 +30,7 @@ client.on('ready', (c) => {
 });
 client.login(TOKEN);
 
-const syncChallengeLinks = (days=31) => {
+const syncChallengeLinks = (days=61) => {
   const channelID = process.env.DAILY_CHALLENGE_CHANNEL_ID;
   const channel = client.channels.cache.get(channelID);
 
@@ -39,15 +39,17 @@ const syncChallengeLinks = (days=31) => {
       console.log(`Received ${messages.size} messages`);
       const newLinksObj = {...challengeLinksHistory}
       messages.forEach(message =>{
-        console.log(message.createdTimestamp)
+        // console.log(message.createdTimestamp)
         const dateStr = formatTimestampToCalifornia(message.createdTimestamp);
         if (!newLinksObj[dateStr] && message.content.startsWith('https')) {
+          console.log('game url updated for ', dateStr)
           newLinksObj[dateStr] = message.content
         }
- 
       });
+      // format the url object and sort based on date str 
+      const sortedLinksObj = sortObjectByDate(newLinksObj);
 
-      fs.writeFile('challengeLinksHistory.js', `module.exports = ${JSON.stringify(newLinksObj, null, 2)};`, err => {
+      fs.writeFile('challengeLinksHistory.js', `module.exports = ${JSON.stringify(sortedLinksObj, null, 2)};`, err => {
         if (err) {
             console.error('Error writing to file:', err);
             return;
@@ -80,4 +82,24 @@ function formatTimestampToCalifornia(timestamp) {
   day = parseInt(day, 10); // Remove leading zeros
   
   return `${month}-${day}-${year}`;
+}
+
+function sortObjectByDate(obj) {
+  const sortedKeys = Object.keys(obj).sort((a, b) => {
+      const [monthA, dayA, yearA] = a.split('-').map(Number);
+      const [monthB, dayB, yearB] = b.split('-').map(Number);
+
+      // Construct dates in YYYY-MM-DD format for comparison
+      const dateA = new Date(yearA, monthA - 1, dayA); // Months are 0-based in JS Date
+      const dateB = new Date(yearB, monthB - 1, dayB);
+
+      return dateA - dateB;
+  });
+
+  const sortedObj = {};
+  sortedKeys.forEach(key => {
+      sortedObj[key] = obj[key];
+  });
+
+  return sortedObj;
 }
