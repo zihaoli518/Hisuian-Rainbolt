@@ -277,11 +277,19 @@ module.exports = {
   "10-12-2024": "https://www.geoguessr.com/challenge/pGlKkxhocHZXYvGw",
   "10-13-2024": "https://www.geoguessr.com/challenge/aE0skxx72Yz3A3Kn",
   "10-14-2024": "https://www.geoguessr.com/challenge/WgyBLrwy4RQSrhcR",
-
   "10-15-2024": "https://www.geoguessr.com/challenge/rPcwxf6SHw63SVGv",
   "10-16-2024": "https://www.geoguessr.com/challenge/W295ETZdXmCddVgj",
-  
+  "10-17-2024": "https://www.geoguessr.com/challenge/pBFyHMrOnkL8XqAd",
+  "10-18-2024": "https://www.geoguessr.com/challenge/yc2D7hIKRisQkkWL",
+  "10-19-2024": "https://www.geoguessr.com/challenge/24244BMnDxe4AXCo",
+  "10-20-2024": "https://www.geoguessr.com/challenge/6mTb44GRFjyymrKC",
+  "10-21-2024": "https://www.geoguessr.com/challenge/W9ik3XT5yk0KiH6I",
+  "10-22-2024": "https://www.geoguessr.com/challenge/D7SMBXBRSPLVEWs7",
+  "10-23-2024": "https://www.geoguessr.com/challenge/Nm9uBba9gE72WEUr",
+  "10-24-2024": "https://www.geoguessr.com/challenge/El9J2ISX4JpjXh5o",
+  "10-25-2024": "https://www.geoguessr.com/challenge/WOPengMcjRULoVNV",
   "10-26-2024": "https://www.geoguessr.com/challenge/4pUBNTBk5V5YtyPT",
+  "10-27-2024": "https://www.geoguessr.com/challenge/E9kFtq052w4iuZHX",
   "10-28-2024": "https://www.geoguessr.com/challenge/l60WGRUxKrvblJC9",
   "10-29-2024": "https://www.geoguessr.com/challenge/lS7PxjwDIKTdlrYI",
   "10-30-2024": "https://www.geoguessr.com/challenge/u8Uw2vumh2vAqbw7",
@@ -289,5 +297,13 @@ module.exports = {
   "11-1-2024": "https://www.geoguessr.com/challenge/46FElNQxJDFKsIKd",
   "11-2-2024": "https://www.geoguessr.com/challenge/b3FrVMzhgPRgTonL",
   "11-3-2024": "https://www.geoguessr.com/challenge/codItKKWo1dLfZFn",
-  "11-10-2024": "https://www.geoguessr.com/challenge/s4us2GYIhWvSAvNY"
+  "11-4-2024": "https://www.geoguessr.com/challenge/iB7eavb1obJfmhn3",
+  "11-5-2024": "https://www.geoguessr.com/challenge/r65xh88NpYV2xvZl",
+  "11-6-2024": "https://www.geoguessr.com/challenge/a13rD0HxySWefmo4",
+  "11-7-2024": "https://www.geoguessr.com/challenge/PXiTEjZxCimEqHYG",
+  "11-8-2024": "https://www.geoguessr.com/challenge/kTbPPOHPSkG8hICy",
+  "11-9-2024": "https://www.geoguessr.com/challenge/pmj0bfvFyCtyID0O",
+  "11-10-2024": "https://www.geoguessr.com/challenge/s4us2GYIhWvSAvNY",
+  "11-12-2024": "https://www.geoguessr.com/challenge/JzPJ7tO1fKxnsQ0U",
+  "11-13-2024": "https://www.geoguessr.com/challenge/nBhv8JEYiMaF5Cnj"
 };

@@ -30,26 +30,55 @@ client.on('ready', (c) => {
 });
 client.login(TOKEN);
 
-const syncChallengeLinks = (days=61) => {
+const syncChallengeLinks = (days=91) => {
   const channelID = process.env.DAILY_CHALLENGE_CHANNEL_ID;
   const channel = client.channels.cache.get(channelID);
 
   channel.messages.fetch({ limit: days })
     .then(messages => {
       console.log(`Received ${messages.size} messages`);
-      const newLinksObj = {...challengeLinksHistory}
-      messages.forEach(message =>{
+      const newLinksObj = {...challengeLinksHistory};
+
+      let messageArray = Array.from(messages.values()); // Convert collection to array
+
+
+      for (let i=0; i<messageArray.length; i++) {
         // console.log(message.createdTimestamp)
+        const message = messageArray[i];
+        console.log(i, message.createdTimestamp, message.content)
         const dateStr = formatTimestampToCalifornia(message.createdTimestamp);
         if (!newLinksObj[dateStr] && message.content.startsWith('https')) {
           console.log('game url updated for ', dateStr)
-          newLinksObj[dateStr] = message.content
+          newLinksObj[dateStr] = message.content;
         }
-      });
+        // check if it's missing
+        let prevCounter = i+1;
+        if (!messageArray[prevCounter]) continue;
+        let prevMessage = messageArray[prevCounter];
+        let prevMessageDate = prevMessage.createdTimestamp;
+        let prevMessageDateStr = formatTimestampToCalifornia(prevMessageDate);
+        let prevHistoryDateStr = getPreviousDay(dateStr);
+        console.log(i, dateStr, prevMessageDateStr)
+
+        while (prevMessageDateStr===dateStr) {
+          if (!newLinksObj[prevHistoryDateStr]) {
+            newLinksObj[prevHistoryDateStr] = prevMessage.content;
+            // prevCounter++;
+            prevHistoryDateStr = getPreviousDay(prevHistoryDateStr);
+          }
+          prevCounter++
+          if (!messageArray[prevCounter]) break;
+          prevMessage = messageArray[prevCounter]
+          prevMessageDate = prevMessage.createdTimestamp;
+          prevMessageDateStr = formatTimestampToCalifornia(prevMessageDate);
+          console.log(dateStr, prevMessageDateStr)
+        }
+      }
+
       // format the url object and sort based on date str 
       const sortedLinksObj = sortObjectByDate(newLinksObj);
 
-      fs.writeFile('challengeLinksHistory.js', `module.exports = ${JSON.stringify(sortedLinksObj, null, 2)};`, err => {
+      fs.writeFile('challengeLinksHistoryTEST.js', `module.exports = ${JSON.stringify(sortedLinksObj, null, 2)};`, err => {
         if (err) {
             console.error('Error writing to file:', err);
             return;
@@ -102,4 +131,22 @@ function sortObjectByDate(obj) {
   });
 
   return sortedObj;
+};
+
+function getPreviousDay(dateStr) {
+  // Split the input dateStr into parts: MM, DD, YYYY
+  const [month, day, year] = dateStr.split('-').map(Number);
+  
+  // Create a Date object using the parts
+  const currentDate = new Date(year, month - 1, day); // month is 0-indexed in JS Date
+  
+  // Subtract one day
+  currentDate.setDate(currentDate.getDate() - 1);
+  
+  // Format the new date back to MM-DD-YYYY
+  const previousDay = String(currentDate.getDate()); // Ensure 2 digits for the day
+  const previousMonth = String(currentDate.getMonth() + 1); // Ensure 2 digits for the month (add 1 since months are 0-indexed)
+  const previousYear = currentDate.getFullYear();
+
+  return `${previousMonth}-${previousDay}-${previousYear}`;
 }

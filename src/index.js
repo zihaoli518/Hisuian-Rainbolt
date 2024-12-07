@@ -667,7 +667,7 @@ cron.schedule(schedule, async () => {
   // await client.channels.cache.get(channelID).send(dailyLink);
   // await client.channels.cache.get(channelID).send(`here's the daily challenge for ${date}, glhf! @everyone      (generated with cron job)` );
   console.log('Running scheduled task...');
-  const update = await updatePreviousGames();
+  // const update = await updatePreviousGames();
   const daily = await handleInteractionDailyChallenge();
   const prevDate = getDateStr(undefined, true); 
   const recap = await handleInteractionDailyScoreOf(undefined, prevDate);
